@@ -30,8 +30,8 @@ def index(request):
     send_mail(
         'Congratulations!',
         'You are lucky to recieve this mail.',
-        'iannuxd@gmail.com', # Update this with your mail id
-        ['akfzd006@gmail.com'],  # Update this with the recipients mail id
+        'host@gmail.com', # Update this with your mail id
+        ['recieve@gmail.com'],  # Update this with the recipients mail id
         html_message=html_message,
         fail_silently=False,
     )
