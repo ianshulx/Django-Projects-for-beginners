@@ -1,4 +1,6 @@
-<h2>Django Projects for beginners</h2>
+==============================================
+Add your beginner level django project here 
+==============================================
 
 |Django| |PyVersion| 
 
