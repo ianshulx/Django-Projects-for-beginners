@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_title %}{{ user.username }} | Django Blog{% endblock head_title %}
+
+{% block content %}
+<div class="container-fluid mt-5">
+  <div class="row">
+    <div class="card col-lg-6 offset-lg-3 mb-3">
+      <div class="row">
+        {% if user.profile.image %}
+        <img class="card-img-top col-sm-3 col-4 my-3" src="{{ profile.image.url }}" alt="{{ user.username }}">
+        {% else %}
+        <img class="card-img-top col-sm-3 col-4 my-3" src="{% static 'img/avatar.svg' %}" alt="{{ user.username }}">
+        {% endif %}
+        <div class="card-body col-9">
+          <h2 class="card-title my-3">{{ user.username }}</h2>
+          <p>Last login on: {{ user.last_login }}</p>
+          <p><a href="{% url 'users:edit_profile' %}">Edit your profile</a></p>
+          <p><a href="{% url 'users:password_change' %}">Change password</a></p>
+          <p class="card-text">{{ user.profile.about_me }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

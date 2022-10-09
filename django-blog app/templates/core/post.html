@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head_title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid my-5">
+  <div class="row">
+    <div class="col-lg-6 offset-lg-3">
+
+      <div class="card">
+        <h2 class="card-title text-center my-3">{{ post.title }}</h2>
+        <div class="text-muted text-center mb-3">
+          <div>
+            created: {{ post.created_on|date:"N j Y" }},
+            last updated: {{ post.updated_on|timesince }},
+            by
+            <a class="badge badge-secondary" href="{% url 'users:profile' post.author.username %}">
+              {{ post.author }}
+            </a>
+          </div>
+          <div>
+            {% for tag in post.tags.all %}
+            <span class="badge badge-dark">{{ tag }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        {% if post.image %}
+        <img class="card-img-top" src="{{ post.image.url }}" alt="{{ post.title }}">
+        {% endif %}
+        {% if post.author == request.user %}
+        <div class="mt-4 mx-3">
+          <a class="btn btn-primary" href="{% url 'core:post_update' post.id %}">Edit</a>
+          <a class="btn btn-danger" href="{% url 'core:post_delete' post.id %}">Delete</a>
+        </div>
+        {% endif %}
+        <div class="card-text mt-5 p-4">
+          {{ post.content }}
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- List of comments -->
+  {% if comments %}
+  <div class="row mt-5">
+    <div class="col-lg-6 offset-lg-3">
+      Comment{{ comments.count|pluralize }}
+      <span class="badge badge-dark ml-2">{{ comments.count }}</span>
+    </div>
+    {% for comment in comments %}
+    <div class="col-lg-6 offset-lg-3 mt-2">
+      <div class="card p-2">
+        <div class="row">
+          <div class="col-12">
+            <img class="rounded-circle mr-2" src="{% static 'img/avatar.svg' %}" alt="Avatar">
+            <strong>{{ comment.name }}</strong> said
+          </div>
+          <div class="col-12">
+            <p class="m-1 mt-3">{{ comment.content }}</p>
+            <p class="text-right text-muted"><small>{{ comment.created }}</small></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- Form to leave comment -->
+  <div class="row mt-5">
+    <div class="col-lg-6 offset-lg-3">
+      <h3>Leave a comment</h3>
+      <form method='POST'>
+        {% csrf_token %}
+        <div class="form-group">
+          <span class="ml-2"></span>{{ form.name.label_tag }}
+          <input type="text" class="form-control {% if form.name.errors %}is-invalid{% endif %}" id="id_name"
+            name="name" value="{{ form.name.value|default:'' }}">
+        </div>
+        <div class="form-group">
+          <span class="ml-2"></span>
+          {{ form.email.label_tag }}
+          <span class="text-muted"><small>(Your email address will not be published)</small></span>
+          <input type="text" class="form-control {% if form.email.errors %}is-invalid{% endif %}" id="id_email"
+            name="email" value="{{ form.email.value|default:'' }}">
+        </div>
+        <div class="form-group">
+          <span class="ml-2"></span>{{ form.content.label_tag }}
+          <textarea class="form-control {% if form.content.errors %}is-invalid{% endif %}" id="id_content"
+            name="content" rows="4">{{ form.content.value|default:'' }}</textarea>
+        </div>
+        <button class="btn btn-primary ml-2" type="submit">Reply</button>
+      </form>
+    </div>
+  </div>
+
+</div>
+{% endblock content %}
