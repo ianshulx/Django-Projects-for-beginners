@@ -9,8 +9,7 @@ Add your beginner level django project here
 Introduction
 ************
 
-``Django-Projects-for-beginners
-`` is a contribution library that will help to beginner developers who want to start with Django.
+``Django-Projects-for-beginners`` is a contribution library that will help to beginner developers who want to start with Django.
 
 If you are beginner you can check out these projects and can contribute your projects you have done.
 
