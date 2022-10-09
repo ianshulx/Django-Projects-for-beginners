@@ -1,0 +1,69 @@
+{% extends 'library/base.html' %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+{% block title %}Login{% endblock %}
+{% block extend_head %}
+		<link rel="stylesheet" href="{% static 'css/login/home.css' %}" />
+{% endblock %}
+{% block content %}
+		<!-- Header -->
+			<header id="header">
+				<div class="inner">
+					<h1><strong>LOGIN</strong></h1>
+					<h3>using LDAP</h3>
+					<form method="post" action="#">
+					{% csrf_token %}
+								<div class="row uniform 50%">
+									<div class="12u 12u$(xsmall)">
+									{% render_field form.username placeholder="Username" id="demo-name" style="color: black;" %}
+									</div>
+									<div class="12u$ 12u$(xsmall)">
+									{% render_field form.password placeholder="Password" style="color: black;" %}
+									</div>
+									<div class="12u$">
+										<ul class="actions">
+											<li><input type="submit" value="LOGIN" /></li>
+										</ul>
+									</div>
+								</div>
+							</form>
+				</div>
+			</header>
+
+		<!-- Main -->
+			<div id="main">
+				<!-- One -->
+					<section id="one">
+						
+						<header class="major">
+						<img src="{% static 'img/iiitalogo.jpg' %}" style="width: 15%;margin-top: -40px;"><br><br>
+							<h2>Welcome to IIIT Allahabad Library Management System</h2> 
+						</header>
+						<h2>Guidelines to follow</h2>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris egestas venenatis purus, ut aliquet lectus semper non. Aenean molestie, augue sed elementum pellentesque, quam arcu finibus libero, ut vulputate arcu elit a enim. Sed felis arcu, scelerisque vel ornare a, vestibulum nec enim. Nulla euismod vehicula arcu, consectetur euismod lacus condimentum fringilla. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum gravida diam et purus</p>
+					</section>
+
+				<!-- Two -->
+					</div>
+
+		<!-- Footer -->
+			<footer id="footer" style="margin-top: 10em;">
+				<div class="inner">
+					<ul class="copyright">
+						<li>IIIT Allahabad</li><li>Developed By: <a href="http://anupamdagar.me">Anupam Dagar</a></li>
+					</ul>
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="{% static 'js/login/jquery.poptrox.min.js' %}"></script>
+			<script src="{% static 'js/login/skel.min.js' %}"></script>
+			<script src="{% static 'js/login/util.js' %}"></script>
+			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+			<script src="{% static 'js/login/main.js' %}"></script>
+			<script type="text/javascript">
+			$(function(){
+				$("body").attr("id", "top");
+				})
+			</script>
+{% endblock %}

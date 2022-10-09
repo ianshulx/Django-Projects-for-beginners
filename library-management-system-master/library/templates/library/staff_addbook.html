@@ -1,0 +1,142 @@
+{% extends 'library/base.html' %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+{% load group_check %}
+{% load i18n %}
+{% block title %}Add Book
+{% endblock %}
+{% block extend_head %}
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+<link href="{% static 'css/material-kit.css' %}" rel="stylesheet"/>
+{% endblock %}
+{% block content %}
+{% comment %} <nav class="navbar navbar-primary navbar-transparent navbar-absolute">
+	<div class="container">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="../../presentation.html">IIIT Allahabad Library Management System</a>
+		</div>
+
+		<div class="collapse navbar-collapse">
+			<ul class="nav navbar-nav navbar-right">
+				<li>
+					<a href="add home url">
+						<i class="fa fa-home"></i> Home
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</nav> {% endcomment %}
+
+
+<div class="page-header header-filter" >
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    <div class="card card-signup"  style="margin-top: -6vh;">
+                        <h2 class="card-title text-center"> <i class="material-icons">library_books</i> Add Book</h2>
+                        <div class="row">
+                            <div class="col-md-5 col-md-offset-1">
+                                <div class="info info-horizontal">
+                                    <div class="icon icon-rose">
+                                        <i class="material-icons">timeline</i>
+                                    </div>
+                                    <div class="description">
+                                        <h4 class="info-title">Adding Author</h4>
+                                        <p class="description">
+                                          <br> <b> In first field add Author name</b> 
+                                        </p>
+                                    </div>
+                                </div>
+    
+                                <div class="info info-horizontal">
+                                    <div class="icon icon-primary">
+                                        <i class="material-icons">code</i>
+                                    </div>
+                                    <div class="description">
+                                        <h4 class="info-title">Adding Publisher</h4>
+                                        <p class="description">
+                                           <br>
+                                            <b>In last field add Publisher.</b>
+                                        </p>
+                                    </div>
+                                </div>
+    
+                                
+                            </div>
+                            <div class="col-md-5 ">
+                                    <form class="form" method="POST">
+                                        {% csrf_token %}
+                                            <div class="card-content">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="material-icons">face</i>
+                                                    </span>
+                                                    {% render_field form.author class="form-control" placeholder="Author" %}
+                                                </div>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="material-icons">book</i>
+                                                    </span>
+                                                    {% render_field form.isbn class="form-control" placeholder="ISBN" %}
+                                                </div>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                        <i class="material-icons">library_books</i>
+                                                    </span>
+                                                    {% render_field form.book_id class="form-control" placeholder="Book ID" %}
+                                                </div>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                            <i class="material-icons">book</i>
+                                                    </span>
+                                                    {% render_field form.title class="form-control" placeholder="Book Title " %}
+                                                </div>
+            
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">
+                                                       <i class="material-icons">local_library</i>
+                                                    </span>
+                                                    {% render_field form.publisher class="form-control" placeholder="Publisher " %}
+                                                </div>
+                                            </div>
+                                            <div class="footer text-center">
+                                                <button type="submit" name="submit" value="{% trans 'Add book' %}" class="btn btn-primary btn-round">Add Book</button>
+                                            </div>
+                                        </form>
+            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <footer class="footer ">
+                <div class="container">	          
+                    <div class="copyright text-center">
+                        &copy; <script>document.write(new Date().getFullYear())</script>Made with  <i class="fa fa-heart heart"></i> by <a href="https://github.com/Anupam-dagar" target="_blank"><b>Anupam Dagar</b></a> and <a href="https://github.com/M1doriya" target="_blank"><b>Abhishek Acharya</b></a>
+                    </div>
+                </div>
+                </footer>
+    </div>
+{% endblock %}
+{% block scripts %}
+<script>
+	$(document).ready(function(){
+		$('body').addClass('signup-page');
+		$('body').css('background-image', 'url(\'../../static/img/login/bg.jpg\')');
+		$('body').css('background-repeat', 'no-repeat');
+		$('body').css('background-size', '100% 100%');
+	});
+</script>
+
+{% endblock %}
+

@@ -1,0 +1,145 @@
+{% extends 'library/base.html' %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+{% load group_check %}
+{% block title %}Register{% endblock %}
+{% block extend_head %}
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+<link href="{% static 'css/material-kit.css' %}" rel="stylesheet"/>
+{% endblock %}
+{% block content %}
+<nav class="navbar navbar-primary navbar-transparent navbar-absolute">
+	<div class="container">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="../../presentation.html">IIIT Allahabad Library Management System</a>
+		</div>
+
+		<div class="collapse navbar-collapse">
+			<ul class="nav navbar-nav navbar-right">
+				<li>
+					<a href="{% url 'home' %}">
+						<i class="fa fa-home"></i> Home
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</nav>
+
+
+<div class="page-header header-filter" >
+	<div class="container">
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1">
+				<div class="card card-signup"  style="margin-top: -6vh;">
+					<h2 class="card-title text-center">Register</h2>
+					<div class="row">
+						<div class="col-md-5 col-md-offset-1">
+							<div class="info info-horizontal">
+								<div class="icon icon-rose">
+									<i class="material-icons">timeline</i>
+								</div>
+								<div class="description">
+									<h4 class="info-title">Marketing</h4>
+									<p class="description">
+										We've created the marketing campaign of the website. It was a very interesting collaboration.
+									</p>
+								</div>
+							</div>
+
+							<div class="info info-horizontal">
+								<div class="icon icon-primary">
+									<i class="material-icons">code</i>
+								</div>
+								<div class="description">
+									<h4 class="info-title">Fully Coded in HTML5</h4>
+									<p class="description">
+										We've developed the website with HTML5 and CSS3. The client has access to the code using GitHub.
+									</p>
+								</div>
+							</div>
+
+							
+						</div>
+						<div class="col-md-5 ">
+							<form class="form" method="" action="signup-page.html">
+								<div class="card-content">
+									<div class="input-group">
+										<span class="input-group-addon">
+											<i class="material-icons">face</i>
+										</span>
+										<input type="text" class="form-control" placeholder="First Name...">
+									</div>
+									<div class="input-group">
+											<span class="input-group-addon">
+												<i class="material-icons">face</i>
+											</span>
+											<input type="text" class="form-control" placeholder="Last Name...">
+										</div>
+	
+
+									<div class="input-group">
+										<span class="input-group-addon">
+											<i class="material-icons">email</i>
+										</span>
+										<input type="text" class="form-control" placeholder="Email...">
+									</div>
+
+									<div class="input-group">
+										<span class="input-group-addon">
+											<i class="material-icons">lock_outline</i>
+										</span>
+										<input type="password" placeholder="Password..." class="form-control" />
+									</div>
+
+									<!-- If you want to add a checkbox to this form, uncomment this code -->
+
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" name="optionsCheckboxes" unchecked>
+											I agree to the <a href="signup-page.html#something">terms and conditions</a>.
+										</label>
+									</div>
+								</div>
+								<div class="footer text-center">
+									<a href="signup-page.html#pablo" class="btn btn-primary btn-round">Get Started</a>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+	<footer class="footer ">
+			<div class="container">	          
+				<div class="copyright text-center">
+					&copy; <script>document.write(new Date().getFullYear())</script>Made with  <i class="fa fa-heart heart"></i> by <a href="https://github.com/Anupam-dagar" target="_blank"><b>Anupam Dagar</b></a> and <a href="https://github.com/M1doriya" target="_blank"><b>Abhishek Acharya</b></a>
+				</div>
+			</div>
+			</footer>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+	$(document).ready(function(){
+		$('body').addClass('signup-page');
+		$('body').css('background-image', 'url(\'../../static/img/login/bg.jpg\')');
+		$('body').css('background-repeat', 'no-repeat');
+		$('body').css('background-size', '100% 100%');
+		$('body').find('a').each(function() {
+			$(this).attr('href', '#');
+		});
+	});
+</script>
+
+{% endblock %}
+

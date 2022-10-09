@@ -1,0 +1,422 @@
+{% extends 'library/base.html' %}
+{% load staticfiles %}
+{% load group_check %}
+{% load widget_tweaks %}
+{% block title %}Home{% endblock %}
+{% block extend_head %}
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons"
+/>
+<link href="{% static 'css/material-kit.css' %}" rel="stylesheet" /> 
+{% endblock %} 
+{% block content %}
+{% comment %} <nav class="navbar navbar-primary navbar-transparent navbar-absolute">
+	<div class="container">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="../presentation.html">IIIT Allahabad Library Management System</a>
+		</div>
+
+		<div class="collpase navbar-collapse">
+			<ul class="nav navbar-nav navbar-right">
+					{% if request.user|has_group:"admin" %}
+					<li>
+						<a href="{% url 'create_user' %}">
+								<i class="material-icons">content_paste</i>create user
+						</a>
+					</li>
+					{% endif %}
+				{% if request.user|has_group:"staff" %}
+				<li>
+					<a href="{% url 'staff_dashboard' %}">
+							<i class="material-icons">content_paste</i>issue books
+					</a>
+				</li>
+				<li>
+					<a href="{% url 'staff_addbook' %}">
+							<i class="material-icons">add_circle</i>add books
+					</a>
+				</li>
+				{% endif %}
+				{% if request.user|has_group:"student" %}
+				<li>
+					<a href="{% url 'student_dashboard' %}">
+							<i class="material-icons">dashboard</i>dashboard
+					</a>
+				</li>
+				{% endif %}
+				<li>
+					<a href="#">
+						<i class="fa fa-user"></i> {{ request.user }}
+					</a>
+				</li>
+				<li>
+					<a href="{% url 'auth_logout' %}?next=/" id="logout" class="btn btn-white btn-simple">
+						<i class="fa fa-sign-out"></i> Logout
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</nav> {% endcomment %}
+<div class="page-header header-filter clear-filter" id="abc" data-parallax="true">
+	<div class="page-header header-filter clear-filter" style="background: rgba(0,0,0,0.5);">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<div class="brand">
+						<h1>Search Books
+						</h1>
+					</div>
+					<div class="card card-raised card-form-horizontal">
+						<div class="card-content">
+							<form method="get" action="{% url 'home' %}" id="search">
+								<div class="row">
+									<div class="col-sm-8">
+
+										<div class="input-group">
+											<span class="input-group-addon">
+												<i class="material-icons">book</i>
+											</span>
+											<input type="text" name="q" id="id_q" value="{{ query }}" placeholder="Enter author's first name" class="form-control" />
+											<div class="row">
+												<div class="col-sm-3">
+													<div class="checkbox">
+														<label>
+															<input class="searchtype" type="checkbox" name="type" value="title">Title
+														</label>
+													</div>
+												</div>
+												<div class="col-sm-3">
+													<div class="checkbox">
+														<label>
+															<input class="searchtype" type="checkbox" name="type" value="author">Author
+														</label>
+													</div>
+												</div>
+												<div class="col-sm-3">
+													<div class="checkbox">
+														<label>
+															<input class="searchtype" type="checkbox" name="type" value="isbn">ISBN
+														</label>
+													</div>
+												</div>
+											<div class="col-sm-3">
+													<div class="checkbox">
+														<label>
+															<input class="searchtype" type="checkbox" name="type" value="users">USERS
+														</label>
+													</div>
+												</div>
+											</div>
+												
+											</div>
+											
+											</div>
+											<div class="col-sm-4">
+													<input id="submit" type="submit" class="btn btn-primary btn-block" value="Search" />
+												</div>
+										</div>
+										
+									</div>
+						</form>
+									
+								</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+{% if detail %}
+<div class="main main-raised">
+	<div class="section section-basic">
+		<div class="container">
+
+
+
+
+			<div id="contentAreas" class="cd-section">
+
+
+
+				<!--                 tables -->
+				<div id="tables">
+					<div class="title">
+						<h3>Search Results</h3>
+					</div>
+					<div class="row">
+						<div class="col-md-12 ">
+							<div class="table-responsive">
+								<table class="table table-striped">
+									{% if request.GET.type == 'users' %}
+									{% if detail.0.enrollment_no %}
+									<thead>
+											<tr>
+												<th class="text-center">
+													<b>Serial No.</b>
+												</th>
+												<th class="text-center">
+													<b>User</b>
+												</th>
+												<th>
+													<b>Enrollment No</b>
+												</th>
+												<th>
+													<b>First Name</b>
+												</th>
+												<th>
+													<b>Last Name</b>
+												</th>
+												<th>
+													<b>Department</b>
+												</th>
+												<th>
+													<b>Semester</b>
+												</th>
+												<th>
+													<b>Gender</b>
+												</th>
+											</tr>
+										</thead>
+										<tbody>
+											{% for det in detail %}
+											<tr>
+												<td class="text-center">{{ forloop.counter }}</td>
+												<td class="text-center">{{ det.user }}</td>
+												<td>{{ det.enrollment_no }}</td>
+												<td id="a">{{ det.first_name }}</td>
+												<td>{{ det.last_name }}</td>
+												<td>{{ det.department }}</td>
+												<td>{{ det.semester }}</td>
+												<td>{{ det.gender }}</td>
+											</tr>
+											{% endfor %}	
+										</tbody>
+									{% else %}
+									<thead>
+											<tr>
+												<th class="text-center">
+													<b>Serial No.</b>
+												</th>
+												<th class="text-center">
+													<b>User</b>
+												</th>
+												<th>
+													<b>Librarian id</b>
+												</th>
+												<th>
+													<b>First Name</b>
+												</th>
+												<th>
+													<b>Last Name</b>
+												</th>
+											</tr>
+										</thead>
+										<tbody>
+											{% for det in detail %}
+											<tr>
+												<td class="text-center">{{ forloop.counter }}</td>
+												<td class="text-center">{{ det.user }}</td>
+												<td>{{ det.librarian_id }}</td>
+												<td id="a">{{ det.first_name }}</td>
+												<td>{{ det.last_name }}</td>
+											</tr>
+											{% endfor %}	
+										</tbody>
+									{% endif %}
+									{% else %}
+									<thead>
+										<tr>
+											<th class="text-center">
+												<b>Serial No.</b>
+											</th>
+											<th class="text-center">
+												<b>Book id</b>
+											</th>
+											<th>
+												<b>Title</b>
+											</th>
+											<th>
+												<b>Author</b>
+											</th>
+											<th>
+												<b>isbn</b>
+											</th>
+											<th>
+												<b>Publisher</b>
+											</th>
+											<th>
+												<b>Request issue</b>
+											</th>
+											<th>
+												<b>Issue status</b>
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% for det in detail %}
+										<tr>
+											<td class="text-center">{{ forloop.counter }}</td>
+											<td class="text-center">{{ det.book_id }}</td>
+											
+											<td id="a">{{ det.title }}</td>
+											<td>{{ det.author.firstname }}</td>
+											<td>{{ det.author.lastname }}</td>
+											<td>{{ det.publisher }}</td>
+											{% if det == 'No results found!' %}
+											<td></td>
+											{% else %}
+											<td>
+													<form method="post" class="myform">
+														{% csrf_token %} 
+														{% if not det.request_issue %}
+														<div class="checkbox">
+															<label>
+																<input type="checkbox" class="request_issue" name="request_issue" value="True">
+															</label>
+														</div>
+														{% else %}
+														<div class="checkbox">
+															<label>
+																{% if det.issue_status is True %}
+																<input type="checkbox" class="request_issue" name="request_issue" value="False" disabled checked>
+																{% else %}																
+																<input type="checkbox" class="request_issue" name="request_issue" value="False" checked>
+																{% endif %}
+															</label>
+														</div>
+														{% endif %}
+													<input type="hidden" class="bookid" name="bookid" value="{{ det.book_id }}">
+													<input type="hidden" class="usermail" name="usermail" value="{{ request.user.email }}">
+												</form>
+											</td>
+											{% endif %}
+											{% if det == "No results found!" %}
+											<td></td>
+											{% else %}
+											{% if det.issue_status is  False %}
+											<td>Not Issued</td>
+											{% else %}
+											<td>Issued </td>
+											{% endif %}
+											{% endif %}
+										</tr>
+										{% endfor %}	
+									</tbody>
+									{% endif %}
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--                 end tables -->
+			</div>
+
+		</div>
+	</div>
+	<footer class="footer ">
+		<div class="container">	          
+			<div class="copyright text-center">
+				&copy; <script>document.write(new Date().getFullYear())</script> Made with  <i class="fa fa-heart heart"></i> by <a href="https://github.com/Anupam-dagar" target="_blank"><b>Anupam Dagar</b></a> and <a href="https://github.com/M1doriya" target="_blank"><b>Abhishek Acharya</b></a>
+			</div>
+		</div>
+		</footer>
+</div>
+{% endif %}
+{% endblock %} 
+{% block scripts %}
+<script>
+		$(document).ready(function(){
+			$('input.searchtype').on('change', function() {
+				$('input.searchtype').not(this).prop('checked', false);  
+			});
+		});
+	</script>
+		<script>
+				$(".request_issue").change(function (e) {
+					var form = $(this).parent().parent().parent();
+					console.log(form);
+					request_val = $(this).val();
+					bookid = $(this).parent().parent().siblings("input").next().next().val();
+					usermail = $(this).parent().parent().siblings("input").next().next().next().val()
+					e.preventDefault();
+					$.ajax({
+						url: '{% url "change_request_issue" %}',
+						data: {
+						  'request_val': request_val,
+						  'bookid': bookid,
+						  'usermail': usermail
+						},
+						dataType: 'json',
+						success: function (data) {
+						  if (data.valdb) {
+							console.log("Issue request has been sent");
+							form.submit();
+						  }
+						}
+					  });
+				});
+		</script>
+<script>
+	$(document).ready(function () {
+
+		var checkboxes = $("input[type='checkbox']"),
+			submitButt = $("input[type='submit']");
+		$('#submit').attr('disabled', 'disabled');
+		checkboxes.click(function () {
+			submitButt.attr("disabled", !checkboxes.is(":checked"));
+		});
+	});
+</script>
+<script>
+	$(document).ready(function () {
+		$('#abc').css('background-image', 'url(\'../../static/img/login/bg.jpg\')');
+		$('#abc').css('background-repeat', 'no-repeat');
+		$('#abc').css('background-size', '100% 100%');
+	});
+</script>
+<!--   Core JS Files   -->
+
+
+<script type="text/javascript">
+
+
+	$(document).ready(function () {
+		var slider = document.getElementById('sliderRegular');
+
+		noUiSlider.create(slider, {
+			start: 40,
+			connect: [true, false],
+			range: {
+				min: 0,
+				max: 100
+			}
+		});
+
+		var slider2 = document.getElementById('sliderDouble');
+
+		noUiSlider.create(slider2, {
+			start: [20, 60],
+			connect: true,
+			range: {
+				min: 0,
+				max: 100
+			}
+		});
+
+
+
+		materialKit.initFormExtendedDatetimepickers();
+
+	});
+</script> 
+{% endblock %}

@@ -1,0 +1,192 @@
+{% extends 'library/base.html' %}
+{% load staticfiles %}
+{% load group_check %}
+{% load widget_tweaks %}
+{% load i18n %}
+{% block title %}Add Student{% endblock %}
+{% block extend_head %}
+		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+		<link href="{% static 'css/material-kit.css' %}" rel="stylesheet"/>
+{% endblock %}
+{% block content %}
+{% comment %} <nav class="navbar navbar-primary navbar-transparent navbar-absolute">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="../presentation.html">IIIT Allahabad Library Management System</a>
+            </div>
+    
+            <div class="collpase navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                        {% if request.user|has_group:"admin" %}
+                        <li>
+                            <a href="{% url 'create_user' %}">
+                                    <i class="material-icons">content_paste</i>issue books
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'staff_addbook' %}">
+                                    <i class="material-icons">add_circle</i>add books
+                            </a>
+                        </li>
+                        {% endif %}
+                    {% if request.user|has_group:"staff" %}
+                    <li>
+                        <a href="{% url 'staff_dashboard' %}">
+                                <i class="material-icons">content_paste</i>issue books
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'staff_addbook' %}">
+                                <i class="material-icons">add_circle</i>add books
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if request.user|has_group:"student" %}
+                    <li>
+                        <a href="{% url 'student_dashboard' %}">
+                                <i class="material-icons">dashboard</i>dashboard
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-user"></i> {{ request.user }}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'auth_logout' %}?next=/" id="logout" class="btn btn-white btn-simple">
+                            <i class="fa fa-sign-out"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav> {% endcomment %}
+
+	<div class="page-header header-filter" >
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3">
+					<div class="card card-signup">
+						<form class="form" method="post">
+							{% csrf_token %}							
+							<div class="header header-primary text-center">
+								<h4 class="card-title">Add Student</h4>
+							</div>
+							<div class="card-content">
+                                <div class="col-md-6">
+								<div class="input-group">
+									<span class="input-group-addon">
+										<i class="material-icons">face</i>
+									</span>
+									{% render_field form.enrollment_no class="form-control" placeholder="Enrollment No" %}
+								</div>
+
+                                <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">email</i>
+                                        </span>
+                                        {% render_field form.first_name class="form-control" placeholder="First Name" %}
+                                </div>
+
+								<div class="input-group">
+									<span class="input-group-addon">
+										<i class="material-icons">lock_outline</i>
+									</span>
+									{% render_field form.last_name class="form-control" placeholder="Last Name" %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">accessibility</i>
+                                        </span>
+                                        
+                                        {% render_field form.gender class="form-control" placeholder="Gender" %}
+                                    </div>
+                                    <div class="input-group">
+                                            <span class="input-group-addon">
+                                                    <i class="material-icons">business</i>
+                                            </span>
+                                            {% render_field form.department class="form-control" placeholder="Department" %}
+                                        </div>
+                                        <div class="input-group">
+                                                <span class="input-group-addon">
+                                                        <i class="material-icons">library_books</i>
+                                                </span>
+                                                {% render_field form.semester class="form-control" placeholder="Semester" %}
+                                            </div>
+                                        </div>
+								{% comment %} {% if form.errors %}
+								<h5 class="text-center" style="color:red;"><b>Wrong username or password</b></h5>
+								{% endif %} {% endcomment %}
+							</div>
+							<div class="footer text-center">
+									<button class="btn btn-primary btn-simple btn-wd btn-lg" type="submit" name="submit" value="{% trans 'Create Student' %}">Create Student</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<footer class="footer navbar-fixed-bottom">
+	        <div class="container">
+	            {% comment %} <nav class="pull-left">
+					<ul>
+						<li>
+							<a href="http://www.creative-tim.com">
+								Creative Tim
+							</a>
+						</li>
+						<li>
+							<a href="http://presentation.creative-tim.com">
+							   About Us
+							</a>
+						</li>
+						<li>
+							<a href="http://blog.creative-tim.com">
+							   Blog
+							</a>
+						</li>
+						<li>
+							<a href="http://www.creative-tim.com/license">
+								Licenses
+							</a>
+						</li>
+					</ul>
+	            </nav> {% endcomment %}
+	            <div class="copyright pull-center">
+	                <b>Made with <i class="fa fa-heart heart"></i> by <a href="https://github.com/Anupam-dagar" target="_blank">Anupam Dagar</a> and <a href="https://github.com/M1doriya" target="_blank">Abhishek Acharya</a></b>
+	            </div>
+	        </div>
+	    </footer>
+
+	</div>
+{% endblock %}	
+{% block scripts %}
+<script>
+    $(document).ready(function(){
+        $('input.acctype').on('change', function() {
+            $('input.acctype').not(this).prop('checked', false);  
+        });
+    });
+</script>
+<script>
+	$(document).ready(function(){
+		$('body').addClass('login-page');
+		$('body').css('background-image', 'url(\'../../static/img/login/bg.jpg\')');
+		$('body').css('background-repeat', 'no-repeat');
+		$('body').css('background-size', '100% 100%');
+		$('body').find('a').each(function() {
+			$(this).attr('href', '#');
+		});
+	});
+</script>
+{% endblock %}
