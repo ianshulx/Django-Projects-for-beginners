@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>NK Bank - Transactions Made Easy</title>
+
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static 'banking/assets/img/nklogo1.jpg' %}" rel="icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,700,700i&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.9.0/font/bootstrap-icons.min.css">
+
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'banking/assets/vendor/animate.css/animate.min.css' %}" rel="stylesheet">
+  <link href="{% static 'banking/assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'banking/assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'banking/assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'banking/assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'banking/assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'banking/assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{% static 'banking/assets/css/style.css' %}" rel="stylesheet">
+
+<style>
+  .transact_btn {
+    display: inline-block;
+    background: #68A4C4;
+    color: #fff;
+    padding: 6px 20px;
+    transition: 0.3s;
+    font-size: 14px;
+    border:none;
+  }
+</style>
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top d-flex align-items-center ">
+    <div class="container d-flex justify-content-between align-items-center">
+
+      <div class="logo">
+        <h1 class="text-light"><a href="{% url 'banking:index' %}"><span>NK Bank</span></a></h1>
+      </div>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a href="{% url 'banking:index' %}">Home</a></li>
+          <li><a href="{% url 'donate:index' %}">Donate</a></li>
+          <li><a class="active " href="{% url 'banking:customers' %}">Customers</a></li>
+          <li><a href="{% url 'banking:records' %}">Records</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+
+    </div>
+  </header><!-- End Header -->
+
+  <main id="main">
+
+    <!-- ======= Customers Section ======= -->
+    <section class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>Transact</h2>
+
+          <ol>
+            <!-- <li><a href="index.html">Home</a></li>
+            <li>Customers</li> -->
+                <li><Strong>Hey {{from_customer}}</Strong></li>
+        </ol>
+        </div>
+
+      </div>
+    </section><!-- End Customers Section -->
+
+    <!-- ======= Customers Section ======= -->
+    <section id="blog" class="blog">
+      <div class="container" data-aos="fade-up">
+
+        <div class="row">
+
+          <div class="col-lg-8 entries">
+            {% if customers %}
+            {% for customer in customers %}
+              {% if customer.user.id == id_from %}
+            
+              {% else %}        
+
+            <article class="entry">
+
+              <!-- <div class="entry-img">
+                <img src="{% static 'banking/assets/img/blog/blog-1.jpg' %}" alt="" class="img-fluid">
+              </div> -->
+
+              <h2 class="entry-title">
+                <a href="">{{customer.user.first_name}} {{customer.user.last_name}}</a>
+              </h2>
+
+              <div class="entry-meta" style="zoom:1.4;-ms-zoom: 1.4;                      
+              -webkit-zoom: 1.4;
+              -moz-transform:  scale(1.4,1.4);
+              -moz-transform-origin: left center;"
+              >           <!-- Zoom for mozilla also-->
+                <ul>
+                  <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="">{{customer.user.email}}</a></li>
+                  <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href=""><time datetime="2020-01-01">{{customer.user.date_joined}}</time></a></li>
+                  <li class="d-flex align-items-center"><i class="bi bi-currency-rupee"></i> <a href="">{{customer.current_balance}}</a></li>
+                </ul>
+              </div>
+
+              <div class="entry-content">
+                <div style="text-align:left"><img src="{% static 'banking/assets/img/nklogo1.jpg' %}" width="45" heigh="45" style="float:left"></div>
+
+                <div class="read-more">
+                    <form action="{% url 'banking:transact' customer.user.pk %}" method="POST" id="transact_form">
+                        {% csrf_token %}
+                        <i class="bi bi-currency-rupee"></i><input type="number" name="amount" id="amount" placeholder="Amount" max="{{from_customer.current_balance}}" min="1" style="width:100px">
+                        <input type="hidden" name="from_id" id="from_id" value="{{id_from}}">
+                        <input class="transact_btn" type="submit" value="Transact">
+                        <!-- <a class="transact_btn" onclick="transact()">Transact</a> -->
+                </form>
+                </div>
+              </div>
+
+            </article>
+            {% endif %}
+            {% endfor %}
+            {% else %}
+            No Customers found! Search again!
+          {% endif %}
+  
+          </div><!-- End customer entries list -->
+
+          <div class="col-lg-4">
+
+            <div class="sidebar">
+
+              <h3 class="sidebar-title">Search</h3>
+              <div class="sidebar-item search-form">
+                <form action="{% url 'banking:transact_customers_search' id_from %}" method="GET">
+                  <input type="text" name="query" id="query">
+                  <button type="submit"><i class="bi bi-search"></i></button>
+                </form>
+              </div><!-- End sidebar search formn-->
+
+
+
+            </div><!-- End sidebar -->
+
+
+          </div><!-- End blog sidebar -->
+
+        </div>
+
+      </div>
+    </section><!-- End Blog Section -->
+
+  </main><!-- End #main -->
+    <script>
+      function transact() {
+          document.getElementById("transact_form").submit();
+      }
+  </script>
+
+<!-- ======= Footer ======= -->
+<footer id="footer" data-aos="fade-up" data-aos-easing="ease-in-out" data-aos-duration="500">
+
+
+  <div class="footer-top">
+    <div class="container">
+      <div class="row">
+
+        <div class="col-lg-4 col-md-6 footer-links">
+          <h4>Useful Links</h4>
+          <ul>
+            <li><i class="bx bx-chevron-right"></i> <a href="{% url 'banking:index' %}">Home</a></li>
+            <li><i class="bx bx-chevron-right"></i> <a href="{% url 'donate:index' %}">Donate</a></li>
+            <li><i class="bx bx-chevron-right"></i> <a href="{% url 'banking:customers' %}">Customers</a></li>
+            <li><i class="bx bx-chevron-right"></i> <a href="{% url 'banking:records' %}">Records</a></li>
+          </ul>
+        </div>
+
+
+        <div class="col-lg-4 col-md-6 footer-contact">
+          <h4>Contact Us</h4>
+          <p>
+            IIT Kharagpur <br>
+            Kharagpur, WB 721302<br>
+            West Bengal <br><br>
+            <strong>Phone:</strong> +91 85150 88390<br>
+            <strong>Email:</strong> nkbank@gmail.com<br>
+          </p>
+
+        </div>
+
+        <div class="col-lg-4 col-md-6 footer-info">
+          <h3>About NK Bank</h3>
+          <p>NK Bank provides premium banking and transaction services both electronic and manual.
+            Highest rate of interest and fastest transaction is provided to our customers.
+          </p>
+          <div class="social-links mt-3">
+            <a href="https://github.com/NabhyaKhoria" class="twitter" target="_blank"><i class="bx bxl-github"></i></a>
+            <a href="https://www.facebook.com/nkhoria/" class="facebook" target="_blank"><i class="bx bxl-facebook"></i></a>
+            <a href="https://www.instagram.com/nabhya_khoria/" class="instagram"><i class="bx bxl-instagram" target="_blank"></i></a>
+            <a href="https://www.linkedin.com/in/nabhya-khoria-30a601218/" class="linkedin"><i class="bx bxl-linkedin" target="_blank"></i></a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="copyright">
+      &copy; Copyright <strong><span>NK Bank</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+      Designed by <a href="https://www.linkedin.com/in/nabhya-khoria-30a601218/" target="_blank">Nabhya Khoria</a>
+    </div>
+  </div>
+</footer>
+<!-- End Footer -->
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'banking/assets/vendor/purecounter/purecounter.js' %}"></script>
+  <script src="{% static 'banking/assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'banking/assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'banking/assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'banking/assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+  <script src="{% static 'banking/assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'banking/assets/vendor/waypoints/noframework.waypoints.js' %}"></script>
+  <script src="{% static 'banking/assets/vendor/php-email-form/validate.js' %}"></script>
+
+  <!-- Template Main JS File -->
+  <script src="{% static 'banking/assets/js/main.js' %}"></script>
+
+</body>
+
+</html>
