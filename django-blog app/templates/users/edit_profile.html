@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block head_title %}Edit profile{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-6">
+      <h2 class="my-5">Edit profile</h2>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+          {{ form.username.label_tag }}
+          <input type="text" class="form-control {% if form.username.errors %}is-invalid{% endif %}" id="id_username"
+            name="username" value='{{ form.username.value|default:user.username }}'>
+          {% if form.username.errors %}
+          <div class="invalid-feedback">{{ form.username.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          {{ form.about_me.label_tag }}
+          <textarea type="text" class="form-control {% if form.about_me.errors %}is-invalid{% endif %}" id="id_about_me"
+            name="about_me" value='{{ form.about_me.value }}' rows="5"></textarea>
+          {% if form.about_me.errors %}
+          <div class="invalid-feedback">{{ form.about_me.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          {{ form.image.label_tag }}<br>
+          <input type="file" class="{% if form.image.errors %}is-invalid{% endif %}" id="id_image" name="image"
+            accept="image/*">
+          {% if form.image.errors %}
+          <div class="invalid-feedback">{{ form.image.errors }}</div>
+          {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+      <br>
+    </div>
+  </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+  <title>{% block head_title %}Welcome - Blog{% endblock %}</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-sm navbar-light bg-light">
+    <div class="container">
+      <a href="{% url 'core:home' %}" class="navbar-brand">Django blog</a>
+      <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+        <div class="navbar-nav">
+          <a href="{% url 'core:home' %}"
+            class="nav-item nav-link  {% if request.path == '/' %}active{% endif %}">Home</a>
+        </div>
+
+        {% if request.user.is_authenticated %}
+        <div class="navbar-nav ml-auto">
+          <a href="{% url 'core:post_create' %}"
+            class="nav-item nav-link {% if request.path == '/post/create/' %}active{% endif %}">
+            Create a post
+          </a>
+          <a href="{% url 'users:profile' request.user.username %}"
+            class="nav-item nav-link {% if request.user.username in request.path %}active{% endif %}">
+            Profile
+          </a>
+          <a href="{% url 'users:logout' %}" class="nav-item nav-link">Log out</a>
+        </div>
+        {% else %}
+        <div class="navbar-nav ml-auto">
+          <a href="{% url 'users:login' %}"
+            class="nav-item nav-link {% if request.path == '/users/login/' %}active{% endif %}">Log in</a>
+          <a href="{% url 'users:signup' %}"
+            class="nav-item nav-link {% if request.path == '/users/signup/' %}active{% endif %}">Sign up</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+  {% for message in messages %}
+  <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} 
+  alert-dismissible fade show">
+    {{ message }}
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+  </div>
+  {% endfor %}
+  {% block content %}
+  {% endblock content %}
+
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

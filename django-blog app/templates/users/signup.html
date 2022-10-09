@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block head_title %}Sign Up{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="my-5">Sign up</h2>
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          {{ form.username.label_tag }}
+          <input type="text" class="form-control {% if form.username.errors %}is-invalid{% endif %}" id="id_username"
+            name="username" value='{{ form.username.value|default:"" }}'>
+          <small class="text-muted">{{ form.username.help_text }}</small>
+          {% if form.username.errors %}
+          <div class="invalid-feedback">{{ form.username.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          {{ form.email.label_tag }}
+          <input type="email" class="form-control {% if form.email.errors %}is-invalid{% endif %}" id="id_email"
+            name="email" value='{{ form.email.value|default:"" }}'>
+          {% if form.email.errors %}
+          <div class="invalid-feedback">{{ form.email.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          {{ form.password1.label_tag }}
+          <input type="password" class="form-control {% if form.password1.errors %}is-invalid{% endif %}"
+            id="id_password1" name="password1" value='{{ form.password1.value|default:"" }}'>
+          <small class="text-muted">{{ form.password1.help_text }}</small>
+          {% if form.password1.errors %}
+          <div class="invalid-feedback">{{ form.password1.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          {{ form.password2.label_tag }}
+          <input type="password" class="form-control {% if form.password2.errors %}is-invalid{% endif %}"
+            id="id_password2" name="password2" value='{{ form.password2.value|default:"" }}'>
+          <small class="text-muted">{{ form.password2.help_text }}</small>
+          {% if form.password2.errors %}
+          <div class="invalid-feedback">{{ form.password2.errors }}</div>
+          {% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary">Sign up</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock content %}

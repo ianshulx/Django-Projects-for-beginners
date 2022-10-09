@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block head_title %}Log In{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h2 class=" my-5">Log in</h2>
+      <form method="post">
+        {% csrf_token %}
+
+        <div class="form-group">
+          {{ form.email.label_tag }}
+          <input type="email" class="form-control {% if form.email.errors %}is-invalid{% endif %}" id="id_email"
+            name="email" value='{{ form.email.value|default:"" }}'>
+          {% if form.email.errors %}
+          <div class="invalid-feedback">{{ form.email.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          {{ form.password.label_tag }}
+          <input type="password" class="form-control {% if form.password.errors %}is-invalid{% endif %}"
+            id="id_password" name="password" value='{{ form.password.value|default:"" }}'>
+          {% if form.password.errors %}
+          <div class="invalid-feedback">{{ form.password.errors }}</div>
+          {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Sign up</button>
+      </form>
+      <br>
+      <p>Forgot your password? <a href="{% url 'users:password_reset' %}">Click here</a></p>
+    </div>
+  </div>
+</div>
+{% endblock content %}

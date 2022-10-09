@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+
+  <div class="row">
+    {% for post in object_list %}
+    <div class="card col-lg-6 offset-lg-3 mb-3">
+      {% if post.image %}
+      <img class="card-img-top mt-3" src="{{ post.image.url }}" alt="{{ post.title }}">
+      {% endif %}
+      <div class="card-body">
+        <a href="{% url 'core:post' post.id post.slug %}">
+          <h2 class="card-title my-3">{{ post.title }} </h2>
+        </a>
+        <div class="text-muted mb-3">
+          <div>
+            <span>created: {{ post.created_on|date:"N j Y" }} |</span>
+            <span>updated: {{ post.updated_on|timesince }} ago |</span>
+            <span>author: {{ post.author }}</span>
+          </div>
+          <div>
+            {% for tag in post.tags.all %}
+            <span class="badge badge-dark">{{ tag }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        <p class="card-text">{{ post.content|truncatewords:20 }}</p>
+        <a class='btn btn-primary' href="{% url 'core:post' post.id post.slug %}">Read more ...</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Pagination -->
+  <div class="row">
+    <nav class="col-lg-6 offset-lg-3 mt-4 d-flex justify-content-center">
+      <ul class="pagination">
+
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+          <a class="page-link" href="#"">Previous</a>
+        </li>
+        {% endif %}
+  
+        {% for i in page_obj.paginator.page_range %}
+        <li class=" page-item {% if page_obj.number == i %}active{% endif %}">
+            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+        </li>
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+          <a class="page-link" href="#">Next</a>
+        </li>
+        {% endif %}
+
+      </ul>
+    </nav>
+  </div>
+  <!-- /Pagination -->
+
+</div>
+{% endblock %}
