@@ -1,0 +1,10 @@
+**/__pycache__
+**/db.sqlite3
+**/DB backup
+**/log.txt
+**/staticfiles
+**/media
+banking/migrations*
+donate/migrations*
+.idea*
+nkbank/settings.py
