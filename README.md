@@ -1,8 +1,6 @@
-====================
-Django projects for beginners
-====================
+#Django Projects for beginners
 
-|Gitter| |PyPiVersion| 
+|Django| |PyVersion| 
 
 
 ************
@@ -33,6 +31,3 @@ What to do ?
    :target: https://www.djangoproject.com/
     :alt: Django
 
-.. |CodeClimate| image:: https://codeclimate.com/github/nephila/djangocms-installer/badges/gpa.svg?style=flat-square
-   :target: https://codeclimate.com/github/nephila/djangocms-installer
-   :alt: Code Climate
