@@ -1,4 +1,4 @@
-#Django Projects for beginners
+<h2>Django Projects for beginners</h2>
 
 |Django| |PyVersion| 
 
