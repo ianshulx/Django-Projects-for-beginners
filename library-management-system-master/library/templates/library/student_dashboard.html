@@ -1,0 +1,185 @@
+{% extends 'library/base.html' %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+{% load group_check %}
+{% block title %}Dashboard
+{% endblock %} 
+{% block extend_head %}
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons"/>
+<link href="{% static 'css/material-kit.css' %}" rel="stylesheet" /> 
+{% endblock %}
+{% block content %}
+{% comment %} <nav class="navbar navbar-default navbar-transparent navbar-fixed-top navbar-color-on-scroll" color-on-scroll=" " id="sectionsNav">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">IIITA Library Management System</a>
+        </div>
+
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="{% url 'home' %}">
+                        <i class="material-icons">home</i> Home
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fa fa-user"></i> {{ request.user.username}}
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'auth_logout' %}?next=/" id="logout" class="btn btn-white btn-simple">
+                        <i class="fa fa-sign-out"></i> Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav> {% endcomment %}
+
+<div class="page-header header-filter clear-filter" data-parallax="true" style="background-image: url('assets/img/bg0.jpg');height:30vh;">
+</div>
+
+<div class="main main-raised">
+    <div class="section">
+        <div class="container tim-container">
+            <div id="contentAreas" class="cd-section">
+
+
+                <h2>Hello {{ request.user.username }}</h2>
+
+                <!--                 tables -->
+                <div id="tables">
+                    <div class="title">
+                        <h3>Here is a summary for your account</h3>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table class="table table-striped" id="studashboard">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">
+                                                <b>Serial No.</b>
+                                            </th>
+                                            <th class="text-center">
+                                                <b>Book id</b>
+                                            </th>
+                                            <th>
+                                                <b>Title</b>
+                                            </th>
+                                            <th>
+                                                <b>Author</b>
+                                            </th>
+                                            <th>
+                                                <b>ISBN</b>
+                                            </th>
+                                            <th>
+                                                <b>Publisher</b>
+                                            </th>
+                                            <th>
+                                                <b>Due Date</b>
+                                            </th>
+                                            <th>
+                                                <b>Return Date</b>
+                                            </th>
+                                            <th>
+                                                <b>Request Issue</b>
+                                            </th>
+                                            <th>
+                                                <b>Issue Status</b>
+                                            </th>
+                                            <th>
+                                                <b>Fine</b>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for det in detail %}
+                                        <tr>
+                                            <td class="text-center">{{ forloop.counter }}</td>
+                                            {% if det.book_id %}
+                                            <td class="text-center">{{ det.book_id }}</td>
+                                            {% else %}
+                                            <td class="text-center">{{ det }}</td>
+                                            {% endif %}
+                                            <td>{{ det.title }}</td>
+                                            <td>{{ det.author }}</td>
+                                            <td>{{ det.isbn }}</td>
+                                            <td>{{ det.publisher }}</td>
+                                            <td>{{ det.due_date }}</td>
+                                            <td>{{ det.return_date }}</td>
+                                            <td>{{ det.request_issue }}</td>
+                                            <td>{{ det.issue_status }}</td>
+                                            <td class="fine">{{ det.fine }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                        <tr>
+                                            <td colspan="9"></td>
+                                            <td>
+                                                <b>Total</b>
+                                            </td>
+                                            <td class="td-price">
+                                                ₹
+                                                <span id="totalfine"></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!--                 end tables -->
+
+                <div class="space-50"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!--         cards -->
+    <!--         end cards         -->
+    <footer class="footer">
+        <div class="container">
+            <div class="copyright pull-center">
+                &copy;
+                <script>document.write(new Date().getFullYear())</script>, made with
+                <i class="material-icons">favorite</i> by
+                <b>Anupam Dagar</b> and
+                <b>Abhishek Acharya</b>.
+            </div>
+        </div>
+    </footer>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+    $(document).ready(function(){
+    $('body').css('background', 'linear-gradient(to top, #9d50bb, #6e48aa');
+});
+</script>
+<script>
+    $(document).ready(function(){
+        var sum = 0;
+        $(".fine").each(function() {
+
+            var value = $(this).text();
+            // add only if the value is number
+            if(!isNaN(value) && value.length != 0) {
+                sum += parseFloat(value);
+            }
+        });
+        $('#totalfine').append(sum);
+    });
+</script>
+{% endblock %}
