@@ -29,7 +29,7 @@ What to do ?
 Steps to Contribute in repository:
 ************************************
 
-* Fork this repo (button on top)
+* Fork this repo (button on top).
 * Clone on your local machine.
 ``git clone https://github.com/ianshulx/DSA-Hacktoberfest2022.git``
 
