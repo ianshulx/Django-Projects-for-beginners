@@ -29,21 +29,21 @@ What to do ?
 Steps to Contribute in repository:
 ************************************
 
-*Fork this repo (button on top)
-*Clone on your local machine<br>
+* Fork this repo (button on top)
+* Clone on your local machine.
 ``git clone https://github.com/ianshulx/DSA-Hacktoberfest2022.git``
 
-*Navigate to project directory.
+* Navigate to project directory.
 ``cd DSA-Hacktoberfest2022``
-*Create a new Branch
+* Create a new Branch
 ``git checkout -b my-new-branch``
-*Add your contribution
+* Add your contribution
 ``git add .``
-*Commit your changes.
+* Commit your changes.
 ``git commit -m "Relevant message"``
-*Then push
+* Then push
 ``git push origin my-new-branch``
-*Create a new pull request from your forked repository, and you are DONE!
+* Create a new pull request from your forked repository, and you are DONE!
 
 .. |PyVersion| image:: https://img.shields.io/pypi/pyversions/djangocms-installer.svg?style=flat-square
     :target: https://pypi.python.org/pypi/djangocms-installer
