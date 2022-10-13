@@ -31,10 +31,10 @@ Steps to Contribute in repository:
 
 * Fork this repo (button on top).
 * Clone on your local machine.
-``git clone https://github.com/ianshulx/DSA-Hacktoberfest2022.git``
+``git clone https://github.com/ianshulx/Django-Projects-for-beginners``
 
 * Navigate to project directory.
-``cd DSA-Hacktoberfest2022``
+``cd Django-Projects-for-beginners``
 
 * Create a new Branch.
 ``git checkout -b my-new-branch``
