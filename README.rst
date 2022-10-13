@@ -35,14 +35,19 @@ Steps to Contribute in repository:
 
 * Navigate to project directory.
 ``cd DSA-Hacktoberfest2022``
+
 * Create a new Branch.
 ``git checkout -b my-new-branch``
+
 * Add your contribution.
 ``git add .``
+
 * Commit your changes.
 ``git commit -m "Relevant message"``
+
 * Then push
 ``git push origin my-new-branch``
+
 * Create a new pull request from your forked repository, and you are DONE!.
 
 .. |PyVersion| image:: https://img.shields.io/pypi/pyversions/djangocms-installer.svg?style=flat-square
