@@ -1,0 +1,17 @@
+html, body {
+    height:100%;
+    padding: 0;
+    margin: 0;
+    color: white;
+  }
+html{
+    background-image: url('../img/background.jpg');
+    background-size: cover;
+}
+body {
+    background: rgba(0, 0, 0, 0.466);
+}
+#home-content{
+    text-align: center;
+    padding-top: 20%;
+}

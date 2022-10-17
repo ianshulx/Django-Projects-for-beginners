@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="container">
+    <h1>Polls details page</h1>
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <hr>
+    <h2 class="mt-3 mb-3">{{ poll }}</h2>
+    <form action="{% url 'polls:vote' poll.id %}" method="POST">
+        {% csrf_token %}
+        {% for choice in poll.choice_set.all %}
+        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+        <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label>
+        <br>
+        {% endfor %}
+        <input type="submit" value="Vote" class="btn btn-primary mt-3">
+        <a class="btn btn-warning mt-3" href="{% url 'polls:list' %}" role="button">Cancel</a>
+    </form>
+
+</div>
+
+{% endblock content %}
