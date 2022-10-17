@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link id="mystylesheet" type="text/css" rel="stylesheet" href="{% static 'css/light.css' %}">
+    <script>
+        var currenttheme = localStorage.getItem("theme"); 
+        if(currenttheme==null){
+            currenttheme="light.css"
+        }
+        var cssFile = "{% static 'css' %}";
+        document.getElementById('mystylesheet').href =cssFile + '/'+ currenttheme;
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>📰 NEWS</title>
+</head>
+<body>
+    <h1> 📰 NEWS APP</h1><button onclick="swapStyles('light.css')" class="btn" >🌞</button><button onclick="swapStyles('dark.css')" class="btn">🌑</button>
+    {% for x in api.articles%}
+    <div id="container">	
+        <div class="news">       
+            <h1>{{x.title}}</h1>        
+            <p class="information">{{x.description  | truncatechars:200}}<a target="_blank" href="{{x.url}}">Learn More</a></p>    
+        </div>     
+        <div class="product-image">       
+            <img src="{{x.urlToImage}}" alt="image">        
+        </div> 
+    </div>
+    {% endfor %}
+    <script type="text/javascript">
+		var cssFile = "{% static 'css' %}"
+		function swapStyles(sheet){
+			document.getElementById('mystylesheet').href = cssFile + '/' + sheet
+			localStorage.setItem('theme', sheet)
+		}
+   </script>
+</body>
+
+
+</html>
