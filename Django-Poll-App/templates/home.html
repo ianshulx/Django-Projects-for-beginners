@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block custom_css %}
+<link rel="stylesheet" href="{% static 'css/home_style.css' %}">
+{% endblock custom_css %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div id="home-content">
+                <h1>PollMe - Get Started!</h1>
+                <h3>Your Voice Matters!</h3>
+                <hr>
+                <a class="btn btn-light btn-lg" href="{% url 'polls:list' %}" role="button">Get Started !</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-sm-2">
+            <h1 class="text-center mt-3 mb-3">Welcome to polls List!</h1>
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <a class="btn btn-{% if 'name' in request.GET %}warning{% else %}primary{% endif %} mb-3" href="?name=True"
+                role="button"><i class="fas fa-sort-alpha-down"></i>
+                Name</a>
+            <a class="btn btn-{% if 'date' in request.GET %}warning{% else %}primary{% endif %} mb-3" href="?date=True"
+                role="button"><i class="far fa-clock"></i> Date</a>
+            <a class="btn btn-{% if 'vote' in request.GET %}warning{% else %}primary{% endif %} mb-3" href="?vote=True"
+                role="button"><i class="fas fa-poll"></i> Vote</a>
+
+            <a class="btn btn-primary mb-3 float-right" href="{% url 'polls:add' %}" role="button">Add <i class="fas fa-plus"></i></a>
+
+            <form class="form-inline">
+                <div class="form-group mr-sm-2 mb-2">
+                    <input type="search" class="form-control" name="search" placeholder="Search" value={{ search_term }}>
+                </div>
+                <button type="submit" class="btn btn-primary mb-2"><i class="fas fa-search"></i></button>
+            </form>
+
+
+            <ul class="list-group">
+                {% for poll in polls %}
+                <li class="list-group-item"><a href="{% url 'polls:detail' poll.id %}">{{ poll.text|truncatewords:5 }}
+                        {% if not poll.active%}
+                        <i class="fas fa-check-circle ml-2"></i>
+                        {% endif %}
+                    </a>
+                    {% if request.user == poll.owner %}
+                    {% if poll.active %}
+                    <a href="{% url 'polls:end_poll' poll.id %}" data-toggle="tooltip" data-placement="top" title="End Poll"
+                        onclick="return confirm('Are you sure ?')"><i class="fas fa-step-forward float-right btn btn-danger btn-sm"></i></a>
+                    {% endif %}
+                    <a href="{% url 'polls:edit' poll.id %}" class="mr-3" data-toggle="tooltip" data-placement="top"
+                        title="Edit Poll"><i class="fas fa-pencil-alt float-right btn btn-primary btn-sm mr-1"></i></a>
+                    {% endif %}
+                </li>
+
+                {% endfor %}
+            </ul>
+            <nav class="mt-3">
+                <ul class="pagination">
+                    {% if polls.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page=1&{{ params }}">First</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ polls.previous_page_number }}&{{ params }}">Previous</a></li>
+                    {% endif %}
+
+                    <li class="page-item active"><a class="page-link" href="">{{ polls.number }}</a></li>
+
+                    {% if polls.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ polls.next_page_number }}&{{ params }}">Next</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ polls.paginator.num_pages }}&{{ params }}">Last</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
