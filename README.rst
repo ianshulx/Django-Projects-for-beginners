@@ -1,5 +1,5 @@
 ==============================================
-Add your beginner level django project here 
+Beginner level django projects
 ==============================================
 
 |Django| |PyVersion| 
