@@ -1,5 +1,5 @@
 ==============================================
-Add your beginner level django project here 
+Beginner level django projects
 ==============================================
 
 |Django| |PyVersion| 
@@ -22,6 +22,33 @@ What to do ?
 * Add the project folder in this repo.
 * Don't Forget to add a requirements.txt file in it.
 * Don't use any other framework rather than django.
+
+
+
+************************************
+Steps to Contribute in repository:
+************************************
+
+* Fork this repo (button on top).
+* Clone on your local machine.
+``git clone https://github.com/ianshulx/Django-Projects-for-beginners``
+
+* Navigate to project directory.
+``cd Django-Projects-for-beginners``
+
+* Create a new Branch.
+``git checkout -b my-new-branch``
+
+* Add your contribution.
+``git add .``
+
+* Commit your changes.
+``git commit -m "Relevant message"``
+
+* Then push
+``git push origin my-new-branch``
+
+* Create a new pull request from your forked repository, and you are DONE!.
 
 .. |PyVersion| image:: https://img.shields.io/pypi/pyversions/djangocms-installer.svg?style=flat-square
     :target: https://pypi.python.org/pypi/djangocms-installer

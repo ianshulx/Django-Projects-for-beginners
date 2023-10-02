@@ -1,40 +1,46 @@
-from django.http import HttpResponseRedirect
-from django.urls import reverse
 from django.utils.deprecation import MiddlewareMixin
+from django.shortcuts import render, redirect
+from django.urls import reverse
 
 
 class LoginCheckMiddleWare(MiddlewareMixin):
+    
+    def process_view(self, request, view_func, view_args, view_kwargs):
+        modulename = view_func.__module__
+        # print(modulename)
+        user = request.user
 
-    def process_view(self,request,view_func,view_args,view_kwargs):
-        modulename=view_func.__module__
-        user=request.user
+        #Check whether the user is logged in or not
         if user.is_authenticated:
             if user.user_type == "1":
                 if modulename == "student_management_app.HodViews":
                     pass
-                elif modulename == "student_management_app.views":
+                elif modulename == "student_management_app.views" or modulename == "django.views.static":
                     pass
                 else:
-                    return HttpResponseRedirect(reverse("admin_home"))
+                    return redirect("admin_home")
+            
             elif user.user_type == "2":
                 if modulename == "student_management_app.StaffViews":
                     pass
-                elif modulename == "student_management_app.views":
+                elif modulename == "student_management_app.views" or modulename == "django.views.static":
                     pass
                 else:
-                    return HttpResponseRedirect(reverse("staff_home"))
+                    return redirect("staff_home")
+            
             elif user.user_type == "3":
                 if modulename == "student_management_app.StudentViews":
                     pass
-                elif modulename == "student_management_app.views":
+                elif modulename == "student_management_app.views" or modulename == "django.views.static":
                     pass
                 else:
-                    return HttpResponseRedirect(reverse("student_home"))
+                    return redirect("student_home")
+
             else:
-                return HttpResponseRedirect(reverse("show_login"))
+                return redirect("login")
 
         else:
-            if request.path == reverse("show_login") or request.path == reverse("do_login"):
+            if request.path == reverse("login") or request.path == reverse("doLogin"):
                 pass
             else:
-                return HttpResponseRedirect(reverse("show_login"))
+                return redirect("login")
