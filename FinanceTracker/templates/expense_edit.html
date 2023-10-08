@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FinTech. | Expenses</title>
+    <link rel="stylesheet" href="{% static './expense.css' %}">
+    
+</head>
+<body>
+    <a href="/dashboard"><h1>FinTech.</h1></a>
+
+
+        <h2 style="color: white;">Update Expense Details</h2>
+        <form id="incomeDetailsForm" action="/edit-expense/{{expense.id}}" method="post">
+            {% csrf_token %}
+            <div style="text-align: center;color: white;">
+                <label style="font-size: 2em;" for="name">Name: </label>
+                <input style="width: 30em;" type="text" id="name" name="name" value="{{expense.name}}" required><br><br>
+                <label style="font-size: 2em;" for="category">Category: </label>
+                <select  style="width: 30em;height: 3em;" class="custom-select tm-select-accounts" id="category" name="category">
+                    {% for category in categories %}
+                    {% if category == expense.category %}
+                    <option value="{{category.id}}" selected>{{category.name}}</option>
+                    {% else %}
+                    <option value="{{category.id}}">{{category.name}}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select><br><br>
+                
+                <label style="font-size: 2em;" for="amount">Amount: </label>
+                <input  style="width: 30em;" type="number" id="amount" name="amount" value="{{expense.amount}}" required><br><br>
+                
+                <label style="font-size: 2em;" for="date">Date: </label>
+                <input style="width: 30em;" type="date" id="date" name="date" value="{{expense.date}}"><br><br>
+                
+                <label style="font-size: 2em;" for="note">Note: </label>
+                <textarea style="width: 30em;" id="note" name="note" rows="4">{{expense.note}}</textarea><br><br>
+                
+            </div>
+            <input style="font-size: 2em;align-self: center;" type="submit" value="Update" >
+        </form>
+
+    
+</body>
+</html>

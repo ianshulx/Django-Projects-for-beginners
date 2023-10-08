@@ -1,0 +1,102 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url(dark-gradient.jpg);
+}
+
+.nav
+{
+    display: flex;
+    width: 100%;
+    /* background-color: #ffffff; */
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    
+}
+
+.nav-logo
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    margin-right: 0px;
+    margin-left: 490px;
+    
+}
+
+#logo
+{
+    text-decoration: none;
+    color: #ffffff;
+}
+
+/* #Profile */
+.left
+{
+    width: 130px;
+    height: 40px;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.4);
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: .3s ease;
+    margin: 0 25px;
+    box-shadow: 0 0 5px rgb(255, 254, 254);
+    
+}
+
+/* #Profile:hover
+{
+    width: 150px;
+    height: 50px;
+    /* margin: 0 25px; */
+/* }  */
+
+
+.page-title
+{
+        color: #ffffff;
+        margin-right: 150px;
+}
+
+.nav-button .btn{
+    width: 130px;
+    height: 40px;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.4);
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: .3s ease;
+    margin: 0 25px;
+    box-shadow: 0 0 5px rgb(255, 254, 254);
+    
+    
+}
+
+#Logout
+{
+    width: 70px;
+}
+
+#Profile
+{
+    width: 70px;
+}
+
+svg
+{
+    font-size: xx-large;
+}
+
+/* .btn:hover
+{
+    width: 150px;
+    height: 50px;
+    margin: 0 10px;
+} */

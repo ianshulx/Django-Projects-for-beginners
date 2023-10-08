@@ -1,0 +1,175 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FinTech. | Incomes</title>
+    <link rel="stylesheet" href="{% static './expense.css' %}">
+    <link rel="stylesheet" href="{% static 'nav.css' %}">
+    <style>
+        /* Style for the close button */
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+                
+        <a href="/dashboard" id="logo"><h1>FinTech.</h1></a>
+         <div class="nav-button">
+             
+             <button class="btn" id="Income" onclick="location.href='/incomes'">Incomes</button>
+             <button class="btn" id="Expense" onclick="location.href='/expenses'">Expenses</button>
+             <!-- <button class="btn" id="Transaction" onclick="transaction()">Transaction</button> -->
+             <button class="btn" id="Setting" onclick="location.href='/settings'">Settigs</button>
+         </div>
+ 
+         <div class="nav-logo">
+             
+             <button class="btn left" id="Profile" onclick="location.href='/profile'"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAbBJREFUSEvN1rtrVFEQx/FPRIVACgkBFUJMoU0QgikEa1FIJxYWtqYQNU1iII2YQBoRK1+V/gEpBEuRtNoZERRBEIU0aSys82LCHrgxd/c+9i7rabbYmfnO78zMuTOgT2egT1xlwMO4jtEuktzAG/xJMYrAp/AZJ7uAJtdNTCJ+CxXfw9MGoClExHteBryEhwXgv3iHQVzF8Q72y4iYhYo7gXdwE6vYbcHG8BVDbeCNgF/jVg7gCeZ6Cb6LFzmAO6mOOf81ovgBVnKCR0/s17EsOFvPNGadavwd57GdARzDN5ztJThir2EBkcQEHuFy1a6uqrjOeOfWuA54Cx8Ro3UEl3C0l4p/tq71bXoCW7B4Yq9hEWeabq4PmEa8WO1OfFjeY+ofg9pXHUovFEATawRfcDoDrw2ewasKXXUfj5sAz+NTBfDFVi8kl9qKKzC7e7ma/h7P4lmklN1A8uZ4HD8KZrPsLcTMn8OvMuCwiXm80sDOFeP1O2VZpLismsp2/wX4Nl5WTv2wQ9Hmuu+RNTqBdURDdXMqgwMWS9oNxNJW97TbPg7EK5Vd3Qw6+fUNvAcn7GMf6tRoiQAAAABJRU5ErkJggg=="/></button>
+ 
+             <button class="btn left" id="Logout" onclick="location.href='/logout'"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAUVJREFUSEvt1r8uREEUx/HPiqhFosALKBCJRodHUChREToJhc6fR0AiER2lQmg0/r0BjUJBeAJvQEbuJjebm707I3s3wpQzZ+73zPmdc+6p6dCqdYjrV4GDs6Poi4jWK97y9rEvHsIVRiKgddMTLOIzbMSCj7CUAK1fmcV5CvgGM3jEWoQDt5ntFnZTwHeYwj2mI8Df4cUOtv/BRZHrxzo2s8NKQj2BSzzn9BxHLz7w0A6N53GMnoREKvKnNLm6sYfV3O3Y0glyNK6m4KDnBSYjQlhkWtSUmoIHMk2Dtj9Z0eAAC5oeNLTFtoc6/8pl7FeZXHl40Dpo/lRlOdUdCLpvZE0k7FXSQIoS7B/catmVdq6yD3VsEDjESpl3Tc7ncJYyCAziGsMJ8FMspA57gdeFsez32Cr/Be9549gps1VQqd3fA38BTKRcH8E6ncAAAAAASUVORK5CYII="/></button>
+         </div>
+         <!-- <div class="nav-menu-btn">
+             <i class="bx bx-menu" onclick="myMenuFunction()"></i>
+         </div> -->
+     </nav>
+
+     <br>
+    <!-- Add Income Button -->
+    <button id="addIncomeButton" onclick="showIncomeForm()">Add Income</button>
+
+    <!-- Income Entry Form (Initially Hidden) -->
+    <div id="incomeForm" style="display: none; position: relative;">
+        <!-- Close Button -->
+        <span class="close-button" onclick="closeIncomeForm()">&#10006;</span>
+
+        <h2>Add Income Details</h2>
+        <form id="incomeDetailsForm" action="/incomes" method="post">
+            {% csrf_token %}
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required><br>
+
+            <label for="category">Category:</label>
+            <select class="custom-select tm-select-accounts" id="category" name="category">
+                      <option selected>Select category</option>
+                      {% for category in categories %}
+                      <option value="{{category.id}}">{{category.name}}</option>
+                      {% endfor %}
+            </select><br>
+
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" required><br>
+
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required><br>
+
+            <label for="note">Note:</label>
+            <textarea id="note" name="note" rows="4"></textarea><br>
+
+            <input type="submit" value="Add" >
+        </form>
+    </div>
+
+    <!-- Display Income Entries in a Table -->
+    <h2 style="color: white;">Income Entries</h2>
+    <table id="incomeTable" border="1">
+        <tr>
+            <th>Sr.No.</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Note</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        {% for income in incomes %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{income.name}}</td>
+            <td>{{income.category}}</td>
+            <td>{{income.amount}}</td>
+            <td>{{income.date}}</td>
+            <td>{{income.note}}</td>
+            <td>
+                <div class="rem">										
+                    <button type="button" onclick="location.href='/edit-income/{{income.id}}' ">
+                        <span class="glyphicon glyphicon-trash">Edit</span>
+                    </button>
+                </div>
+            </td>
+            <td>
+                <div class="rem">										
+                    <button type="button" onclick="location.href='/delete-income/{{income.id}}' ">
+                        <span class="glyphicon glyphicon-trash">X</span>
+                    </button>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br><br><br>
+    {% comment %} For Report BTN {% endcomment %}
+    <div style="position: relative; text-align: center;">
+        <label style="font-size: 2em; color: white;" for="date">Generate Report: </label>
+        <button style="font-size: 2em;align-self: center;" type="button" onclick="location.href='/income-report/daily' ">
+            <span class="glyphicon glyphicon-trash"> Daily </span>
+        </button>
+        <button style="font-size: 2em;align-self: center;" type="button" onclick="location.href='/income-report/weekly' ">
+            <span class="glyphicon glyphicon-trash"> Weekly </span>
+        </button>
+        <button style="font-size: 2em;align-self: center;" type="button" onclick="location.href='/income-report/monthly' ">
+            <span class="glyphicon glyphicon-trash"> Monthly </span>
+        </button>
+        <button style="font-size: 2em;align-self: center;" type="button" onclick="location.href='/income-report/alltime' ">
+            <span class="glyphicon glyphicon-trash"> All </span>
+        </button>
+    </div>
+
+    <script>
+        function showIncomeForm() {
+            var incomeForm = document.getElementById("incomeForm");
+            incomeForm.style.display = "block";
+        }
+
+        function closeIncomeForm() {
+            var incomeForm = document.getElementById("incomeForm");
+            incomeForm.style.display = "none";
+        }
+
+        function addIncomeEntry() {
+            var name = document.getElementById("name").value;
+            var category = document.getElementById("category").value;
+            var amount = document.getElementById("amount").value;
+            var date = document.getElementById("date").value;
+            var note = document.getElementById("note").value;
+
+            var incomeTable = document.getElementById("incomeTable");
+
+            var newRow = incomeTable.insertRow(-1);
+            var cell1 = newRow.insertCell(0);
+            var cell2 = newRow.insertCell(1);
+            var cell3 = newRow.insertCell(2);
+            var cell4 = newRow.insertCell(3);
+            var cell5 = newRow.insertCell(4);
+
+            cell1.innerHTML = name;
+            cell2.innerHTML = category;
+            cell3.innerHTML = amount;
+            cell4.innerHTML = date;
+            cell5.innerHTML = note;
+
+            // Clear the form
+            document.getElementById("incomeDetailsForm").reset();
+
+            // Close the form after submission
+            closeIncomeForm();
+        }
+    </script>
+</body>
+</html>
