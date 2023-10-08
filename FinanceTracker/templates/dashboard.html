@@ -1,0 +1,134 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinTech. | Dashboard</title>
+    <link rel="stylesheet" href="{% static 'dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'nav.css' %}">
+</head>
+<body>
+    <nav class="nav">
+                
+       <a href="/dashboard" id="logo"><h1>FinTech.</h1></a>
+        <div class="nav-button">
+            
+            <button class="btn" id="Income" onclick="location.href='/incomes'">Incomes</button>
+            <button class="btn" id="Expense" onclick="location.href='/expenses'">Expenses</button>
+            <!-- <button class="btn" id="Transaction" onclick="transaction()">Transaction</button> -->
+            <button class="btn" id="Setting" onclick="location.href='/settings'">Settigs</button>
+        </div>
+
+        <div class="nav-logo">
+            
+            <button class="btn left" id="Profile" onclick="location.href='/profile'"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAbBJREFUSEvN1rtrVFEQx/FPRIVACgkBFUJMoU0QgikEa1FIJxYWtqYQNU1iII2YQBoRK1+V/gEpBEuRtNoZERRBEIU0aSys82LCHrgxd/c+9i7rabbYmfnO78zMuTOgT2egT1xlwMO4jtEuktzAG/xJMYrAp/AZJ7uAJtdNTCJ+CxXfw9MGoClExHteBryEhwXgv3iHQVzF8Q72y4iYhYo7gXdwE6vYbcHG8BVDbeCNgF/jVg7gCeZ6Cb6LFzmAO6mOOf81ovgBVnKCR0/s17EsOFvPNGadavwd57GdARzDN5ztJThir2EBkcQEHuFy1a6uqrjOeOfWuA54Cx8Ro3UEl3C0l4p/tq71bXoCW7B4Yq9hEWeabq4PmEa8WO1OfFjeY+ofg9pXHUovFEATawRfcDoDrw2ewasKXXUfj5sAz+NTBfDFVi8kl9qKKzC7e7ma/h7P4lmklN1A8uZ4HD8KZrPsLcTMn8OvMuCwiXm80sDOFeP1O2VZpLismsp2/wX4Nl5WTv2wQ9Hmuu+RNTqBdURDdXMqgwMWS9oNxNJW97TbPg7EK5Vd3Qw6+fUNvAcn7GMf6tRoiQAAAABJRU5ErkJggg=="/></button>
+
+            <button class="btn left" id="Logout" onclick="location.href='/logout'"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAUVJREFUSEvt1r8uREEUx/HPiqhFosALKBCJRodHUChREToJhc6fR0AiER2lQmg0/r0BjUJBeAJvQEbuJjebm707I3s3wpQzZ+73zPmdc+6p6dCqdYjrV4GDs6Poi4jWK97y9rEvHsIVRiKgddMTLOIzbMSCj7CUAK1fmcV5CvgGM3jEWoQDt5ntFnZTwHeYwj2mI8Df4cUOtv/BRZHrxzo2s8NKQj2BSzzn9BxHLz7w0A6N53GMnoREKvKnNLm6sYfV3O3Y0glyNK6m4KDnBSYjQlhkWtSUmoIHMk2Dtj9Z0eAAC5oeNLTFtoc6/8pl7FeZXHl40Dpo/lRlOdUdCLpvZE0k7FXSQIoS7B/catmVdq6yD3VsEDjESpl3Tc7ncJYyCAziGsMJ8FMspA57gdeFsez32Cr/Be9549gps1VQqd3fA38BTKRcH8E6ncAAAAAASUVORK5CYII="/></button>
+        </div>
+        <!-- <div class="nav-menu-btn">
+            <i class="bx bx-menu" onclick="myMenuFunction()"></i>
+        </div> -->
+    </nav>
+
+    <main class="container">
+        <div class="left-chart">
+            <div class="chart-container">
+                <canvas id="chart1"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="chart2"></canvas>
+            </div>
+        </div>
+        <div class="right-chart">
+
+            
+            <div class="chart-container">
+                <canvas id="chart3"></canvas>
+            </div>
+
+            <div class="feilds">
+                <button class="income" onclick="location.href='/incomes'">Incomes</button>
+                <button class="expense" onclick="location.href='/expenses'">Expenses</button>
+
+                <p class="balance">Balance: {{balance}} ₹</p>
+            </div>
+
+        </div>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    {% comment %} <script src="{% static 'dashboard.js' %}"></script> {% endcomment %}
+    <script >
+
+    // Dummy data for the second chart (line chart)
+    const labels2 = ["June", "July", "August", "September", "October"];
+    const data2 = [45, 70, 42, 60, 75];
+
+
+    // Create the first Chart.js chart (bar chart)
+    const ctx1 = document.getElementById("chart1").getContext("2d");
+    const chart1 = new Chart(ctx1, {
+        type: "bar",
+        data: {
+            labels: [{% for day in pre_10days_list %}"{{day}}",{% endfor %}],
+            datasets: [
+                {
+                    label: "Last 10 days Incomes",
+                    data: [{% for income in Income_last_10days_amount %}{{ income }},{% endfor %}],
+                    backgroundColor: "rgba(75, 192, 192, 0.2)",
+                    borderColor: "rgba(75, 192, 192, 1)",
+                    borderWidth: 1,
+                },
+            ],
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                },
+            },
+        },
+    });
+
+    // Create the second Chart.js chart (line chart)
+    const ctx2 = document.getElementById("chart2").getContext("2d");
+    const chart2 = new Chart(ctx2, {
+        type: "line",
+        data: {
+            labels: [{% for day in pre_10days_list %}"{{day}}",{% endfor %}],
+            datasets: [
+                {
+                    label: "Last 10 days Expenses",
+                    data: [{% for expense in Expense_last_10days_amount %}{{ expense }},{% endfor %}],
+                    borderColor: "rgba(255, 99, 132, 1)",
+                    borderWidth: 2,
+                    fill: false,
+                },
+            ],
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                },
+            },
+        },
+    });
+
+    // Create the third Chart.js chart (donut chart)
+    const ctx3 = document.getElementById("chart3").getContext("2d");
+    const chart3 = new Chart(ctx3, {
+        type: "doughnut",
+        data: {
+            labels: [{% for category in category_list %}"{{category}}",{% endfor %}],
+            datasets: [
+                {
+                    data: [{% for val in catg_total_list %}{{val}},{% endfor %}],
+                    backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#9FE2BF", "#808080","#7DFF33"],
+                },
+            ],
+        },
+    });
+    </script>
+</body>
+</html>

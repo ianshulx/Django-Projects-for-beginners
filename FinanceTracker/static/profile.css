@@ -1,0 +1,229 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url(dark-gradient.jpg);
+}
+
+.nav
+{
+    display: flex;
+    width: 100%;
+    /* background-color: #ffffff; */
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    
+}
+
+.nav-logo
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    margin-right: 0px;
+    margin-left: 490px;
+    
+}
+
+#logo
+{
+    text-decoration: none;
+    color: #ffffff;
+}
+
+/* #Profile */
+.left
+{
+    width: 130px;
+    height: 40px;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.4);
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: .3s ease;
+    margin: 0 25px;
+    box-shadow: 0 0 5px rgb(255, 254, 254);
+    
+}
+
+/* #Profile:hover
+{
+    width: 150px;
+    height: 50px;
+    /* margin: 0 25px; */
+/* }  */
+
+
+.page-title
+{
+        color: #ffffff;
+        margin-right: 150px;
+}
+
+.nav-button .btn{
+    width: 130px;
+    height: 40px;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.4);
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: .3s ease;
+    margin: 0 25px;
+    box-shadow: 0 0 5px rgb(255, 254, 254);
+    
+    
+}
+
+#Logout
+{
+    width: 70px;
+}
+
+#Profile
+{
+    width: 70px;
+}
+
+svg
+{
+    font-size: xx-large;
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    /* background-color: #f4f4f4; */
+}
+
+
+
+
+/* body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+} */
+
+.top
+{
+    display: flex;
+    flex-direction: row;
+}
+
+.left-container {
+    text-align: center;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
+
+}
+
+.right-container
+{
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+
+.profile-photo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%; /* Makes the image circular */
+    overflow: hidden; /* Hides any image overflow outside the circular shape */
+    margin-top: 200px;
+}
+
+#setting-text
+{
+justify-content: center;
+}
+
+.container {
+    max-width: 800px;
+    height: 500px;;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffffad;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    border-radius: 20px;
+    margin-top: 60px;
+    display: flex;
+    flex-direction: row;
+}
+.profile-photo {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    background-image: url('dark-gradient.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.container
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.top
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.btm 
+{
+    display: flex;
+    flex: row;
+    margin-left: 120px;
+}
+
+form{
+    margin-top: 100px;
+    margin-left: 0;
+}
+
+.accbal
+{
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.input-field {
+    display: block;
+    width: 80%;
+    padding: 10px;
+    margin: 20px 0;
+    
+    margin-left: 100px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-left: 90px ;
+    font-size: 16px;
+}
+.submit-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 7px;
+    margin-left: 180px;
+}

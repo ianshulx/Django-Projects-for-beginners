@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Settings</title>
+    <link rel="stylesheet" href="{% static 'profile.css' %}">
+    <link rel="stylesheet" href="{% static 'nav.css' %}">
+</head>
+<body>
+
+
+
+<nav class="nav">
+                
+    <a href="/dashboard" id="logo"><h1>FinTech.</h1></a>
+     <div class="nav-button">
+         
+         <button class="btn" id="Income" onclick="location.href='/incomes'">Incomes</button>
+         <button class="btn" id="Expense" onclick="location.href='/expenses'">Expenses</button>
+         <!-- <button class="btn" id="Transaction" onclick="transaction()">Transaction</button> -->
+         <button class="btn" id="Setting" onclick="location.href='/settings'">Settigs</button>
+     </div>
+
+     <div class="nav-logo">
+         
+         <button class="btn left" id="Profile" onclick="location.href='/profile'"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAbBJREFUSEvN1rtrVFEQx/FPRIVACgkBFUJMoU0QgikEa1FIJxYWtqYQNU1iII2YQBoRK1+V/gEpBEuRtNoZERRBEIU0aSys82LCHrgxd/c+9i7rabbYmfnO78zMuTOgT2egT1xlwMO4jtEuktzAG/xJMYrAp/AZJ7uAJtdNTCJ+CxXfw9MGoClExHteBryEhwXgv3iHQVzF8Q72y4iYhYo7gXdwE6vYbcHG8BVDbeCNgF/jVg7gCeZ6Cb6LFzmAO6mOOf81ovgBVnKCR0/s17EsOFvPNGadavwd57GdARzDN5ztJThir2EBkcQEHuFy1a6uqrjOeOfWuA54Cx8Ro3UEl3C0l4p/tq71bXoCW7B4Yq9hEWeabq4PmEa8WO1OfFjeY+ofg9pXHUovFEATawRfcDoDrw2ewasKXXUfj5sAz+NTBfDFVi8kl9qKKzC7e7ma/h7P4lmklN1A8uZ4HD8KZrPsLcTMn8OvMuCwiXm80sDOFeP1O2VZpLismsp2/wX4Nl5WTv2wQ9Hmuu+RNTqBdURDdXMqgwMWS9oNxNJW97TbPg7EK5Vd3Qw6+fUNvAcn7GMf6tRoiQAAAABJRU5ErkJggg=="/></button>
+
+         <button class="btn left" id="Logout" onclick="location.href='/logout'"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAUVJREFUSEvt1r8uREEUx/HPiqhFosALKBCJRodHUChREToJhc6fR0AiER2lQmg0/r0BjUJBeAJvQEbuJjebm707I3s3wpQzZ+73zPmdc+6p6dCqdYjrV4GDs6Poi4jWK97y9rEvHsIVRiKgddMTLOIzbMSCj7CUAK1fmcV5CvgGM3jEWoQDt5ntFnZTwHeYwj2mI8Df4cUOtv/BRZHrxzo2s8NKQj2BSzzn9BxHLz7w0A6N53GMnoREKvKnNLm6sYfV3O3Y0glyNK6m4KDnBSYjQlhkWtSUmoIHMk2Dtj9Z0eAAC5oeNLTFtoc6/8pl7FeZXHl40Dpo/lRlOdUdCLpvZE0k7FXSQIoS7B/catmVdq6yD3VsEDjESpl3Tc7ncJYyCAziGsMJ8FMspA57gdeFsez32Cr/Be9549gps1VQqd3fA38BTKRcH8E6ncAAAAAASUVORK5CYII="/></button>
+     </div>
+ </nav>
+
+
+<!-- ----------------------------------------------------------------------- -->
+
+
+    <div class="container">
+
+        <div class="top">
+        <h2 id="setting-text" style="justify-content: center;">My Profile</h2>
+        </div>
+
+        <div class="btm">
+        <div class="left-container">
+            <div class="profile-photo">
+                <img src="{% static 'dark-gradient.jpg' %}" alt="Profile Photo">
+            </div>
+            <H2 id="balance">Account Balance:</H1>
+            <input type="text" class="accbal" readonly placeholder="Balance" value="{{balance}}">
+        </div>
+
+        <div class="right-container"></div>
+        
+        <form action="/profile" method="post">
+            {% csrf_token %}
+            <input type="text" class="input-field" name="first_name" placeholder="First Name" value="{{profile.first_name}}" >
+            <input type="text" class="input-field" name="last_name" value="{{profile.last_name}}" placeholder="Last Name">
+            <input type="email" class="input-field" name="email" value="{{profile.email}}" placeholder="Email" >
+            <input type="submit" value="Save Changes" class="submit-button">
+        </form>
+        </div>
+        </div>
+    </div>
+</body>
+</html>

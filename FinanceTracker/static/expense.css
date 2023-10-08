@@ -1,0 +1,104 @@
+body{
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+    min-height: 100vh;
+    background: url(dark-gradient.jpg);
+}
+/* styles.css */
+
+/* styles.css */
+
+/* Add Income Button */
+#addIncomeButton {
+    position: absolute;
+    right: 45px;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 15px 62px;
+    border: none;
+    border-radius: 5px;
+}
+h1{
+    color: white;
+}
+/* Centered Income Entries Heading with White Color */
+h2 {
+    text-align: center;
+    color:black;
+}
+
+/* Styling for the Income Table */
+#incomeTable {
+    border-collapse: collapse;
+    width: 100%;
+    background-color: rgba(250, 235, 215, 0.379); /* Color theme for the table */
+    border-radius: 7px; 
+    border-color: none;
+}
+
+#incomeTable th, #incomeTable td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid rgba(250, 235, 215, 0.379);
+}
+
+#incomeTable th {
+    background-color: rgba(250, 235, 215, 0.379);
+   
+}
+
+/* Style for even rows */
+#incomeTable tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+/* Styling for the Form */
+#incomeForm {
+    position: fixed;
+    float: initial;
+    z-index: 10;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-top: 20px;
+width: 85%;
+margin-inline: 7.5%;
+    background-color: rgba(255, 255, 255, 0.998); /* Transparent white background for the form */
+    border-radius: 5px;
+    color: black;
+}
+
+#incomeDetailsForm {
+    display: flex;
+    flex-direction: column;
+}
+
+#incomeDetailsForm label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    
+}
+#incomeDetailsForm input[type="text"],
+#incomeDetailsForm input[type="number"],
+#incomeDetailsForm input[type="date"],
+#incomeDetailsForm textarea {
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#incomeDetailsForm input[type="button"] {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+#incomeDetailsForm input[type="button"]:hover {
+    background-color: #45a049;
+}
+
+#incomeDetailsForm input[type="button"]:focus {
+    outline: none;
+}
