@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" href="/style.css">
+    <title>Weather App</title>
+    
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+
+    <style>
+
+        /* sign in FORM */
+        #logreg-forms{
+            width:412px;
+            margin:10vh auto;
+            background-color:#f3f3f3;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+        }
+        #logreg-forms form {
+            width: 100%;
+            max-width: 410px;
+            padding: 15px;
+            margin: auto;
+        }
+        #logreg-forms .form-control {
+            position: relative;
+            box-sizing: border-box;
+            height: auto;
+            padding: 10px;
+            font-size: 16px;
+        }
+        #logreg-forms .form-control:focus { z-index: 2; }
+        #logreg-forms .form-signin input[type="email"] {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        #logreg-forms .form-signin input[type="password"] {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+
+        #logreg-forms .social-login{
+            width:390px;
+            margin:0 auto;
+            margin-bottom: 14px;
+        }
+        #logreg-forms .social-btn{
+            font-weight: 100;
+            color:white;
+            width:190px;
+            font-size: 0.9rem;
+        }
+
+        #logreg-forms a{
+            display: block;
+            padding-top:10px;
+            color:lightseagreen;
+        }
+
+        #logreg-form .lines{
+            width:200px;
+            border:1px solid red;
+        }
+
+
+        #logreg-forms button[type="submit"]{ margin-top:10px; }
+
+        #logreg-forms .facebook-btn{  background-color:#3C589C; }
+
+        #logreg-forms .google-btn{ background-color: #DF4B3B; }
+
+        #logreg-forms .form-reset, #logreg-forms .form-signup{ display: none; }
+
+        #logreg-forms .form-signup .social-btn{ width:210px; }
+
+        #logreg-forms .form-signup input { margin-bottom: 2px;}
+
+        .form-signup .social-login{
+            width:210px !important;
+            margin: 0 auto;
+        }
+
+        /* Mobile */
+
+        @media screen and (max-width:500px){
+            #logreg-forms{
+                width:300px;
+            }
+            
+            #logreg-forms  .social-login{
+                width:200px;
+                margin:0 auto;
+                margin-bottom: 10px;
+            }
+            #logreg-forms  .social-btn{
+                font-size: 1.3rem;
+                font-weight: 100;
+                color:white;
+                width:200px;
+                height: 56px;
+                
+            }
+            #logreg-forms .social-btn:nth-child(1){
+                margin-bottom: 5px;
+            }
+            #logreg-forms .social-btn span{
+                display: none;
+            }
+            #logreg-forms  .facebook-btn:after{
+                content:'Facebook';
+            }
+        
+            #logreg-forms  .google-btn:after{
+                content:'Google+';
+            }
+            
+        }
+    </style>
+
+</head>
+<body>
+
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Weather Application</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            
+        </div>
+      </nav>
+
+
+
+    <div id="logreg-forms">
+
+            <!-- Weather form ///////////////////-->
+            <form method="post" action="{% url 'index_url' %}" class="form-signin">
+            {% csrf_token %}
+            <h1 class="h3 mb-3 font-weight-normal" style="text-align: center">Universal Weather Forcaster</h1>
+           
+            <p style="text-align:center"> {{ checker }}  </p>
+            
+            <br>
+            <input name="city" type="text" value="{{static_city}}" id="" class="form-control" placeholder="Enter Your City " required autofocus="">
+            <br>
+
+            
+            {% if weather %}
+
+                <div style="text-align: left; margin: 0 auto 0 auto; width: 54%; padding: 0;">
+                    <h6 class="h6 mb-3 font-weight-normal" style="padding: 10px 0px 0px -50%;">Temperature : {{weather}} C <sup>0</sup> </h6>
+                    <h6 class="h6 mb-3 font-weight-normal" style="padding: 10px 0px 0px -50%;">City : {{city_name}}</h6>
+                    <h6 class="h6 mb-3 font-weight-normal" style="padding: 10px 0px 0px -50%;">Region : {{region}}</h6>
+                    <h6 class="h6 mb-3 font-weight-normal" style="padding: 10px 0px 0px -50%;">Country : {{country}}</h6>
+                    <h6 class="h6 mb-3 font-weight-normal" style="padding: 10px 0px 0px -50%;">Latitude : {{lat}}</h6>
+                    <h6 class="h6 mb-3 font-weight-normal" style="padding: 10px 0px 0px -50%;">Longitude : {{lon}}</h6>
+                    <h6 class="h6 mb-3 font-weight-normal" style="padding: 10px 0px 0px -50%;">Localtime : {{localtime}}</h6>
+                    <h6 class="h6 mb-3 font-weight-normal" style="padding: 10px 0px 0px -50%;">Continent : {{continent}}</h6>
+                </div>
+                
+                <br>
+                <a style="color:white" href="/" class="btn btn-info btn-block" type="submit">Clear</a>
+            
+            {% else %}
+                <button class="btn btn-info btn-block" type="submit">Submit</button>
+            {% endif %}
+            
+            </form>
+            <!-- Weather form end ///////////////////-->
+            
+    </div>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+   
+</body>
+</html>
