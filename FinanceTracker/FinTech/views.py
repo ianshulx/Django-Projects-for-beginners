@@ -1,7 +1,7 @@
-from django.shortcuts import render,redirect,HttpResponse
+from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from django.contrib.auth.models import User, auth 
-from datetime import date,datetime,timedelta
-from .models import Expense,Income,IncomeCategory,ExpenseCategory,Account,Budget
+from datetime import date, datetime, timedelta
+from .models import Expense, Income, IncomeCategory, ExpenseCategory, Account, Budget
 # Create your views here.
 
 # Dashboard
@@ -93,26 +93,33 @@ def dashboard(request):
 # Income
 def income(request):
     if request.user.is_authenticated:
-        if request.method=="POST":
-            name=request.POST['name']
-            category_id=request.POST.get('category')
-            amount=request.POST['amount']
-            date=request.POST['date']
-            note=request.POST.get('note')
-            category = IncomeCategory.objects.get(user=request.user.id,id=int(category_id))
+        if request.method == "POST":
+            name = request.POST['name']
+            category_id = request.POST.get('category')
+            amount = request.POST['amount']
+            date = request.POST['date']
+            note = request.POST.get('note')
+            category = get_object_or_404(IncomeCategory, user=request.user.id, id=int(category_id))
 
-            my_account= Account.objects.get(user=User.objects.get(id = request.user.id))
-            my_account.balance+=float(amount)
+            my_account = get_object_or_404(Account, user=request.user.id)
+            my_account.balance += float(amount)
             my_account.save()
             print("Account Balance Updated!!")
-            # Create INcome record
-            Income.objects.create(name=name,user=User.objects.get(id = request.user.id),category=category,amount=amount,date=date,note=note)
+            # Create Income record
+            Income.objects.create(
+                name=name,
+                user=request.user,
+                category=category,
+                amount=amount,
+                date=date,
+                note=note
+            )
             return redirect('/incomes')
 
-        incomes_catg= IncomeCategory.objects.filter(user=request.user.id)
-        incomes= Income.objects.filter(user=request.user.id)
+        incomes_catg = IncomeCategory.objects.filter(user=request.user.id)
+        incomes = Income.objects.filter(user=request.user.id)
 
-        return render(request,"income.html",{"categories":incomes_catg,"incomes":incomes})
+        return render(request, "income.html", {"categories": incomes_catg, "incomes": incomes})
     else:
         return redirect("/")
 
