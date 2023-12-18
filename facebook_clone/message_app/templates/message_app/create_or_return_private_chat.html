@@ -1,0 +1,39 @@
+<script type="text/javascript">
+	var url = window.location.origin
+	//console.log(url)
+	function createOrReturnPrivateChat(id){
+		/*payload = {
+			"csrfmiddlewaretoken": "{{ csrf_token }}",
+			"user2_id": id,
+		}*/
+		console.log(id)
+		fetch(`${url}/message/create-or-return-private-chat/${id}/`, {
+			body: null,
+			method: 'POST',
+			headers:{
+				'X-CSRFToken': "{{csrf_token}}",
+				"Content-Type": "application/json"
+			}
+		}).then((res) => res.json()).then((data) =>{
+			console.log("SUCCESS", data)
+			if(data['response'] == "Successfully got the chat"){
+				var chatroomId = data['chatroom_id']
+				OnGetOrCreateChatroomSuccess(chatroomId)
+			}
+			else if(data['response'] != null){
+				alert(data['response'])
+			}
+		})
+
+	}
+
+
+	function OnGetOrCreateChatroomSuccess(chatroomId){
+			var url = "{% url 'private-chat-room' %}?room_id=" + chatroomId
+			var win = window.location.replace(url)
+			// window.open(url) // for new tab
+			win.focus()
+		}
+	
+
+</script>

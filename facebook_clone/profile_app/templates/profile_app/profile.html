@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+
+{% block content %}
+<br>
+    <div class="row">
+      <div class="col-3">
+        {% include 'snippets/left-menu.html' %}
+      </div>
+      <div class="col-6">
+        <h1>My Profile</h1>
+        <div class="friend-main-image-containter">
+          <img src="{{ account.profile_image.url }}" class="" alt="" srcset="">
+          <div class="friend-image-container">
+              <div>
+                  <img src="{{ account.profile_image.url }}" class="rounded-circle" alt="" srcset="">
+              </div>
+
+          </div>
+      </div>
+      <br>
+      <br>
+      <br>
+      <h1>Omotosho Micheal<span style="font-size: 30px;"> ({{ account.username }})</span></h1>
+      {% if friends|length == 0 or friends|length == 1 %}
+          <h5>{{ friends|length }} <span style="color: gray;">friend</span></h5>
+      {% else %}
+          <h5>{{ friends|length }} <span style="color: gray;">friends</span></h5>
+      {% endif %}
+      {% if account.username == request.user.username %}
+      <a class="btn btn-primary" href="{% url 'edit-profile' %}">Edit Profile</a>
+      {% endif %}
+      </div>
+      <div class="col-3">
+        <div class="card">
+          {% include 'snippets/right-data.html' %}
+        </div>
+      </div>
+    </div>
+  
+{% endblock %}

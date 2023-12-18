@@ -1,0 +1,82 @@
+{% extends 'account/base.html' %}
+
+        {% block title %}
+        Register Page
+        {% endblock %}
+
+        {% block content %}
+        
+        <div class="row">
+          <div class="col-6 d-flex flex-column justify-content-between second-container">
+            <div></div>
+            <div>
+                <h1>Facebook</h1>
+                <p>Facebook allows you to conect and share to families and friends in your life.</p>
+            </div>
+            <div></div>
+          </div>
+
+          
+          <div class="col-6 d-flex flex-column justify-content-between second-container">
+            <div></div>
+            <div class="card">
+                <div class="card-header text-center">
+                    <h1>Register UI</h1>
+                </div>
+                <div class="card-body text-center">
+                   <form action="" method="post">{% csrf_token %}
+                    <div class="input-group mb-3">
+
+                        <span class="input-group-text material-symbols-outlined" id="basic-addon1">person</span>
+                        <input type="text" class="form-control" placeholder="Enter Username" aria-label="Username" name = "username" aria-describedby="basic-addon1">
+                        
+                      </div>
+                      <div class="input-group mb-3">
+                        <span class="input-group-text material-symbols-outlined" id="basic-addon1">email</span>
+                        <input type="email" class="form-control" placeholder="Enter Email" aria-label="Email" name = "email" aria-describedby="basic-addon1">
+                        
+                      </div>
+                      <div class="input-group mb-3">
+                        <span class="input-group-text material-symbols-outlined" id="basic-addon1">lock</span>
+                        <input type="password" class="form-control" placeholder="Enter Password" aria-label="Password" name = "password1" aria-describedby="basic-addon1">
+                        
+                      </div>
+                      <div class="input-group mb-3">
+                        <span class="input-group-text material-symbols-outlined" id="basic-addon1">lock</span>
+                        <input type="password" class="form-control" placeholder="Re-Enter Password" aria-label="Password" name = "password2" aria-describedby="basic-addon1">
+                        
+                      </div>
+                      
+                          {% for field in reg_form %}
+                          <p>
+                          {% for error in field.errors %}
+                          <p style="color: red">{{ error }}</p>
+                          {% endfor %}
+                          </p>
+                          {% endfor %}
+                          {% if reg_form.non_field_errors %}
+                          <div style="color: red">
+                            <p>{{reg_form.non_field_errors}}</p>
+                          </div>
+
+                          {% endif %}
+                      <div class="d-grid gap-2">
+                        <input type="submit" class="btn btn-primary" value="Sign Up">
+                      </div>
+                      <br>
+                      <p>Already have an account?</p>
+                      <hr>
+                      
+                        <button class="btn btn-success"><a href="{% url 'login' %}">Login Here</a></button>
+                      
+                   </form>
+
+                
+                </div>
+            </div>
+            <div></div>
+          </div>
+        </div>
+
+        {% endblock %}
+      

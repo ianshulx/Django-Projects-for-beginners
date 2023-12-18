@@ -1,0 +1,108 @@
+<!-- Modal For creating a Post -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 ms-auto" id="exampleModalLabel">Create Post</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="cancelBtn"></button>
+        </div>
+        <div class="modal-body">
+          <div class="d-flex flex-row align-items-left">
+            <img class="pe-1 profile-pic" src="{{ request.user.profile_image.url }}" alt="" srcset="">
+            <div class="d-flex flex-column align-items-left" id="postview">
+              <span>{{ request.user.username }}</span>
+              <div class="d-flex flex-row align-items-center justify-content-start" id="public">
+                <i class="fa-solid fa-earth-americas ps-2"></i>
+                <span class="pe-1 ps-1">Public</span>
+                <i class="fa-solid fa-caret-down"></i>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div id="postform">
+            <textarea name="" id="postinputid" cols="50" rows="0" placeholder="What on your mind, {{ request.user.username }}?"></textarea>
+          </div>
+          <div class="d-none justify-content-between">
+            <i class="fa-solid fa-xmark" style="padding: 5px; border-radius: 50%; background-color: gray;" id="confirmImageBtn"></i>
+            <i class="fa-solid fa-xmark" style="padding: 5px; border-radius: 50%; background-color: gray;" id="cancelImageBtn"></i>
+          </div>
+          <div id="ImageContainer1">
+            <div class="d-flex flex-column justify-content-between align-items-center h-100 rounded" id="photoBtn1">
+              <form class="form-signin" method="post" enctype="multipart/form-data">{% csrf_token %}
+                <input class="d-none" type="file" name="profile_image" id="id_profile_image" onchange="readURL(this)">
+              </form>
+              
+              <div></div>
+                <div class="d-flex flex-column align-items-center">
+                    <i class="fa-solid fa-file-circle-plus"></i>
+                    <span>Add Photos</span>
+                </div>
+                <div></div>
+            </div>
+          </div>
+
+          <div id="ImageContainer2">
+            <img class="w-100 h-100 rounded" src="" alt="" srcset="" id="photoImageID">
+            <video class="w-100 h-100 rounded" id="video-container" controls>
+              <source src="" id="videoImageID" type="video/mp4">
+            </video>
+          </div>
+
+
+              
+          
+        </div>
+        <div class="modal-footer">
+          <div class="d-flex flex-row justify-content-between border border-black rounded" id="assets">
+            <div class="d-flex">
+              <p>Add to your post</p>
+            </div>
+            <div class="d-flex flex-row justify-content-between p-3" id="mediaid">
+              <i class="fa-solid fa-images" style="color: green;" id="addphotoBtn"></i>
+              <i class="fa-solid fa-user-tag" style="color: blue;"></i>
+              <i class="fa-regular fa-face-smile" style="color: yellow;"></i>
+              <i class="fa-solid fa-location-dot" style="color: red;"></i>
+            </div>
+          </div>
+          <div class="d-grid gap-2 col-12 mx-auto">
+            <button class="btn btn-primary" type="button" id="postbtnid" disabled>Post</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for live video-->
+<div class="modal fade" id="livevideo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 ms-auto" id="exampleModalLabel">Create Post</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h3>Live Video coming soon</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+   <!-- Modal for emoji-->
+<div class="modal fade" id="emoji" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 ms-auto" id="exampleModalLabel">Create Post</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h3>Emoji coming soon</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+<!-- Script to creating a post-->
+{% include 'snippets/home_js.html' %}

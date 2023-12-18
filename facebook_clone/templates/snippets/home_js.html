@@ -1,0 +1,190 @@
+
+
+<script>
+     const addPhotoBtn = document.querySelector('#addphotoBtn')
+    const ImageContainer1 = document.querySelector('#ImageContainer1')
+    const ImageContainer2 = document.querySelector('#ImageContainer2')
+    var imageField = document.getElementById("photoImageID")
+    var videoImageID = document.getElementById("videoImageID")
+    var video_container = document.getElementById("video-container")
+    const photoid = document.querySelector('#photoid')
+    const cancelBtn = document.querySelector('#cancelBtn')
+    const postBtn = document.querySelector('#postbtnid')
+    const postInput = document.querySelector('#postinputid')
+    const photoBtn1 = document.querySelector('#photoBtn1')
+   
+    //const idProfileImage = document.querySelector('#id_profile_image')
+
+	var imageFile;
+	var base64ImageString;
+    var inputPostValue
+	
+
+    function readURL(input){
+        postBtn.removeAttribute('disabled')
+        ImageContainer1.style.display = "none"
+        console.log(input.files[0].name)
+		if(input.files && input.files[0].name.match(/\.(jpg|jpeg|png|gif|webp)$/i)){
+			var reader = new FileReader()
+
+			reader.onload = function(e){
+				//disableImageOverlay()
+				var image = e.target.result
+                ImageContainer2.style.display = "block"
+                video_container.style.display = "none"
+				imageField.src = image
+                imageFile =	image
+                
+						
+			}
+			reader.readAsDataURL(input.files[0])
+            
+		}else if(input.files && input.files[0].name.match(/\.(mp4)$/i)){
+            var reader = new FileReader()
+            reader.onload = function(e){
+				//disableImageOverlay()
+				var video = e.target.result
+                ImageContainer2.style.display = "block"
+                imageField.style.display = "none"
+				videoImageID.src = video
+                imageFile =	video
+						
+			}
+            reader.readAsDataURL(input.files[0])
+        }
+	}
+
+
+    
+
+    function isImageSizeValid(image){
+		var startIndex = image.indexOf("base64,") + 7
+		var base64str = image.substr(startIndex)
+		var decoded = atob(base64str)
+		if(decoded.length >= "{{ DATA_UPLOAD_MAX_MEMORY_SIZE }}"){
+			return null
+		}
+		return base64str
+	}
+
+    
+    
+
+
+
+// <!------------ Script to add post photo view Button --------------->
+
+    const photoViewButton = (e) =>{
+        e.preventDefault()
+        ImageContainer1.style.display = "block"
+    }
+    addPhotoBtn.addEventListener('click', photoViewButton)
+    photoid.addEventListener('click', photoViewButton)
+
+//<----------------- END ---------------------------------------->     
+    
+
+// <!------------ Script to remove post photo view Button -------------->
+
+    cancelBtn.addEventListener('click', (e) =>{
+        e.preventDefault()
+        ImageContainer1.style.display = "none"
+        ImageContainer2.style.display = "none"
+        addPhotoBtn.style.pointerEvents = ""
+        
+    })
+
+// <----------------- END ---------------------------------------->
+
+
+
+// <-------------- Script to create a post ----------------------->
+
+
+
+postBtn.addEventListener('click', (e) =>{
+    e.preventDefault()
+
+    if(inputPostValue && imageFile){
+        fetch(`${url}/create-post/`, {
+        body: JSON.stringify({
+            inputPostValue: inputPostValue,
+            imgPostValue: imageFile 
+        }),
+        method: 'POST',
+        headers:{
+            'X-CSRFToken': "{{csrf_token}}",
+            "Content-Type": "application/json"
+        }
+    }).then((res) => res.json()).then((data) =>{
+        console.log(data)
+    })
+
+    }else{
+        if(inputPostValue){
+            fetch(`${url}/create-post/`, {
+        body: JSON.stringify({
+            inputPostValue: inputPostValue,
+            //imgPostValue: imageFile 
+        }),
+        method: 'POST',
+        headers:{
+            'X-CSRFToken': "{{csrf_token}}",
+            "Content-Type": "application/json"
+        }
+    }).then((res) => res.json()).then((data) =>{
+        console.log(data)
+    })
+        }else{
+            fetch(`${url}/create-post/`, {
+        body: JSON.stringify({
+            //inputPostValue: inputPostValue,
+            imgPostValue: imageFile 
+        }),
+        method: 'POST',
+        headers:{
+            'X-CSRFToken': "{{csrf_token}}",
+            "Content-Type": "application/json"
+        }
+    }).then((res) => res.json()).then((data) =>{
+        console.log(data)
+    })
+        }
+    }
+
+    window.location.reload()
+
+})
+
+// <------------------------- END --------------------------------------->
+
+
+
+// <-------------- Script Enabling and disablng button -------------------->
+
+postInput.addEventListener('keyup', (e) =>{
+    e.preventDefault()
+    
+    if(e.target.value.length > 0){
+        postBtn.removeAttribute('disabled')
+        inputPostValue = e.target.value.trim()
+    }else{
+        postBtn.setAttribute('disabled', 'disabled')
+    }
+})
+
+// <------------------------------- END -------------------------------------->
+
+
+photoBtn1.addEventListener("click", function(event){
+    addPhotoBtn.style.pointerEvents = "none"
+	document.getElementById("id_profile_image").click()
+})
+
+
+
+</script>
+
+
+
+

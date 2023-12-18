@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Friend{% endblock %}
+
+{% load static %}
+
+{% block content %}
+<br>
+    <div class="row">
+      <div class="col-3">
+        {% include 'snippets/left-menu.html' %}
+      </div>
+      <div class="col-6">
+        <div class="friend-main-image-containter">
+            <img src="{{ account.profile_image.url }}" class="" alt="" srcset="">
+            <div class="friend-image-container">
+                <div>
+                  {% if account.username == request.user.username %}
+                    <img src="{{ account.profile_image.url }}" alt="" srcset="">
+                    <div class="select-image-icon d-flex align-items-center">
+                        <i class="fa-solid fa-camera" style="margin-left: 7px;"></i>
+                    </div>
+                    {% else %}
+                    <img src="{{ account.profile_image.url }}" alt="" srcset="">
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+        <br>
+        <br>
+        <br>
+        <div class="d-flex flex-row justify-content-between align-items-center">
+          <h3>Omotosho Micheal<span style="font-size: 20px;"> ({{ account.username }})</span></h3>
+          {% if is_myfriend %}
+          <div class="d-flex flex-row justify-content-end align-items-center">
+            <a class="btn btn-primary me-2" href="" onclick="createOrReturnPrivateChat('{{ account.id }}')">Send Message</a>
+          <a class="btn btn-primary" href="{% url 'remove_friend' account.id %}">Unfriend</a>
+          </div>
+          {% else %}
+            {% if request_sent == -1 %}
+            <a class="btn btn-primary me-2" href="{% url 'send-friend-request' account.id %}">Send Friend Request</a>
+            {% elif request_sent == 0 and pending_friend_request_id %}
+            <div class="d-flex flex-row justify-content-end align-items-center">
+              <a class="btn btn-primary me-2" href="{% url 'accept-friend-request' pending_friend_request_id %}">Accept</a>
+            <a class="btn btn-secondary" href="{% url 'decline-friend-request' pending_friend_request_id %}">Decline</a>
+            </div>
+            {% elif request_sent == 1 %}
+            <a class="btn btn-secondary me-2" href="{% url 'cancel_friend_request' account.id %}">Cancel</a>
+            {% endif %}
+          {% endif %}
+        </div>
+        {% if account.hide_email %}
+        <p>Email: {{ account.email }}</p>
+        {% else %}
+        <p>Email: **********</p>
+        {% endif %}
+        {% if friends|length == 0 or friends|length == 1 %}
+            <h5>{{ friends|length }} <span style="color: gray;">friend</span></h5>
+        {% else %}
+            <h5>{{ friends|length }} <span style="color: gray;">friends</span></h5>
+        {% endif %}
+        {% if account.username == request.user.username %}
+        <button class="btn btn-primary">Edit Profile</button>
+        {% endif %}
+
+      </div>
+      
+      </div>
+
+      {% include 'message_app/create_or_return_private_chat.html' %}
+
+{% endblock %}

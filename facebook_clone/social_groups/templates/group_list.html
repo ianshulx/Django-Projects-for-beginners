@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<br>
+    <div class="row">
+      <div class="col-3">
+        {% include 'snippets/left-menu.html' %}
+      </div>
+      <div class="col-6">
+        <h1>Groups</h1>
+        <div class="card p-2">
+          <div class="row d-flex">
+            {% for i in group_list %}
+            <div class="col-4">
+              <a class="text-decoration-none" href="{% url 'group-detail' i.id %}">
+              <div class="pt-2 rounded" style="background-color: rgb(1, 1, 41); height: 50px; width: 150px;">
+                
+                  <h5 class="text-center text-white">{{ i.title }}</h5>
+                  
+              </div>
+            </a>
+              <br>
+            </div>
+            
+            {% endfor %}
+            
+          </div>
+        
+          
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="card">
+          {% include 'snippets/right-data.html' %}
+        </div>
+      </div>
+    </div>
+  
+{% endblock %}

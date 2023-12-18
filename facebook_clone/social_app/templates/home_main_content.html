@@ -1,0 +1,41 @@
+
+<!----------------------------------------------------------------------------- HOME PAGE MAIN CONTENT ----------------------------------------------------------------------------------->
+
+<div class="card p-3">
+    <div class="d-flex flex-row align-items-left">
+      <img class="pe-1 profile-pic" src="{{ request.user.profile_image.url }}" alt="" srcset="">
+      <input class="w-100 border border-0 rounded-pill text-start text-secondary" id="inputpost" data-bs-toggle="modal" data-bs-target="#exampleModal" type="submit" value="What's on your mind, {{ request.user.username }}">
+    </div>
+    <hr>
+    <div class="row text-center ps-4 p3-4">
+        <div class="col-4">
+            <div class="d-flex flex-row align-items-center" id="videoid" data-bs-toggle="modal" data-bs-target="#livevideo">
+                <div>
+                    <i class="fa-solid fa-video"></i>
+                    <span class="text-secondary ms-2">Live video</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="d-flex flex-row align-items-center" id="photoid" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <div>
+                    <i class="fa-solid fa-images"></i>
+                <span class="text-secondary ms-2">Photo/video</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="d-flex flex-row justify-content-center align-items-center" id="emojiid" data-bs-toggle="modal" data-bs-target="#emoji">
+                <div>
+                    <i class="fa-regular fa-face-smile"></i>
+                <span class="text-secondary ms-2">Feeling/activity</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- All Modals -->
+{% include 'snippets/modal.html' %}
+
+ 

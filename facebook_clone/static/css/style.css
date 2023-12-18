@@ -1,0 +1,84 @@
+
+
+.anch{
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.anch i{
+    color: blue;
+}
+
+.anch span{
+    color: black;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.profile-pic{
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+}
+
+#myheader{
+    position: relative;
+}
+
+.drop1{
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    background-color: white;
+    top: 50px;
+    z-index: 100;
+    border-radius: 5px;
+    right: 0;
+    text-align: center;
+    padding: 10px;
+    display: none;
+}
+
+.drop1 a{
+    background-color: blue;
+    color: white;
+
+}
+
+.drop1 a:hover{
+    background-color: blue;
+    color: white;
+}
+
+.notifi{
+    width: 300px;
+    height: 400px;
+    position: absolute;
+    background-color: white;
+    top: 50px;
+    z-index: 100;
+    border-radius: 5px;
+    right: 0;
+    text-align: center;
+    padding: 10px;
+    display: none;
+}
+
+#mybadge{
+    background-color: red;
+    position: absolute;
+    border-radius: 100%;
+    font-size: 10px;
+    width: 15px;
+    height: 15px;
+    color: white;
+    top: 10px;
+    right: 30;
+    display: none;
+    font-weight: bold;
+    text-align: center;
+}
+
+
+
+ 

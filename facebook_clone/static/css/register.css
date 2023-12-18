@@ -1,0 +1,38 @@
+
+
+.second-container{
+    height: 100vh;
+}
+
+.second-container .content{
+    width: 100%;
+    padding: 30px;
+}
+
+.second-container div h1{
+    color: rgb(28, 0, 187);
+    font-size: 50px;
+}
+
+.second-container div p{
+    font-size: 20px;
+}
+
+.card h1{
+    color: rgb(28, 0, 187);
+}
+
+button a{
+    text-decoration: none;
+    color: white;
+}
+
+
+/*------- MEDIA QUERIES -------*/
+@media only screen and (max-width: 768px){
+    
+
+   
+
+    
+}

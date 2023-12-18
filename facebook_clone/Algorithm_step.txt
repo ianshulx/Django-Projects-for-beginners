@@ -1,0 +1,13 @@
+1. Registration done
+2. Login done
+3. Password Forgot done
+4. Logout done.
+5. Social media auth "still pending"
+6. Like post done
+7. show number of likes done
+8. comment post done
+9. comment list "Still pending"
+10. post list substring "Still pending"
+11. CSRF_TOKEN for json done
+
+

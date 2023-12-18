@@ -1,0 +1,11 @@
+.menuhover:hover{
+    background-color: rgb(221, 221, 221);
+}
+
+.menuhover{
+    cursor: pointer;
+}
+
+.active1{
+    background-color: rgb(221, 221, 221);
+}
