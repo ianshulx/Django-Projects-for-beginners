@@ -1,0 +1,310 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+{% load static %}
+<br>
+    <div class="row">
+      <div class="col-3">
+        {% include 'snippets/left-menu.html' %}
+      </div>
+      <div class="col-6" id="postlistid">
+        {% include 'home_main_content.html' %}
+        
+        {% for i in post_list %}
+        <br>
+        <div class="card p-3">
+          <div class="d-flex flex-row justify-content-between align-items-center">
+            <div class="d-flex flex-row">
+              <img class="pe-1 profile-pic" src="{{ i.user.profile_image.url }}" alt="" srcset="">
+              <div class="d-flex flex-column">
+                <span style="font-size: 14px; font-weight: bold;">{{ i.user.username }}</span>
+                <span style="font-size: 11px; color: gray;">{{ i.date_post }} Ago</span>
+              </div>
+            </div>
+            <div class="d-flex flex-row">
+              
+            </div>
+          </div>
+          <br>
+          <div class="w-100" id="post">
+            {% if i.user_post %}
+              <p>{{ i.user_post }}</p>
+            {% endif %}
+          </div>
+          <div id="postimage">
+            {% if i.file %}
+              {% if i.file.url|slice:"-4:" == ".MP4" or i.file.url|slice:"-4:" == ".mp4" %}
+              <video id="movie" class="w-100 h-100 rounded" controls>
+                <source src="{{ i.file.url }}" type="video/mp4">
+              </video>
+              {% else %}
+              <img class="w-100" src="{{ i.file.url }}" alt="" srcset="">
+              {% endif %}
+            {% endif %}
+          </div>
+          <hr>
+          <div class="d-flex flex-row justify-content-between align-items-center">
+           <div class="d-flex flex-row align-items-center">
+            <a href="#" class="likesstyle likecountclass_{{ i.id }}" id="likecountid" data-id="{{ i.id }}">
+              
+          </a>
+           </div>
+           <div>
+            <a href="#" class="commentinputclass_{{ i.pk }}" id="commentcountid" data-id="{{ i.id }}">
+              
+            </a>
+           </div>
+          </div>
+          <hr>
+            <div class="d-flex flex-row justify-content-between">
+              <div class="d-flex flex-row align-items-center justify-content-center w-50 likecommentshare" id="likeidBtn" data-id="{{ i.pk }}">
+                <i class="fa-solid fa-thumbs-up p-1"></i>
+                <span class="likeunlike_{{ i.id }}" id="likeunlikeid" data-id="{{ i.id }}">Like</span>
+              </div>
+            <div class="d-flex flex-row align-items-center justify-content-center w-50 likecommentshare" id="commentidBtn" data-id="{{ i.pk }}">
+              <i class="fa-regular fa-comment p-1"></i>
+              <span>Comment</span>
+            </div>
+            <div class="d-flex flex-row align-items-center justify-content-center w-50 likecommentshare" id="shareidBtn">
+              <a href="{% url 'user-share-post' i.id %}">
+                <i class="fa-solid fa-share p-1"></i>
+              <span>Repost</span>
+              </a>
+            </div>
+            </div>
+          <hr>
+          <div class="commentcontainer" id="commentcontainerid_{{ i.pk }}">
+            <img class="pe-1 profile-pic" src="{{ i.user.profile_image.url }}" alt="" srcset="">
+            <textarea name="" placeholder="Write a comment..." class="" id="commentinput" data-pk="{{ i.pk }}"></textarea>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-1">
+
+            </div>
+            <div class="col-11" id="cardcommentid_{{ i.id }}">
+              
+            </div>
+          </div>
+          <br>
+    
+        </div>
+        {% endfor %}
+      </div>
+      <div class="col-3">
+        {% include 'snippets/right-data.html' %}
+      </div>
+    </div>
+
+
+    
+<script>
+
+  var url = window.location.origin
+  const commentidBtn = [...document.querySelectorAll('#commentidBtn')]
+  const likecountId = [...document.querySelectorAll('#likecountid')].reverse() 
+  const likeidBtn = [...document.querySelectorAll('#likeidBtn')]
+  const commentInput = [...document.querySelectorAll('#commentinput')]
+  const commentcountId = [...document.querySelectorAll('#commentcountid')]
+  const likeunlikeid = [...document.querySelectorAll('#likeunlikeid')].reverse()
+ //var wrapper = $("#postimage")
+ //console.log(wrapper)
+
+  
+
+
+  commentInput.forEach(comInput=> comInput.addEventListener('keyup', (e)=>{
+        e.preventDefault()
+        var commentPk = comInput.getAttribute('data-pk')
+        var commentinputclass = document.querySelector(`.commentinputclass_${commentPk}`)
+        var cardcommentid = document.querySelector(`#cardcommentid_${commentPk}`)
+        console.log(cardcommentid)
+        var inputValue = e.target.value.trim()
+        if(e.key === 'Enter'){
+          
+          fetch(`${url}/user-comment/${commentPk}/`, {
+            body: JSON.stringify({
+              inputValue: inputValue
+            }),
+            method: 'POST'
+          }).then((res) => res.json()).then((data) =>{
+            console.log(data["comment_list"].length)
+            commentinputclass.innerHTML = `<span class="text-secondary">${data['comment_count']} comments</span>`
+            
+            var secCardElement = document.createElement('div')
+            secCardElement.classList.add("mycardbg1")
+            var thirdCardElement = document.createElement('div')
+            thirdCardElement.classList.add('d-flex')
+            thirdCardElement.classList.add('p-2')
+            var img = document.createElement('img')
+            img.classList.add('imgstyle')
+            img.src = "{% static 'img/profile_image.png' %}"
+            thirdCardElement.appendChild(img)
+            var fourthCardElement = document.createElement('div')
+            fourthCardElement.classList.add('d-flex')
+            fourthCardElement.classList.add('flex-column')
+            var fifthCardElement = document.createElement('div')
+            fifthCardElement.classList.add('d-flex')
+            fifthCardElement.classList.add('ps-2')
+            var anchoruser = document.createElement('a')
+            anchoruser.id = 'namestyle'
+            anchoruser.innerHTML = data['user']
+            var spancomment = document.createElement('span')
+            spancomment.classList.add('ps-2')
+            spancomment.classList.add('text-black')
+            spancomment.innerHTML = data['comment']
+            fifthCardElement.appendChild(anchoruser)
+            fifthCardElement.appendChild(spancomment)
+            var sixthCardElemet = document.createElement('div')
+            sixthCardElemet.classList.add('commentminute')
+            var spanminute = document.createElement('span')
+            spanminute.innerHTML = data['date']
+            sixthCardElemet.appendChild(spanminute)
+            fourthCardElement.appendChild(fifthCardElement)
+            fourthCardElement.appendChild(sixthCardElemet)
+            thirdCardElement.appendChild(fourthCardElement)
+            secCardElement.appendChild(thirdCardElement)
+            var brkElement = document.createElement('br')
+            cardcommentid.appendChild(brkElement)
+            cardcommentid.appendChild(secCardElement)
+            
+            
+
+            
+          })
+          comInput.value = ""
+        }
+      }))
+
+
+// --------------------- END ------------------------------------------ -->
+  
+
+
+// <!-----------------  Script to get user like counts --------->
+
+  UserlikeCount()
+  function UserlikeCount(){
+    likecountId.forEach((likCount) =>{
+      var pkhdh = likCount.getAttribute('data-id')
+      fetch(`${url}/get-like-count/${pkhdh}/`, {
+      body: null,
+      method: "GET"
+    }).then((res) => res.json()).then((data) =>{
+      likCount.innerHTML += `
+              <i class="fa-solid fa-thumbs-up text-white text-bg-primary p-1 rounded-pill"></i>
+              <span class="ps-1" style="color: black; text-decoration-line: none;">${data['like_count']}</span>
+      ` 
+    })
+    })
+    
+  }
+
+// --------------------------- END ------------------------------------------- -->
+
+
+
+// ---------------Script for user to like a post -------------------------------->
+  
+    likeidBtn.forEach(likeBtn => likeBtn.addEventListener('click', (e) =>{
+      e.preventDefault()
+      var id = likeBtn.getAttribute('data-id')
+      var likeclass = document.querySelector(`.likecountclass_${id}`)
+      var likeUnlike = document.querySelector(`.likeunlike_${id}`)
+      fetch(`${url}/like-post/${id}/`, {
+        body: null,
+        method: 'POST'
+      }).then((res) => res.json()).then((data) =>{
+        likeclass.innerHTML = `
+              <i class="fa-solid fa-thumbs-up text-white text-bg-primary p-1 rounded-pill"></i>
+              <span class="ps-1" style="color: black; text-decoration-line: none;">${data['like_count']}</span>
+        `
+
+        // Like and Unlike Change UI
+        if(data['response'] === "Like User"){
+          likeUnlike.textContent = "Unlike"
+        }else{
+          likeUnlike.textContent = "Like"
+        }
+      })
+      
+    }))
+
+//----------------------------- END ---------------------------------------------- -->
+
+
+
+
+// ----------------------------Script to display Like and Unlike UI --------------- -->
+/**likeunlikeMethod()
+function likeunlikeMethod(){
+  likeunlikeid.forEach((likUnlik) =>{
+    var pk = likUnlik.getAttribute('data-id')
+    var likeunlike = document.querySelector(`.likeunlike_${pk}`)
+    console.log(likeunlike)
+    fetch(`${url}/like-post/${pk}/`, {
+        body: null,
+        method: 'POST'
+      }).then((res) => res.json()).then((data) =>{
+        // Like and Unlike Change UI
+        if(data['response'] === "Like User"){
+          likeunlike.textContent = "Unlike"
+        }else{
+          likeunlike.textContent = "Like"
+        }
+      })
+})
+}**/
+
+
+// --------------------------- END --------------------------------------------- -->
+
+
+
+
+// ------------Script to display comment Input textarea ---------------->
+
+  commentidBtn.forEach(comBtn=> comBtn.addEventListener('click', (e) =>{
+      e.preventDefault()
+      var idNum = comBtn.getAttribute('data-id')
+      var commentcontainerId = document.querySelector(`#commentcontainerid_${idNum}`)
+      console.log(commentcontainerId)
+      commentcontainerId.classList.add('d-flex')
+      commentcontainerId.classList.add('flow-row')
+  }))
+
+//--------------------------- END --------------------------------------- -->
+
+
+
+
+// --------------- User comment on a post ----------------------------- -->
+
+
+
+
+
+
+  // <---------------------- Script to get user comments ------------------->
+  
+  commentCount()
+  function commentCount(){
+    commentcountId.forEach((countId) =>{
+      var getId = countId.getAttribute('data-id')
+      fetch(`${url}/comment-count/${getId}/`, {
+        body: null,
+        method: 'GET'
+    }).then((res) => res.json()).then((data) =>{
+        countId.innerHTML += `<span class="text-secondary">${data['response']} comments</span>`
+      })
+    }) 
+  }
+
+// <------------------------ END ------------------------------------------->
+
+
+</script>
+  
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Friend{% endblock %}
+
+{% load static %}
+
+{% block content %}
+<br>
+    <div class="row">
+      <div class="col-3">
+        {% include 'snippets/left-menu.html' %}
+      </div>
+      <div class="col-9">
+        <div class="row">
+            <div class="d-flex justify-content-between">
+              <h2>Friends</h2>
+              <a href="#">See all</a>
+            </div>
+        </div>
+        <div class="row pb-2">
+          {% for account in accounts %}
+          <div class="col-3">
+            <div class="card">
+              <div class="all-friend">
+                <a href="{% url 'friend-detail' account.0.pk %}"><img src="{{ account.0.profile_image.url }}" alt="" srcset=""></a>
+                <div class="user-detail">
+                  <h5>{{ account.0.username }}</h5>
+                  
+                  {% if account.1 == True %}
+                    <p>{{ account.2 }} mutual friends</p>
+                    <p>Friends</p>
+                    <a href="{% url 'remove_friend' account.0.id %}" class="btn btn-primary w-100 mb-2">Unfriend</a>
+                  {% else %}
+                    <p>{{ account.2 }} mutual friends</p>
+                    {% if account.3 == 0 %}
+                      <a href="{% url 'accept-friend-request' account.4 %}" class="btn btn-primary w-100 mb-2">Accept Request</a>
+                      <a href="{% url 'decline-friend-request' account.4 %}" class="btn btn-secondary w-100 mb-2">Decline Request</a>
+                    {% elif account.3 == 1 %}
+                      <a href="{% url 'cancel_friend_request' account.0.id %}" class="btn btn-secondary w-100 mb-2">Cancel</a>
+                    {% else %}
+                      <a href="{% url 'send-friend-request' account.0.id %}" class="btn btn-primary w-100 mb-2">Send Friend Request</a>
+                    {% endif %}
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            
+          </div>
+          {% endfor %}
+          
+         
+        </div>
+      </div>
+     
+    </div>
+  
+{% endblock %}

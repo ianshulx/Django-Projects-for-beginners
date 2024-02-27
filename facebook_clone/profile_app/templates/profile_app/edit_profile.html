@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+
+{% block content %}
+<br>
+    <div class="row">
+      <div class="col-3">
+        {% include 'snippets/left-menu.html' %}
+      </div>
+      <div class="col-6">
+        <h1>Edit Profile</h1>
+        <div class="friend-main-image-containter">
+          <img src="{{ account.profile_image.url }}" id="banner-image" class="" alt="" srcset="">
+          <div class="friend-image-container" id="img-container">
+              <div>
+                <a href="#">
+                  <img src="{{ account.profile_image.url }}" class="rounded-circle" id="mini-image" alt="" srcset="">
+                  <div class="select-image-icon d-flex align-items-center">
+                      <i class="fa-solid fa-camera" style="margin-left: 7px;"></i>
+                  </div>
+                </a>
+              </div>
+
+          </div>
+      </div>
+      <br>
+      <br>
+      <br>
+      <h1>Omotosho Micheal<span style="font-size: 30px;"> ({{ account.username }})</span></h1>
+      {% if friends|length == 0 or friends|length == 1 %}
+          <h5>{{ friends|length }} <span style="color: gray;">friend</span></h5>
+      {% else %}
+          <h5>{{ friends|length }} <span style="color: gray;">friends</span></h5>
+      {% endif %}
+      {% if account.username == request.user.username %}
+      <form action="" method="post">{% csrf_token %}
+        <input class="d-none" type="file" name="profile_image" id="id_profile_image" onchange="readURL(this)">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input class="form-control" value="{{ account.username}}" type="text" name="username" id="username">
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input class="form-control" type="text" name="email" value="{{ account.email }}" id="email">
+            <small class="foem-text text-muted">We'll never share your email</small>
+        </div>
+        <br>
+        <div class="form-group">
+            <button class="form-control btn btn-primary">Update Profile</button>
+        </div>
+        
+      </form>
+      
+      {% endif %}
+      </div>
+      <div class="col-3">
+        <div class="card">
+            {% include 'snippets/right-data.html' %}
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+        const img_container = document.querySelector('#img-container')
+        const banner_image = document.querySelector('#banner-image')
+        //const mini_image = document.querySelector('#mini-image')
+        const id_profile_image = document.querySelector('#id_profile_image')
+        var url = window.location.origin
+        console.log(url)
+        var imageFile;
+	    var base64ImageString;
+
+        function readURL(input){
+		if(input.files && input.files[0]){
+			var reader = new FileReader()
+
+			reader.onload = function(e){
+				var image = e.target.result
+                console.log(image)
+                var banner_image = document.querySelector('#banner-image')
+				var imageField = document.querySelector('#mini-image')
+                console.log(imageField)
+				imageField.src = image
+                banner_image.src = image
+            
+
+                if(image){
+                    fetch(`${url}/profile/edit-profile-image/`, {
+                        body: JSON.stringify({
+                            image: image
+                        }),
+                        method: "POST",
+                        headers:{
+                            'X-CSRFToken': "{{csrf_token}}",
+                            "Content-Type": "application/json"
+                        }
+                    }).then((res) => res.json()).then((data) =>{
+                        console.log(data)
+                    })
+                }
+			}
+
+			reader.readAsDataURL(input.files[0])
+		}
+	}
+
+    img_container.addEventListener('click', (e) =>{
+        id_profile_image.click()
+    })
+
+    </script>
+  
+{% endblock %}

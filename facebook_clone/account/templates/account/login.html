@@ -1,0 +1,67 @@
+{% extends 'account/base.html' %}
+
+{% block title %}
+      Login Page
+        {% endblock %}
+
+        {% block content %}
+        {% if messages %}
+            {% for message in messages %}
+            
+              <div class="alert alert-warning alert-dismissable" role="alert">
+                {{message}}
+              </div>
+            
+            {% endfor %}
+          {% endif %}
+        <div class="d-flex flex-column justify-content-between align-items-center content">
+            <div></div>
+            <div class="card">
+                <div class="card-header text-center">
+                    <h1>Login UI</h1>
+                </div>
+                <div class="card-body text-center">
+                   <form action="" method="post">{% csrf_token %}
+                    
+                      <div class="input-group mb-3">
+                        <span class="input-group-text material-symbols-outlined" id="basic-addon1">email</span>
+                        <input type="email" class="form-control" name="email" placeholder="Enter Email" aria-label="Email" aria-describedby="basic-addon1">
+                      </div>
+                      <div class="input-group mb-3">
+                        <span class="input-group-text material-symbols-outlined" id="basic-addon1">lock</span>
+                        <input type="password" name="password" class="form-control" placeholder="Enter Password" aria-label="Password" aria-describedby="basic-addon1">
+                      </div>
+                      
+                      {% for field in login_form %}
+                      <p>
+                      {% for error in field.errors %}
+                      <p style="color: red">{{ error }}</p>
+                      {% endfor %}
+                      </p>
+                      {% endfor %}
+                      {% if login_form.non_field_errors %}
+                      <div style="color: red">
+                        <p>{{login_form.non_field_errors}}</p>
+                      </div>
+
+                      {% endif %}
+                      
+                      <div class="d-grid gap-2">
+                        <input class="btn btn-primary" type="submit" value="Sign In">
+                      </div>
+                      <br>
+                      <p>Forget Password? <a href="{% url 'forgot-password' %}">Reset here</a></p>
+                      <hr>
+                      <a href="{% url 'register' %}">
+                        <button type="button" class="btn btn-success">Register</button>
+                      </a>
+                        
+                      
+                   </form>
+
+                
+                </div>
+            </div>
+            <div></div>
+        </div>
+        {% endblock %}

@@ -1,0 +1,23 @@
+.chat-panel{
+    height: 500px;
+    border-radius: 5px;
+    border: solid black 1px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.chat-log{
+    height: 100%;
+    overflow-y: hidden;
+    padding: 5px;
+}
+
+.chat-log:hover{
+    overflow-y: scroll;
+    scrollbar-width: thin;
+}
+
+.chat-panel textarea:focus{
+    outline: none;
+}

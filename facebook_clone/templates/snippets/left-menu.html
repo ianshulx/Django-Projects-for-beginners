@@ -1,0 +1,64 @@
+<div class="card position-fixed">
+    <ul class="list-group">
+        <a href="{% url 'index' %}" class="anch">
+        <li class="list-group-item menuhover active1">
+                <i class="fa-solid fa-house me-3"></i>
+          <span>Home</span>
+        </li>
+    </a>
+
+    <a href="{% url 'friend-index' %}" class="anch">
+        <li class="list-group-item menuhover">
+                <i class="fa-solid fa-user-group me-3"></i>
+                <span>Friends</span>
+           
+        </li>
+    </a>
+
+    <a href="{% url 'notification-index' %}" class="anch">
+        <li class="list-group-item menuhover">
+                <i class="fa-solid fa-bell me-3"></i>
+          <span>Notifications</span>
+        </li>
+    </a>
+
+    <a href="{% url 'profile-index' %}" class="anch">
+        <li class="list-group-item menuhover">
+            
+                <i class="fa-solid fa-user me-3"></i>
+          <span>Profile</span>
+        </li>
+    </a>
+
+    <a href="{% url 'private-chat-room' %}" class="anch">
+        <li class="list-group-item menuhover">
+            
+                <i class="fa-solid fa-message me-3"></i>
+          <span>Message</span>
+        </li>
+    </a>
+
+    <a href="{% url 'group-list' %}" class="anch">
+        <li class="list-group-item menuhover">
+            
+                <i class="fa-solid fa-message me-3"></i>
+          <span>Groups</span>
+        </li>
+    </a>
+    
+      </ul>
+</div>
+
+<script>
+    const menuHover = document.querySelectorAll('.menuhover')
+    menuHover.forEach(men=> men.addEventListener('click', (e) =>{
+        if(men.className === "active1"){
+            men.classList.remove('active1')
+        }else{
+            men.classList.add('active1')
+        }
+    }))
+</script>
+
+
+
