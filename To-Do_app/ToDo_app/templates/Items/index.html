@@ -1,0 +1,164 @@
+{% extends "base.html" %} {% block content %} {% if values %}
+
+<div class="container pb-0 mb-0 table1">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Sno.</th>
+        <th>Category</th>
+        <th>Description</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Operations</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for values in page_obj %}
+      <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{values.category}}</td>
+        <td>{{values.description }}</td>
+        <td>{{values.date}}</td>
+        <td>
+          {% if not values.status %}
+            <div class="container">
+              <div class="row">
+                <form id="myForm" action="{% url 'statusItems' %}" method="POST">
+                  {% csrf_token %}
+                  <div class="form-check">
+                    <input class="form-check-input btn btn-outline-success" type="checkbox" id="statusCheckbox" name="status" value="{{values.id}}" />
+                    <label class="form-check-label" for="statusCheckbox">
+                    </label>
+                  </div>
+                </form>
+              </div>
+            </div>
+          {% else %}
+            <div class="container">
+              <div class="row">
+                <form id="myForm" action="{% url 'statusItems' %}" method="POST">
+                  {% csrf_token %}
+                  <div class="form-check">
+                    <input checked class="form-check-input btn btn-outline-success" type="checkbox" id="statusCheckbox" name="status" value="{{values.id}}" />
+                    <label class="form-check-label" for="statusCheckbox">
+                    </label>
+                  </div>
+                </form>
+              </div>
+            </div>
+          {% endif %}
+          <script>
+            const checkbox = document.getElementById('statusCheckbox');
+        
+            checkbox.addEventListener('click', function (event) {
+              event.preventDefault(); // Prevent default form submission
+        
+              const status = checkbox.checked;
+        
+              fetch('/statusItems', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRFToken': '{{ csrf_token }}', // Ensure this is correctly rendered
+                },
+                body: JSON.stringify({ status, id: {{ values.id }} }), // Pass the status as a boolean value
+              })
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error('Network response was not ok');
+                }
+                return response.json();
+              })
+              .then(data => {
+                console.log('Status updated successfully:', data);
+                window.location.href = "{% url 'index' %}";
+              })
+              .catch(error => {
+                console.error('There was a problem updating the status:', error);
+              });
+            });
+          </script>
+        </td>
+        
+        <td>
+          <div class="container">
+            <div class="row">
+              <div class="col-md-3">
+                <form action="{% url 'updateItems' %}" method="GET">
+                  <button
+                    type="submit"
+                    class="btn btn-outline-success"
+                    name="update"
+                    value="{{ values.id }}"
+                  >
+                    Edit
+                  </button>
+                </form>
+              </div>
+              <div class="col-md-3">
+                <form action="{% url 'deleteItems' %}" method="POSt">
+                  {% csrf_token %}
+                  <button
+                    type="submit"
+                    class="btn btn-outline-danger"
+                    name="delete"
+                    value="{{ values.id }}"
+                  >
+                    X
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div
+  class="d-flex justify-content-between align-items-center mt-0 pt-0 pageNumbers"
+>
+  <span class="text-muted fs-6"
+    >Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}</span
+  >
+  <ul class="pagination justify-content-end h-25">
+    {% if page_obj.has_previous %}
+    <li class="page-item h-25 fs-6">
+      <a class="page-link" href="?page={{ page_obj.previous_page_number }}"
+        >..</a
+      >
+    </li>
+    {% else %}
+    <li class="page-item h-25 fs-6 disabled">
+      <a class="page-link">..</a>
+    </li>
+    {% endif %} {% for num in page_obj.paginator.page_range %}
+    <li
+      class="page-item h-25 fs-6 {% if num == page_obj.number %}active{% endif %}"
+    >
+      <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+    </li>
+    {% endfor %} {% if page_obj.has_next %}
+    <li class="page-item h-25 fs-6">
+      <a class="page-link" href="?page={{ page_obj.next_page_number }}">..</a>
+    </li>
+    {% else %}
+    <li class="page-item h-25 fs-6 disabled">
+      <a class="page-link">..</a>
+    </li>
+    {% endif %}
+  </ul>
+</div>
+
+{% else %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      No values for diaply
+      <br />
+      <a class="link active" href="{% url 'addItems' %}">Add Items</a>
+    </div>
+  </div>
+</div>
+{% endif %} {% endblock content%}
