@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <form method="post" class="col-6 mx-auto card p-3 shadow-lg" action="{% url 'login' %}" id="login-form">
+      <h3>Login</h3>
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">User Name</label>
+        <input type="text" class="form-control" id="exampleInputPassword1" name="username" />
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Password</label>
+        <input type="password" class="form-control" id="exampleInputPassword1" name="password" />
+      </div>
+      <div>Don't have an account<a href="{% url 'registration' %}"> Sigun Up </a>here</div>
+      <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+  </div>
+</div>
+{% endblock content %}
