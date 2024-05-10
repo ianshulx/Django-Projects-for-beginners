@@ -1,0 +1,43 @@
+{% extends "base.html" %} {% block content %}
+<h1>Add Item</h1>
+<div class="card">
+  <div class="card-body">
+    <form action="{% url viewName %} " method="POST">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Description</label>
+        <input type="text" class="form-control" id="exampleInputPassword1" name="description"
+          value="{{values.description}}" required />
+      </div>
+
+      <div class="mb-3">
+        <label for="disabledSelect" class="form-label">Categories*</label>
+        <select name="category" id="disabledSelect" class="form-select" required>
+          {% if values.category %}
+          <option name="curency" value="{{values.category}}" selected>
+            {{values.category}}
+          </option>
+          {% else %}
+          <option name="curency" value="" selected>Chose...</option>
+          {% endif %} {% for category in categories %}
+          <option name="category" value="{{category.name}}">
+            {{category.name}}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Date</label>
+        <input type="date" class="form-control" id="exampleInputPassword1" name="date"
+        value="{{values.date | date:'Y-m-d'}}" required />
+      </div>
+      {% if viewName == "addItems"%}
+      <button type="submit" class="btn btn-primary">Submit</button>
+      {% else %}
+      <button type="submit" class="btn btn-primary" name="update" value={{values.id}}>Save</button>
+      {% endif %}
+    </form>
+  </div>
+</div>
+
+{% endblock content %}

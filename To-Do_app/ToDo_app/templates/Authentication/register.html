@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5 col-md-20">
+  <form action="{% url 'registration' %}" method="post" class="col-6 mx-auto card p-3 shadow-lg"
+    enctype="multipart/form-data">
+    {% csrf_token %}
+    <h3>Sign Up</h3>
+    <hr />
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Email address</label>
+      <input required type="email" class="form-control form-control-sm" placeholder="Enter your unique email" name="email"
+        id="useremailField" value="{{ fieldValues.email }}" />
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">User Name</label>
+      <input required type="text" class="form-control form-control-sm" id="usernameField" name="username"
+        placeholder="Enter your unique username" value="{{ fieldValues.username }}" />
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Password</label>
+      <input required type="password1" class="form-control form-control-sm" id="exampleInputPassword1" name="password"
+        placeholder="Enter your password" />
+    </div>
+    <button type="submit" class="btn btn-primary submitButton">Submit</button>
+    <br />
+    <div>Already have an account<a href="{% url 'login' %}"> Login </a>here</div>
+  </form>
+</div>
+{% endblock content %}
