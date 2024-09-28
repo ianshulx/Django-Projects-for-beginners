@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous"> 
+</head>
+      <style>  
+       nav {
+      background-color: rgba(0, 0, 0, 0.851);
+
+    }
+
+    .navbar-brand {
+      margin-left: 3rem;
+      color: rgb(255, 255, 255);
+      font-weight: 600;
+
+    }
+
+    .nav-link {
+      color:  rgb(255, 255, 255);
+      transition: 0.4s;
+      font-weight: 400;
+    }
+    .navbar a:hover {
+    color: #4d63cd;
+  }
+
+  ul {
+      margin-left: 40rem;
+    }
+
+ 
+  .container{
+       
+       width: 410px;
+   border: 1px solid #ccc;
+   border-radius: 5px;
+   background-color: #fff;
+   justify-content: center;
+      box-shadow: 0 0 20px #454b4f;
+      border-radius: 10px;
+      background: transparent;
+      backdrop-filter: blur (10px) brightness(90%);
+      color: #ccc;
+      position: relative;
+      margin-left: 550px;
+      margin-top: 20px;
+      margin-bottom: 60px;
+      margin-top: 100px;
+      padding: 16px;
+      }
+      .login-bg
+{
+    background-image:url('../static/login-bg.png');
+    background-repeat:no-repeat;
+    background-size:cover;
+}
+    </style>
+    
+   </head>
+   <body class="login-bg">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Music Recommendation System</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" href="http://127.0.0.1:8000/musichome/">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="http://127.0.0.1:8000/aboutus/">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="http://127.0.0.1:8000/contactus/">Contact Us</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    <div class="container">
+        <center><h2 style="font-size: 36px; text-transform: uppercase;font-weight: bolder;color: #fff;
+        ">Login Form</h2></center>
+    <form action="" method="post">
+        {% csrf_token %}
+            <label for ='email'><b>User Email:  </b></label>
+            <input type="email" placeholder="Enter email" name="email" float="left"  required><br>
+            <label for='password'><b>Password : </b></label>
+            <input type="password" placeholder="Enter Password" name="password" required><br>
+            <center><button type="submit"><b>Login</b></button><br><br></center>
+            Don't have an account?
+<a href="http://localhost:8000/signup/"> register </a>
+    </div>  
+    </form>
+
+    <style>
+        body{
+            font-family:sans-serif;
+              margin: 0;
+              padding: 0;
+              height: 100vh;
+              background-image: url('static\bg5.jpg');
+              background-repeat: no-repeat;
+              background-attachment: fixed;
+              background-size: cover;
+              
+}
+
+        button{
+            width: 50%;
+            padding: 10px;
+            background-color: rgb(70, 69, 69);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+
+        }
+        button:hover {
+            background-color:  rgb(55, 55, 55);
+            transform: scale(1.05);
+        }
+        label{
+            font-size: 20px;
+            display: block;
+            margin-bottom: 5px;
+            color:#fff;
+          
+        }
+        
+        input[type=email],input[type=password]{
+            width: 100%;
+            font-size: 15px;
+            margin: 20px 0px;
+            padding: 12px 20px;
+            display: inline-block;
+            box-sizing: border-box;
+            height:50px;
+            position: relative;
+            border: solid 2px #fff;
+            border-radius: 10px;
+
+            
+        }
+        button:hover{
+            opacity:0.9;
+
+        }
+          
+    </style>
+    </body>
+    
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music list</title>
+    <link rel="stylesheet" href="Style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+        body{
+            margin: 15px;
+            background-color: white;
+        }
+        table{
+            font-family: 'Poppins', sans-serif;
+            border-collapse: collapse;
+            width:100%;
+        }
+        th, td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+tr:hover {background-color: powderblue;}  
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+}
+ 
+#searchbar {
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    width: 50%;
+    box-sizing: border-box;
+    position: fixed;
+  margin-top: -60px;
+  z-index: 100;
+}
+ 
+#list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+ 
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+ 
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }}
+    .sticky {
+  position: fixed;
+  margin-top: -150px;
+}
+
+.shiftDown {
+  margin-top: 90px;
+}
+
+.downShadow {
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease-in;
+}
+
+    </style>
+    <h1><b><em>Music List</em></b></h1>
+</head>
+<body>
+        <div class="container">
+            <input id="searchbar"
+                   onkeyup="search_song()"
+                   type="text" name="search"
+                   placeholder="Search..">
+    <table width=100% border="1">
+            {% for row in data %}
+            <tr>
+                {% for col in row %}
+                    <td class="songs"><font face=verdana color=black size=3><b>{{col}}</b></font></td>
+                {% endfor %}
+
+            </tr>
+            {% endfor %}
+    </table>
+</div>
+<script>
+function search_song() {
+let input = document.getElementById('searchbar').value
+input = input.toLowerCase();
+let x = document.getElementsByClassName('songs');
+
+for (i = 0; i < x.length; i++) {
+	if (!x[i].innerHTML.toLowerCase().includes(input)) {
+	x[i].style.display = "none";
+	}
+	else {
+	x[i].style.display = "list-item";
+	}
+}
+}
+function myFunction() {
+  if (window.pageYOffset > 150) {
+  	search.classList.add("sticky");
+  	randomStuff.classList.add("shiftDown");
+  	headerBar.classList.add("downShadow");
+  } else {
+  	search.classList.remove("sticky");
+  	randomStuff.classList.remove("shiftDown");
+  	headerBar.classList.remove("downShadow");
+  }
+}
+</script>
+</body>
+</html>
+
