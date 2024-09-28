@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music Recommendation System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    ul {
+      margin-left: 40rem;
+    }
+
+    nav {
+      background-color: rgba(0, 0, 0, 0.851);
+
+    }
+
+    .navbar-brand {
+      margin-left: 3rem;
+      color: rgb(255, 255, 255);
+      font-weight: 600;
+
+    }
+
+    .nav-link {
+      color: rgb(255, 255, 255);
+      font-weight: 400;
+    }
+
+    input {
+      border-radius: 5px;
+      border: #fff
+    }
+
+    .select {
+      margin-bottom: 8rem;
+    }
+
+    button {
+      margin-top: .5rem;
+      width: 15%;
+      padding: 5px;
+      background: linear-gradient(135deg, #e42f9c, #b22d48);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Music Recommendation System</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+        aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="http://127.0.0.1:8000/aboutus/">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="http://127.0.0.1:8000/contactus/">Contact Us</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
+  <div id="carouselExampleRide" class="carousel slide" data-bs-ride="true">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="static\bg1.jpg" class="d-block w-100" alt="...">
+    
+        <div class="select carousel-caption d-none d-md-block">
+          <form method="POST" action="{% url 'recommend_music' %}">
+            {% csrf_token %}
+          <label>Choose a Music from this list:
+            <input type="text" id="fav_music" name="fav_music" placeholder="enter music" /></label>
+          <datalist id="music">
+        
+            {% for n in l %}
+              <option value={{n}}>
+            {% endfor %}
+          
+          </datalist>
+          <div class="button">
+            <button type="submit">Show</button>
+          </div>
+        </form>
+        </div>
+      </div>
+      
+      <div class="carousel-item">
+        <img src="static\bg2.jpg" class="d-block w-100" alt="...">
+        <div class="select carousel-caption d-none d-md-block">
+          <form method="POST" action="{% url 'recommend_music' %}">
+            {% csrf_token %}
+          <label for='fav_music'>Choose a Music from this list:</label>
+            <input type="text" id="fav_music" name="fav_music" placeholder="enter music" >
+          <datalist id="music">
+         
+            {% for n in l %}
+              <option value={{n}}>
+            {% endfor %}
+          
+          </datalist>
+          <div class="button">
+            <button type="submit">Show</button>
+          </div>
+        </form>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="static\bg4.jpg" class="d-block w-100" alt="...">
+        <div class="select carousel-caption d-none d-md-block">
+
+          <form method="POST" action="{% url 'recommend_music' %}">
+            {% csrf_token %}
+          <label>Choose a Music from this list:</label>
+            <input type="text" id="fav_music" name="fav_music" placeholder="enter music" >
+          <datalist id="music">
+            {% url 'music_list' %}
+            {% for n in l %}
+              <option value={{n}}>{{n}}</option>
+            {% endfor %}
+          
+          </datalist>
+          <div class="button">
+            <button type="submit">Show</button>
+          </div>
+        </form>
+
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+  <table>
+    <tr>
+        <th></th>
+    </tr>
+    {% for i in rec %}
+    <tr>
+        <td>{{i}}</td>
+    
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=header, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="style.css">
+<style>
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: arial;
+}
+header{
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 10%;
+    background-image: linear-gradient(#24252A,black);
+    opacity: 86%;
+}
+.logo{
+    font-size: 20px;
+    color: white;
+    cursor: pointer;
+}
+nav li{
+    display: inline-block;
+    list-style: none;
+    padding: 0px 20px;
+}
+a{
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    color: white;
+    cursor: pointer;
+}
+nav li a:hover{
+    color: blue;
+    transition: all 0.4s ease 0%;
+}
+.content-items img{
+    width: 100%;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+}
+h1{
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    color: pink;
+    font-size: 70px;
+}
+.footer {
+    background-color: #000000;
+    padding: 20px;
+    display: flex;
+    justify-content: space-around;
+    height:300px;
+}
+
+.footer h4 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color:#fff;
+}
+.footer p{
+    color:#fff;
+}
+
+.footer a {
+    text-decoration: none;
+    color: #ffffff;
+    margin-right: 10px;
+}
+.animated-footer {
+        background-color: #333;
+        color: #fff;
+        padding: 20px;
+        animation: wave 5s infinite alternate;
+    }
+</style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <p>Music recommendation system</p>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="http://127.0.0.1:8000/musichome/">Home</a></li>
+                <li><a href="http://localhost:8000/login/">Login</a></li>
+                <li><a href="http://127.0.0.1:8000/signup/">Sign up</a></li>
+                <li><a href="http://127.0.0.1:8000/aboutus/">About</a></li>
+                <li><a href="http://127.0.0.1:8000/contactus/">Contact us</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="content-items">
+        <img src="https://yt3.googleusercontent.com/tYgknCOvnMzyUGQujklTY-wCTINzjDPCjU1VZBc4Ch67TwVLlbGpfowMAl7q0gLl2Hr01i1mtg=s900-c-k-c0x00ffffff-no-rj" alt="">
+    </div>
+    <h1>"Unleash the beats that speak to your soul.
+        Get smart music suggestions now!"</h1>
+        <script src="https://cdn.botpress.cloud/webchat/v1/inject.js"></script>
+        <script src="https://mediafiles.botpress.cloud/048db018-7d74-4214-bf77-77a05b2c0d67/webchat/config.js" defer></script>
+<footer class="footer">
+    <div class="footer-column">
+      <b><h4>Music Recommendation System</h4></b>
+  </div>
+    <div class="footer-column">
+        <a href="http://127.0.0.1:8000/aboutus/"><h4>About Us</h4></a>
+        <p>Learn more about us.</p>
+    </div>
+    <div class="footer-column">
+        <h4>Contact</h4>
+        <p>Email: anvishanvartak@gmail.com</p>
+        <p>Email: dhondiharsha@gmail.com</p>
+    </div>
+    <div class="footer-column">
+        <h4>Follow Us</h4>
+        <a href="#">Facebook</a>
+        <a href="#">Twitter</a>
+        <a href="#">Instagram</a>
+    </div>
+</footer>
+</body>
+</html>
