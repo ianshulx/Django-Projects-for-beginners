@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Url Shortener</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+  </head>
+    <body style="background-color: #222; height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <section class=" bg-image " style="width:95%;">
+      <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+        <div class="container h-100">
+          <div
+            class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                <div class="card" style="border-radius: 15px; margin: auto;">
+                <div class="card-body p-5">
+                  <h2 class="text-uppercase text-center mb-5">URL Shortener</h2>
+
+                  <form id="myForm" method="POST">
+                    {% csrf_token %} {% for hidden_field in form.hidden_fields %} 
+                    {{ hidden_field.errors }} {{ hidden_field }} {% endfor %}
+                    {% for field in form.visible_fields %}
+
+                    <div class="form-outline mb-4">
+                      <input
+                        placeholder="Enter the url here"
+                        name="{{ field.name }}"
+                        id="{{ field.id_for_label }}"
+                        type="{{ field.widget_type }}"
+                        class="form-control form-control-lg"
+                      />
+                      {% if field.errors %} {% for error in field.errors %}
+                      <p class="text-danger italic pb-2">{{ error }}</p>
+                      {% endfor %} {% endif %}
+                    </div>
+
+                    {% endfor %}
+
+                    <div class="d-flex justify-content-center">
+                      <button
+                        type="submit"
+                        class="btn btn-success btn-lg gradient-custom-4">
+                        Submit
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="fixed-bottom border-top border-light">
+      <div
+        class="text-center p-3 text-white"
+        style="background-color: #222422; font-size: small">
+        ©{% now "Y" %} All Rights Reserved By <strong>Samin Mahmud</strong>
+      </div>
+    </footer>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+
+    <script>
+      const linkFromBackend = "{{ link }}";
+      // console.log(linkFromBackend);
+      if (linkFromBackend && linkFromBackend !== "Give Valid Url") {
+        Swal.fire({
+          icon: "success",
+          title: "Shortened URL:",
+          html: `
+                <a href='${linkFromBackend}' target='_blank'>${linkFromBackend}</a>
+                <button id="copyButton" class="btn btn-primary">Copy</button>
+            `,
+          confirmButtonText: "Cancel",
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = "/";
+          }
+        });
+
+        // Set up clipboard functionality
+        const copyButton = document.getElementById("copyButton");
+        const clipboard = new ClipboardJS(copyButton, {
+          text: function () {
+            return linkFromBackend;
+          },
+        });
+      } else if (linkFromBackend && linkFromBackend === "Give Valid Url") {
+        Swal.fire({
+          icon: "warning",
+          title: `
+            <p>${linkFromBackend}</p>
+            `,
+          confirmButtonText: "Cancel",
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = "/";
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
