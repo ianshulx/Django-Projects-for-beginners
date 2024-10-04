@@ -16,7 +16,7 @@ def dashboard(request):
         for catg in my_catg:
             out_dict[catg.name]=0
 
-        expenses= Expense.objects.filter(user=request.user.id)
+        expenses= Expense.objects.filter(user=request.user.id).order_by('id')
         for expense in expenses:
             catg=expense.category
             pre_amount=expense.amount
