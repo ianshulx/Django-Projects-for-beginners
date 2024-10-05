@@ -8,8 +8,6 @@ The Event Management System is a Django-based web application that allows users 
 - Create, edit, and delete events
 - Browse and search for events
 - Register for events
-- Calendar integration
-- Email notifications for event updates and reminders
 - User dashboard to manage created events and event registrations
 
 ## Technologies Used
@@ -30,8 +28,6 @@ event_management/
 │   ├── urls.py        # URL patterns
 │   ├── forms.py       # Forms for event creation and registration
 │   └── templates/     # HTML templates
-├── users/             # User management app
-├── static/            # Static files (CSS, JS, images)
 ├── manage.py
 └── requirements.txt
 ```
