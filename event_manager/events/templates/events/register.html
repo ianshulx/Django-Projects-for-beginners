@@ -1,6 +1,6 @@
 {% extends "events/base.html" %}
 {% block content %}
-<h1 class="text-3xl font-bold underline">Login</h1>
+<h1 class="text-3xl font-bold underline">Register</h1>
 <main class="mt-5 form-signin w-100 m-auto">
   {% if messages %}
   <ul class="messages">
@@ -10,16 +10,26 @@
   </ul>
   {% endif %}
 
-  <form method="post" action="{% url 'login' %}">
+  <form method="post" action="{% url 'register' %}">
     {% csrf_token %}
 
     <div class="mt-2 form-floating">
       <input
-        type="usrname"
+        type="email"
+        class="form-control"
+        id="email"
+        name="email"
+        placeholder="name@example.com"
+      />
+      <label for="email">Email address</label>
+    </div>
+    <div class="mt-2 form-floating">
+      <input
+        type="text"
         class="form-control"
         id="username"
         name="username"
-        placeholder="name@example.com"
+        placeholder="Username"
       />
       <label for="username">Username</label>
     </div>
@@ -33,9 +43,19 @@
       />
       <label for="password">Password</label>
     </div>
+    <div class="mt-2 form-floating">
+      <input
+        type="password"
+        class="form-control"
+        name="repeat-password"
+        id="repeat-password"
+        placeholder="Password"
+      />
+      <label for="repeat-password">Repeat Password</label>
+    </div>
 
     <button class="mt-2 btn btn-primary w-100 py-2" type="submit">
-      Sign in
+      Sign Up
     </button>
     <p class="mt-5 mb-3 text-body-secondary">© 2017–2024</p>
   </form>
