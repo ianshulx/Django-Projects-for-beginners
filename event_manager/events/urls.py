@@ -1,11 +1,18 @@
 from django.urls import path
+
 from . import views
 
 urlpatterns = [
-    path("", views.IndexView, name="index"),
-    path("dash/", views.DashView, name="dash"),
+    path("", views.IndexView.as_view(), name="index"),
+    path("edit-event/<int:pk>/", views.EditEvent, name="edit_event"),
+    path("delete-event/<int:pk>/", views.DeleteEvent, name="delete_event"),
+    path("dash/", views.DashView.as_view(), name="dash"),
     path("login/", views.LoginView, name="login"),
     path("register/", views.RegisterView, name="register"),
     path("logout/", views.LogoutView, name="logout"),
-    path("profile/", views.ProfileView, name="profile")
+    path("profile/", views.ProfileView, name="profile"),
+    path("add-event/", views.AddEvent, name="add-event"),
+    path("buy-ticket/<int:pk>", views.DeleteEvent, name="buy_ticket"),
+    path("details/<int:pk>", views.PublicDetails, name="public-details"),
+    path("event-details/<int:pk>", views.DashDetails, name="dash-details"),
 ]

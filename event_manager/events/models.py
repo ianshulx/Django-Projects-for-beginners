@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.core.exceptions import ValidationError
-from django.utils.timezone import timezone
+from django.utils.timezone import timezone, now
 
 
 class Venue(models.Model):
@@ -27,13 +27,14 @@ class Event(models.Model):
     date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
+    is_public = models.BooleanField(default=False)
     location = models.CharField(max_length=100, blank=True, null=True)
     max_participants = models.PositiveIntegerField()
     organizer = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='organized_events')
     venue = models.ForeignKey(
         Venue, on_delete=models.CASCADE, related_name='events')
-    is_remote = models.BooleanField(default=False)
+    pub_date = models.TimeField(default=now)
     status = models.CharField(
         max_length=10, choices=EVENT_STATUS_CHOICES, default="upcoming")
 

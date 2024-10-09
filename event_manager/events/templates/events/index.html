@@ -1,6 +1,36 @@
-{% extends "events/base.html" %}
+{% extends "events/base.html" %} 
 {% block content %}
- <h1 class="text-3xl font-bold underline">
-    Events Management
-  </h1>
+<h1 class="text-3xl font-bold underline">Events Management</h1>
+<ul>
+  {% for event in events %}
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    <div>
+      <h5>{{ event.name }}</h5>
+      <p>{{ event.date }} | {{ event.status }}</p>
+      <p>Tickets Left: {{ event.get_remaining_tickets }}</p>
+    </div>
+    <div>
+      <a href="{% url 'public-details' event.id %}" class="btn btn-info btn-sm"
+        >Details</a
+      >
+      <form
+        action="{% url 'buy_ticket' event.id %}"
+        method="POST"
+        style="display: inline"
+      >
+        {% csrf_token %} {% if event.get_remaining_tickets > 0 %}
+        <button type="submit" class="btn btn-success btn-sm">Buy Ticket</button>
+        {% else %}
+        <button type="button" class="btn btn-secondary btn-sm" disabled>
+          Sold Out
+        </button>
+        {% endif %}
+      </form>
+    </div>
+  </li>
+  {% empty %}
+  <p class="text-muted">No public events available at the moment.</p>
+
+  {% endfor %}
+</ul>
 {% endblock %}
