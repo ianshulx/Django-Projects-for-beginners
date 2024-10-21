@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.views import generic
-from events.models import Event, Venue
+from events.models import Event, Venue, Ticket
 
 
 class IndexView(generic.ListView):
@@ -30,26 +30,59 @@ class DashView(LoginRequiredMixin, generic.ListView):
 
 @login_required(login_url="/login")
 def EditEvent(request, pk):
-    pass
+    event = get_object_or_404(Event, pk=pk)
+    venue = get_object_or_404(Venue, pk=event.venue.pk)
+
+    if request.method == "POST":
+        event.name = request.POST.get('name')
+        event.description = request.POST.get('description')
+        event.date = request.POST.get('date')
+        event.start_time = request.POST.get('start_time')
+        event.end_time = request.POST.get('end_time')
+        event.is_public = request.POST.get('is_public') == 'on'
+        event.location = request.POST.get('location')
+        event.max_participants = request.POST.get('max_participants')
+        event.status = request.POST.get('status', 'upcoming')
+
+        venue.name = request.POST.get('venue_name')
+        venue.is_virtual = request.POST.get('is_virtual') == 'on'
+        venue.address = request.POST.get('address')
+        venue.capacity = request.POST.get('capacity')
+        venue.virtual_meeting_link = request.POST.get('virtual_meeting_link')
+
+        venue.save()
+        event.save()
+
+        return redirect('dash')
+
+    return render(request, "events/edit_event.html", {"event": event})
 
 
 @login_required(login_url="/login")
 def DeleteEvent(request, pk):
-    pass
+    event = get_object_or_404(Event, pk=pk)
+    next_url = request.GET.get('next')
+
+    if event.organizer != request.user:
+        if next_url:
+            return redirect(next_url)
+        return redirect('index')
+    if request.method == "POST":
+        event.delete()
+        if next_url:
+            return redirect(next_url)
+        return redirect('dash')
+    return render(request, "events/delete_event.html", {"event": event})
 
 
 def PublicDetails(request, pk):
-    pass
-
-
-@login_required(login_url="/login")
-def DashDetails(request, pk):
-    pass
+    event = get_object_or_404(Event, pk=pk)
+    ticket = get_object_or_404(Ticket, event=pk, user=request.user)
+    return render(request, "events/details_event.html", {"event": event, "user": request.user, "ticket": ticket, "tickets": event.get_remaining_tickets()})
 
 
 @login_required(login_url="/login")
 def AddEvent(request):
-    print(request.POST)
     if request.method == "POST":
         name = request.POST.get('name')
         description = request.POST.get('description')
@@ -60,8 +93,6 @@ def AddEvent(request):
         location = request.POST.get('location')
         max_participants = request.POST.get('max_participants')
         status = request.POST.get('status', 'upcoming')
-
-        print(date)
 
         venue_name = request.POST.get('venue_name')
         is_virtual = request.POST.get('is_virtual') == 'on'
@@ -78,10 +109,6 @@ def AddEvent(request):
         )
 
         organizer = request.user
-
-        print(venue, organizer)
-
-        print("---" * 20)
 
         # Create the new event instance
         try:
@@ -137,7 +164,6 @@ def RegisterView(request):
         username = request.POST["username"]
         password = request.POST["password"]
         repeat_password = request.POST["repeat-password"]
-        print(email, username, password, repeat_password)
         if password != repeat_password:
             messages.error(request, "Passwords do not match")
         try:
@@ -158,4 +184,23 @@ def LogoutView(request):
 
 @login_required(login_url="/login")
 def ProfileView(request):
-    return render(request, "events/profile.html")
+    return render(request, "events/profile.html", {"user": request.user})
+
+
+@login_required(login_url="/login")
+def BuyTicket(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    user = request.user
+    ticket = event.tickets.filter(user=user).first()
+
+    if request.method == "POST":
+        ticket = Ticket.objects.create(
+            event=event,
+            user=user,
+            price=0.00,
+            purchase_date=timezone.now()
+        )
+
+        return render(request, "events/buy_ticket.html", {"event": event, "user": user, "ticket": ticket})
+
+    return render(request, "events/buy_ticket.html", {"event": event, "user": user, "ticket": ticket})

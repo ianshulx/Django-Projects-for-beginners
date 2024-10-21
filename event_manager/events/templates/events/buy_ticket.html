@@ -1,0 +1,44 @@
+{% extends "events/base.html" %}
+{% block content %}
+<h1>Ticket</h1>
+<h3 class="my-3">{{event.name}}</h3>
+<div class="container">
+ 
+    {% if ticket %} 
+    <div>
+        <dl>
+            <dt>name</dt>
+            <dd>{{event.venue.name}}</dd>
+            <dt>address</dt>
+            <dd>{% if event.venue.is_virtual%} Virtual {% else %} {{event.venue.address}} {%endif%}</dd>
+            <dt>address</dt>
+            <dd>{{event.venue.virtual_meeting_link}}</dd>
+        </dl>
+    </div>
+    {% endif %}
+    {% if ticket == None %} 
+     <form
+action="{% url 'buy-ticket' event.id %}"
+method="POST"
+style="display: inline"
+>
+    {% csrf_token %}
+<button
+    type="submit"
+    class="w-100 btn my-2 btn-lg btn-primary"
+>
+    Get a Spot
+</button>
+</form>
+    {% endif %}
+
+  <footer class="my-5 pt-5 text-body-secondary text-center text-small">
+    <p class="mb-1">© 2017–2024 Company Name</p>
+    <ul class="list-inline">
+      <li class="list-inline-item"><a href="#">Privacy</a></li>
+      <li class="list-inline-item"><a href="#">Terms</a></li>
+      <li class="list-inline-item"><a href="#">Support</a></li>
+    </ul>
+  </footer>
+</div>
+{% endblock %}

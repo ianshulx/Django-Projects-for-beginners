@@ -10,16 +10,16 @@
       <p>Tickets Left: {{ event.get_remaining_tickets }}</p>
     </div>
     <div>
-      <a href="{% url 'public-details' event.id %}" class="btn btn-info btn-sm"
+      <a href="{% url 'details' event.id %}" class="btn btn-info btn-sm"
         >Details</a
       >
       <form
-        action="{% url 'buy_ticket' event.id %}"
+        action="{% url 'buy-ticket' event.id %}"
         method="POST"
         style="display: inline"
       >
         {% csrf_token %} {% if event.get_remaining_tickets > 0 %}
-        <button type="submit" class="btn btn-success btn-sm">Buy Ticket</button>
+        <button type="submit" class="btn btn-success btn-sm">Register</button>
         {% else %}
         <button type="button" class="btn btn-secondary btn-sm" disabled>
           Sold Out

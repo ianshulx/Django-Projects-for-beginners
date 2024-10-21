@@ -12,7 +12,6 @@ urlpatterns = [
     path("logout/", views.LogoutView, name="logout"),
     path("profile/", views.ProfileView, name="profile"),
     path("add-event/", views.AddEvent, name="add-event"),
-    path("buy-ticket/<int:pk>", views.DeleteEvent, name="buy_ticket"),
-    path("details/<int:pk>", views.PublicDetails, name="public-details"),
-    path("event-details/<int:pk>", views.DashDetails, name="dash-details"),
+    path("buy-ticket/<int:pk>", views.BuyTicket, name="buy-ticket"),
+    path("details/<int:pk>", views.PublicDetails, name="details"),
 ]

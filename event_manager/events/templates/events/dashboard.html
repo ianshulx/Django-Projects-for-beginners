@@ -11,7 +11,7 @@
     </div>
     <div>
       <!-- Details Button -->
-      <a href="{% url 'dash-details' event.id %}" class="btn btn-info btn-sm"
+      <a href="{% url 'details' event.id %}" class="btn btn-info btn-sm"
         >Details</a
       >
 
@@ -22,7 +22,7 @@
 
       <!-- Delete Button -->
       <form
-        action="{% url 'delete_event' event.id %}"
+        action="{% url 'delete_event' event.id %}?next={{ request.path }}"
         method="POST"
         style="display: inline"
       >
