@@ -14,7 +14,7 @@
   </head>
   <body>
     <div class="container">
-      {% include "events/components/navbar.html" %} 
+      {% include "events/components/navbar.html" with reviews=reviews %} 
       {% block content %}
       {%endblock %}
     </div>

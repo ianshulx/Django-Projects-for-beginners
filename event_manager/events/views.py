@@ -8,15 +8,32 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.views import generic
-from events.models import Event, Venue, Ticket
-
+from events.models import Event, Venue, Ticket, EventReview
+from django.db.models import Avg
 
 class IndexView(generic.ListView):
     template_name = "events/index.html"
     context_object_name = "events"
 
     def get_queryset(self):
-        return Event.objects.filter(is_public=True).order_by("-pub_date")
+        """
+        Return a filtered list of events based on the search query.
+        """
+        query = self.request.GET.get("q")
+        # Filter events based on the search query
+        if query:
+            return Event.objects.filter(is_public=True, name__icontains=query).order_by("-pub_date")
+        else:
+            return Event.objects.filter(is_public=True).order_by("-pub_date")
+
+    def get_context_data(self, **kwargs):
+        # Get the default context data from ListView
+        context = super().get_context_data(**kwargs)
+
+        # Add today's date to the context
+        context['today'] = timezone.now().date()
+
+        return context
 
 
 class DashView(LoginRequiredMixin, generic.ListView):
@@ -57,6 +74,19 @@ def EditEvent(request, pk):
 
     return render(request, "events/edit_event.html", {"event": event})
 
+@login_required
+def AddReview(request, pk):
+    next_url = request.GET.get('next')
+    if request.method == "POST":
+        event = get_object_or_404(Event, pk=pk)
+        review = request.POST.get('review')
+        rating = request.POST.get('rating')
+        review_event = EventReview.objects.create(event = event, reviewer=request.user, rating=rating, comment=review)
+        review_event.save()
+        return redirect(next_url)
+    if next_url:
+        return redirect(next_url)
+    return redirect('index')
 
 @login_required(login_url="/login")
 def DeleteEvent(request, pk):
@@ -77,9 +107,32 @@ def DeleteEvent(request, pk):
 
 def PublicDetails(request, pk):
     event = get_object_or_404(Event, pk=pk)
-    ticket = get_object_or_404(Ticket, event=pk, user=request.user)
-    return render(request, "events/details_event.html", {"event": event, "user": request.user, "ticket": ticket, "tickets": event.get_remaining_tickets()})
+    user = request.user
+    ticket = None
+    review = None
+    past_event = timezone.now().date() > event.date
+    reviews = EventReview.objects.filter(event=event)
+    rating = reviews.aggregate(Avg('rating'))
+    print(past_event)
 
+    if user.is_authenticated:
+        try:
+            ticket = Ticket.objects.filter(event=event, user=user).first()
+            review = EventReview.objects.filter(event=event, reviewer=user).first()
+        except Ticket.DoesNotExist:
+            ticket = None
+
+    return render(request, "events/details_event.html", {
+        "event": event,
+        "user": user,
+        "ticket": ticket,
+        "date": timezone.now(),
+        "tickets": event.get_remaining_tickets(),
+        "past_event": past_event,
+        "review": review,
+        "reviews": reviews,
+        "rating": rating
+    })
 
 @login_required(login_url="/login")
 def AddEvent(request):

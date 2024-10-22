@@ -1,0 +1,21 @@
+<div>
+    <h4 class="fst-italic">Reviews</h4>
+    <span class="badge text-bg-primary rounded-pill">{{rating.rating__avg}} / 5</span>
+    <ul class="list-unstyled">
+        {% for review in reviews %}
+        <li>
+            <p class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top">
+                <div class="col-lg-8">
+                    <strong class="d-inline-block mb-2 text-primary-emphasis">{{review.rating}} / 5</strong>
+                    <p class="card-text mb-auto">{{review.comment}}
+                    <p class="mb-1 text-body-secondary">{{review.reviewer}} - {{review.created_at|date:"M d, Y" }}</p>
+                </div>
+            </p>
+            {% if review.reviewer == user %}
+            <a class="btn btn-primary rounded-pill px-3" >Edit</a>
+            <a class="btn btn-danger rounded-pill px-3" >Delete</a>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</div>

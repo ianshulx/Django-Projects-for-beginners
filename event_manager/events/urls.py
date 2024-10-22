@@ -14,4 +14,5 @@ urlpatterns = [
     path("add-event/", views.AddEvent, name="add-event"),
     path("buy-ticket/<int:pk>", views.BuyTicket, name="buy-ticket"),
     path("details/<int:pk>", views.PublicDetails, name="details"),
+    path("review/<int:pk>", views.AddReview, name="add-review"),
 ]
