@@ -12,7 +12,21 @@
                 </div>
             </p>
             {% if review.reviewer == user %}
-            <a class="btn btn-primary rounded-pill px-3" >Edit</a>
+            <a hrefclass="btn btn-primary rounded-pill px-3" >Edit</a>
+             <form
+        action="{% url 'delete_event' event.id %}?next={{ request.path }}"
+        method="POST"
+        style="display: inline"
+      >
+        {% csrf_token %}
+        <button
+          type="submit"
+          class="btn btn-danger btn-sm"
+          onclick="return confirm('Are you sure you want to delete this event?');"
+        >
+          Delete
+        </button>
+      </form>
             <a class="btn btn-danger rounded-pill px-3" >Delete</a>
             {% endif %}
         </li>
