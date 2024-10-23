@@ -1,14 +1,13 @@
 # Event Management System
 
 ## Overview
-The Event Management System is a Django-based web application that allows users to create, manage, and participate in events. This project is designed to demonstrate fundamental Django concepts and provide a practical example for beginners.
+The Event Management System is a beginner-friendly Django web app that allows users to create, manage, and participate in events. It demonstrates core Django concepts, providing hands-on experience for new developers.
 
 ## Features
-- User registration and authentication
-- Create, edit, and delete events
-- Browse and search for events
-- Register for events
-- User dashboard to manage created events and event registrations
+- User registration & authentication
+- Event creation, editing, and deletion
+- Event browsing & search functionality
+- Event registration & user dashboard
 
 ## Technologies Used
 - Django 4.2
@@ -31,3 +30,8 @@ event_management/
 ├── manage.py
 └── requirements.txt
 ```
+
+## Setup
+1. Clone the repo: `git clone <repo-url>`
+2. Install dependencies: `pip install -r requirements.txt`
+3. Run server: `python manage.py runserver`
