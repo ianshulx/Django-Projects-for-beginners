@@ -1,0 +1,26 @@
+<header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+  <a
+    href="/"
+    class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"
+  >
+    <span class="fs-4">Events Management</span>
+  </a>
+
+  <ul class="nav nav-pills">
+    
+    {% if user.is_authenticated %}
+    <li class="nav-item"><a href="/" class="nav-link">Events</a></li>
+     <li class="nav-item"><a href="/dash" class="nav-link">Dashboard</a></li>
+    <li class="nav-item"><a href="/profile" class="nav-link">Profile</a></li>
+    <li class="nav-item"><a href="/logout" class="nav-link">Logout</a></li>
+    {% else %}
+    <li class="nav-item">
+      <a href="/" class="nav-link">Home</a>
+    </li>
+    <li class="nav-item"><a href="/" class="nav-link">Events</a></li>
+    <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
+    <li class="nav-item"><a href="/register" class="nav-link">Register</a></li>
+{% endif %}
+    
+  </ul>
+</header>

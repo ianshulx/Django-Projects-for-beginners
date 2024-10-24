@@ -1,0 +1,56 @@
+{% extends "events/base.html" %}
+
+{% block content %}
+<h1>Edit Review</h1>
+<div class="container">
+  <main>
+    <p>{{ review.event.name }}</p>
+    {% if error_message %}
+      <div class="alert alert-danger" role="alert">{{ error_message }}</div>
+    {% endif %}
+    <div class="row g-5 mt-4">
+      <div class="col-md-7 col-lg-8">
+        <form
+          class="needs-validation"
+          method="post"
+          action="{% url 'edit_review' review.pk %}?next={{ request.GET.next }}"
+        >
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="rating" class="form-label">Rating:</label>
+            <input
+              type="number"
+              class="form-control"
+              id="rating"
+              name="rating"
+              min="1"
+              max="5"
+              value="{{ review.rating }}"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="review" class="form-label">Comment:</label>
+            <textarea
+              class="form-control"
+              id="review"
+              name="review"
+              required
+            >{{ review.comment }}</textarea>
+          </div>
+          <button class="btn btn-primary btn-lg w-100 mt-4" type="submit">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer class="my-5 pt-5 text-body-secondary text-center text-small">
+    <p class="mb-1">© 2017–2024 Company Name</p>
+    <ul class="list-inline">
+      <li class="list-inline-item"><a href="#">Privacy</a></li>
+      <li class="list-inline-item"><a href="#">Terms</a></li>
+      <li class="list-inline-item"><a href="#">Support</a></li>
+    </ul>
+  </footer>
+</div>
+{% endblock %}

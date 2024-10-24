@@ -1,0 +1,44 @@
+{% extends "events/base.html" %} 
+{% block content %}
+<h1>Dashboard</h1>
+<a href="/add-event">Add New Event</a>
+<ul class="list-group mt-3">
+  {% for event in events_list %}
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    <div>
+      <h5>{{ event.name }}</h5>
+      <p>{{ event.date }}</p>
+    </div>
+    <div>
+      <!-- Details Button -->
+      <a href="{% url 'details' event.id %}" class="btn btn-info btn-sm"
+        >Details</a
+      >
+
+      <!-- Edit Button -->
+      <a href="{% url 'edit_event' event.id %}" class="btn btn-primary btn-sm"
+        >Edit</a
+      >
+
+      <!-- Delete Button -->
+      <form
+        action="{% url 'delete_event' event.id %}?next={{ request.path }}"
+        method="POST"
+        style="display: inline"
+      >
+        {% csrf_token %}
+        <button
+          type="submit"
+          class="btn btn-danger btn-sm"
+          onclick="return confirm('Are you sure you want to delete this event?');"
+        >
+          Delete
+        </button>
+      </form>
+    </div>
+  </li>
+  {% empty %}
+  <p class="text-muted">You have not created any events yet.</p>
+  {% endfor %}
+</ul>
+{% endblock %}

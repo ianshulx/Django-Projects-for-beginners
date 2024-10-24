@@ -1,0 +1,114 @@
+{% extends "events/base.html" %}
+
+{% block content %}
+<div class="row g-5">
+  <div class="col-md-8">
+    <article class="blog-post">
+      <h2 class="display-5 link-body-emphasis mb-1">{{ event.name }}</h2>
+      <p class="blog-post-meta">{{ event.date }} by {{ event.organizer }}</p>
+
+      <p>{{ event.description }}</p>
+      <hr>
+
+      <h2>Location</h2>
+      <p>{{ event.location }}</p>
+
+      <h3>Number of Participants</h3>
+      <p>{{ event.max_participants }}</p>
+
+      <h3>Venue Details</h3>
+      <dl>
+        <dt>Name</dt>
+        <dd>{{ event.venue.name }}</dd>
+        <dt>Address</dt>
+        <dd>
+          {% if event.venue.is_virtual %}
+            Virtual
+          {% else %}
+            {{ event.venue.address }}
+          {% endif %}
+        </dd>
+      </dl>
+    </article>
+  </div>
+
+  <div class="col-md-4">
+    <div class="position-sticky" style="top: 2rem;">
+      <div class="p-4">
+        <ol class="list-unstyled">
+          {% if not past_event %}
+            <p class="my-2">Spots Left: {{ tickets }}</p>
+          {% endif %}
+
+          {% if user %}
+            {% if event.organizer != user %}
+              <li>
+                {% if tickets == 0 or past_event %}
+                  Finished
+                {% else %}
+                  <a class="w-100 btn btn-lg btn-primary my-2" href="{% url 'buy-ticket' event.id %}">
+                    {% if ticket %}
+                      Registered
+                    {% else %}
+                      Get Spot
+                    {% endif %}
+                  </a>
+                {% endif %}
+              </li>
+            {% endif %}
+
+            {% if event.organizer == user %}
+              <li>
+                <a class="w-100 btn btn-lg btn-primary my-2" href="{% url 'edit_event' event.id %}">
+                  Edit Event
+                </a>
+              </li>
+              <form action="{% url 'delete_event' event.id %}" method="POST" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="w-100 btn btn-lg btn-danger my-2" onclick="return confirm('Are you sure you want to delete this event?');">
+                  Delete Event
+                </button>
+              </form>
+            {% endif %}
+          {% else %}
+            <li>
+              <a class="w-100 btn btn-lg btn-primary my-2" href="{% url 'buy-ticket' event.id %}" {% if tickets == 0 %} disabled {% endif %}>
+                Get Spot
+              </a>
+            </li>
+          {% endif %}
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr />
+
+{% if past_event and ticket %}
+  {% include "events/components/reviews_event.html" with reviews=reviews rating=rating user=user %}
+{% endif %}
+
+{% if past_event %}
+  {% if event.organizer != user %}
+    {% if not review or review.reviewer != user %}
+      <form class="needs-validation my-4" method="post" action="{% url 'add-review' event.id %}?next={{ request.path }}">
+        {% csrf_token %}
+
+        <div class="mb-3">
+          <label for="review" class="form-label">Review:</label>
+          <textarea class="form-control" id="review" name="review" required></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="rating" class="form-label">Rating on 5:</label>
+          <input class="form-control" type="number" id="rating" name="rating" required min="1" max="5" />
+        </div>
+
+        <button class="mt-4 w-100 btn btn-primary btn-sm" type="submit">Submit</button>
+      </form>
+    {% endif %}
+  {% endif %}
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "events/base.html" %} 
+
+{% block content %}
+<h1 class="text-3xl font-bold underline">Events Management</h1>
+
+<form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" method="GET" action="{% url 'index' %}" role="search">
+    <input type="search" name="q" id="q" class="form-control" placeholder="Search..." aria-label="Search">
+</form>
+
+<ul class="my-2">
+    {% for event in events %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <h5>{{ event.name }}</h5>
+                <p>{{ event.date }} </p>
+                {% if event.date < today %}
+                    <p class="text-red-500">Expired</p>
+                {% else %}
+                    <p>Tickets Left: {{ event.get_remaining_tickets }}</p>
+                {% endif %}
+            </div>
+            
+            <div>
+                <a href="{% url 'details' event.id %}" class="btn btn-info btn-sm">Details</a>
+
+                <form action="{% url 'buy-ticket' event.id %}" method="POST" style="display: inline;">
+                    {% csrf_token %}
+                    
+                    {% if event.date < today %}
+                        <p class="text-red-500">Expired</p>
+                    {% else %}
+                        {% if event.get_remaining_tickets > 0 %}
+                            <button type="submit" class="btn btn-success btn-sm">Register</button>
+                        {% else %}
+                            <button type="button" class="btn btn-secondary btn-sm" disabled>Sold Out</button>
+                        {% endif %}
+                    {% endif %}
+                </form>
+            </div>
+        </li>
+    {% empty %}
+        <p class="text-muted">No public events available at the moment.</p>
+    {% endfor %}
+</ul>
+{% endblock %}
