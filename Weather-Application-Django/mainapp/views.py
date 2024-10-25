@@ -12,7 +12,7 @@ def index(request):
     BASE_URL ='http://api.weatherapi.com/v1'
 
     # 2. After generating your API key, copy it and then paste it into the "API_KEY" variable as given below:
-    API_KEY = 'paste-your-api-key' # ***************
+    API_KEY = '6e747923577648d3bbd02035242510' # ***************
 
     if request.method=='POST':
         city=request.POST.get('city').lower()
