@@ -6,6 +6,8 @@
     <title>{{ course.title }}</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <style>
         /* Custom styles for the card */
         .custom-card {
@@ -43,23 +45,43 @@
         .btn-custom:hover {
             background-color: #218838; /* Button hover color */
         }
+
+        /* Custom style for the courses heading */
+        .courses-heading {
+            display: flex; /* Use flexbox for alignment */
+            align-items: center; /* Center items vertically */
+            justify-content: center; /* Center items horizontally */
+            font-size: 2rem; /* Font size for heading */
+            margin-bottom: 20px; /* Space below heading */
+            color: #333; /* Heading text color */
+        }
+
+        .courses-heading i {
+            margin-right: 10px; /* Space between icon and text */
+            color: #007bff; /* Icon color */
+        }
     </style>
 </head>
 <body>
 
 <div class="container mt-5">
-    <h1 class="text-center mb-4">Courses</h1>
+    <h1 class="courses-heading">
+        <i class="fas fa-book-open"></i> <!-- Book icon -->
+        Courses
+    </h1>
     <hr>
     <div class="row">
         {% for course in courses %}
             <div class="col-md-3 mb-4">
-                <div class="card h-100">
+                <div class="card h-100 custom-card">
                     <img src="{{ course.image }}" class="card-img-top course-image" alt="{{ course.title }}" style="height: 150px;">
                     <div class="card-body">
                         <h2 class="card-title">{{ course.title }}</h2>
                         <p class="card-text">{{ course.description }}</p>
                         <p class="card-price">Price: <strong>${{ course.price }}</strong></p>
-                        <a href="{% url 'course_detail' course.id %}" class="btn btn-success">Buy Course</a>
+                        <a href="{% url 'course_detail' course.id %}" class="btn btn-custom">
+                            <i class="fas fa-shopping-cart"></i> Buy Course
+                        </a>
                     </div>
                 </div>
             </div>
