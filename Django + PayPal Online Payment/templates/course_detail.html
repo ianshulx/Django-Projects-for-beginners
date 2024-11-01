@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ course.title }}</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <style>
+        /* Custom styles for the card */
+        .custom-card {
+            border: 2px solid #007bff; /* Card border color */
+            border-radius: 15px; /* Rounded corners */
+            overflow: hidden; /* Hide overflow for rounded corners */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Shadow effect */
+            transition: transform 0.3s; /* Animation for hover effect */
+        }
+
+        .custom-card:hover {
+            transform: scale(1.05); /* Scale effect on hover */
+        }
+
+        .card-header {
+            background-color: #007bff; /* Header background color */
+            color: white; /* Header text color */
+        }
+
+        .card-title {
+            font-size: 1.5rem; /* Custom title size */
+            font-weight: bold; /* Bold title */
+        }
+
+        .card-body {
+            padding: 20px; /* Custom body padding */
+        }
+
+        .btn-custom {
+            background-color: #28a745; /* Custom button color */
+            color: white; /* Button text color */
+            border-radius: 20px; /* Rounded button */
+        }
+
+        .btn-custom:hover {
+            background-color: #218838; /* Button hover color */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card custom-card">
+                <div class="card-header">
+                    <h5 class="card-title">{{ course.title }}</h5>
+                </div>
+                <div class="card-body text-center">
+                    <img src="{{ course.image }}" class="img-fluid mb-3" alt="{{ course.title }}" style="max-width: 200px; height: auto;">
+                    <p class="card-text">{{ course.description }}</p>
+                    <h2 class="text-primary">Price: ${{ course.price }}</h2>
+
+                    <!-- PayPal button will be rendered here -->
+                    <div id="paypal-button-container" class="mt-4"></div>
+                    <p id="result-message" class="mt-2"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include PayPal SDK -->
+<script src="https://www.paypal.com/sdk/js?client-id={{CLIENT_ID}}&currency=USD&components=buttons&enable-funding=venmo"></script>
+
+<script>
+    // Render the PayPal button
+    window.paypal.Buttons({
+        style: {
+            shape: "rect",
+            layout: "vertical",
+            color: "blue",
+            label: "paypal",
+        },
+        createOrder: async function() {
+            try {
+                // Create the order by sending a POST request to your Django backend
+                const response = await fetch(`/courses/{{ course.id }}/create-order/`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": '{{ csrf_token }}',
+                    },
+                    body: JSON.stringify({
+                        cart: [
+                            {
+                                id: "{{ course.id }}",  // Sending the course ID to the backend
+                                quantity: 1,  // You can modify this for multiple quantities
+                            },
+                        ],
+                    }),
+                });
+
+                if (!response.ok) {
+                    // Handle errors if the order could not be created
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || "Could not create order.");
+                }
+
+                const orderData = await response.json();
+                // Redirect the user to PayPal to approve the payment
+                window.location.href = orderData.approval_url;
+            } catch (error) {
+                // Display error messages
+                console.error(error);
+                document.getElementById("result-message").innerHTML = `Could not initiate PayPal Checkout...<br><br>${error}`; // Use backticks for template literal
+            }
+        },
+
+        onApprove: async function(data, actions) {
+            try {
+                // Once the user approves the payment, capture the order
+                const response = await fetch(`/api/orders/${data.orderID}/capture/`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+
+                const orderData = await response.json();
+
+                if (orderData.error) {
+                    throw new Error(orderData.error);
+                }
+
+                // Display success message
+                document.getElementById("result-message").innerHTML = `Transaction successful: ${orderData.id}`; // Use backticks for template literal
+            } catch (error) {
+                // Handle capture errors
+                console.error(error);
+                document.getElementById("result-message").innerHTML = `Could not capture PayPal transaction...<br><br>${error}`; // Use backticks for template literal
+            }
+        }
+    }).render("#paypal-button-container");
+</script>
+
+</body>
+</html>
