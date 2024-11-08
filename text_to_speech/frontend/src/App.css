@@ -136,7 +136,7 @@ button:hover {
 
 audio {
   width: 100%;
-  max-width: 500px; /* Make sure the audio player doesn't stretch too wide */
+  max-width: 400px; /* Make sure the audio player doesn't stretch too wide */
 }
 
 a {
