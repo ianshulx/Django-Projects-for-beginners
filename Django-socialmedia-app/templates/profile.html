@@ -1,0 +1,205 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{profile.profile_img}}" rel="icon" type="image/png">
+    <title>Profile - {{ profile.user.username.capitalize }}</title>
+    <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/uikit.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
+    <style>
+        /* Optional custom styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container m-auto">
+        <a href="/">
+            <button type="submit" class="button bg-blue-700 rounded-full">⬅</button>
+        </a>
+        <div class="grid lg:grid-cols-3 gap-8 mt-12">
+            <div class="bg-white rounded-md lg:shadow-lg shadow p-6">
+                <div class="text-center">
+                    <img src="{{profile.profile_img.url}}" alt="Profile Picture" class="rounded-lg w-full h-auto">
+                    <div class="mt-4 text-lg font-semibold" color="black"><strong><b>{{profile.user.username.capitalize}}</b></strong></div>
+                    <a href="#"><div class="mt-4 text-lg font-semibold" onclick="openModalfollower()">{{profile.followers}} Followers</div></a>
+                    <a href="#"><div class="mt-4 text-lg font-semibold" onclick="openModalfollowing()"> {{profile.following}} Following</div></a>
+                    <div class="mt-4 text-lg font-semibold">{{num_posts}} Posts</div>
+                    {% if user != profile.user %}
+                    <a href="/follow/{{profile.user.username}}">
+                    <button class="button bg-blue-700 text-white mt-4 px-4 py-2 rounded-md">{{ follow_status }}</button>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-span-2">
+                <div class="bg-white rounded-md lg:shadow-lg shadow p-6">
+                    <h1 class="text-2xl leading-none text-gray-900 tracking-tight"><strong>{{ profile.user.username.capitalize }} ✨✨</strong></h1>
+                    <div class="mt-4">
+                        <hr>
+                        <br>
+                        <h2 class="text-xl font-semibold">About {{profile.user.username.capitalize}}</h2>
+                        <br>
+                        <h3 class="text-lg text-gray-700 font-semibold">{{ profile.bio }}</h3>
+                    </div>
+                    <div class="mt-4">
+                        <h2 class="text-xl font-semibold">Location</h2>
+                        <br>
+                        <h3 class="text-lg text-gray-700 font-semibold">{{ profile.location }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-12">
+            <h2 class="text-2xl font-semibold mb-4">Posts</h2>
+            <div class="grid lg:grid-cols-3 gap-8">
+                {% for post in posts reversed %}
+                <a href="/post/{{post.post_id}}">
+                <div class="bg-white rounded-md lg:shadow-lg shadow p-6">
+                    <img src="{{post.Img.url}}" alt="Post Image" class="rounded-md mt-2 w-full">
+                    <br>
+                    <p class="text-gray-600 mt-2"><strong>{{post.caption}}</strong></p>
+                    <div class="mt-4 flex items-center">
+                        <div class="p-2 rounded-full text-black">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="black" width="25" height="25" class="">
+                                <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                            </svg>
+                        </div>
+                        <span class="text-gray-500">{{post.likes}}</span>
+                    </div>
+                </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Followers -->
+    <div id="followerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModalfollower()">&times;</span>
+            <div class="bg-gray-50 border-b border-gray-100 flex items-center justify-between py-4 px-6">
+                {% if user.username == profile.user.username %}
+                <center><h2 class="font-semibold text">Your Followers</h2></center>
+                {% else %}
+                <center><h2 class="font-semibold text-lg">{{profile.user.username.capitalize}}'s Followers</h2></center>
+                {% endif %}
+            </div>
+            {% for profile in follower_list %}
+            <div class="divide-y divide-gray-300">
+                <div class="flex items-center justify-between py-3 px-4">
+                    <div class="flex items-center space-x-4">
+                        <img src="{{profile.profile_img.url}}" class="bg-gray-200 rounded-full w-10 h-10">
+                        <div class="flex flex-col">
+                            <span class="block font-semibold">{{profile.user.username.capitalize}}</span>
+                            <span class="block text-sm text-gray-500">{{profile.followers}} followers</span>
+                        </div>
+                    </div>
+                    <a href="/profile/{{profile.user.username}}" class="border border-gray-200 font-semibold px-4 py-1 rounded-full text-sm text-gray-700 hover:bg-pink-600 hover:text-white hover:border-pink-600">View Profile</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Modal for Following -->
+    <div id="followingModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModalfollowing()">&times;</span>
+            <div class="bg-gray-50 border-b border-gray-100 flex items-center justify-between py-4 px-6">
+                {% if user.username == profile.user.username %}
+                <center><h2 class="font-semibold text">Your Following</h2></center>
+                {% else %}
+                <center><h2 class="font-semibold text-lg">{{profile.user.username.capitalize}}'s Following</h2></center>
+                {% endif %}
+            </div>
+            {% for profile in following_list %}
+            <div class="divide-y divide-gray-300">
+                <div class="flex items-center justify-between py-3 px-4">
+                    <div class="flex items-center space-x-4">
+                        <img src="{{profile.followed.profile_img.url}}" class="bg-gray-200 rounded-full w-10 h-10">
+                        <div class="flex flex-col">
+                            <span class="block font-semibold">{{profile.followed.user.username.capitalize}}</span>
+                            <span class="block text-sm text-gray-500">{{profile.followed.followers}} followers</span>
+                        </div>
+                    </div>
+                    <a href="/profile/{{profile.followed.user.username}}" class="border border-gray-200 font-semibold px-4 py-1 rounded-full text-sm text-gray-700 hover:bg-pink-600 hover:text-white hover:border-pink-600">View Profile</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        function openModalfollower() {
+            document.getElementById('followerModal').style.display = 'block';
+        }
+        function openModalfollowing() {
+            document.getElementById('followingModal').style.display = 'block';
+        }
+    
+        function closeModalfollower() {
+            document.getElementById('followerModal').style.display = 'none';
+        }
+
+        function closeModalfollowing() {
+            document.getElementById('followingModal').style.display = 'none';
+        }
+
+        // Close the modal when clicking outside of it
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('followerModal')) {
+                closeModalfollower();
+            }
+            if (event.target == document.getElementById('followingModal')) {
+                closeModalfollowing();
+            }
+        }
+    </script>
+    <script src="{% static 'assets/js/tippy.all.min.js' %}"></script>
+    <script src="{% static 'assets/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'assets/js/uikit.js' %}"></script>
+    <script src="{% static 'assets/js/simplebar.js' %}"></script>
+    <script src="{% static 'assets/js/custom.js' %}"></script>
+    <script src="{% static '../../unpkg.com/ionicons%405.2.3/dist/ionicons.js' %}"></script>
+</body>
+</html>
+

@@ -1,0 +1,83 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'assets/images/favicon.png' %}" rel="icon" type="image/png">
+    <title>Settings</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/uikit.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
+
+</head>
+
+<body>
+    <a href="/">
+        <button type="submit" class="button bg-blue-700 rounded-full" style="float: left; margin-left: 50px;margin-top: 50px;">⬅</button>
+    </a>
+            <div class="container m-auto"> 
+                <h1 class="text-2xl leading-none text-gray-900 tracking-tight mt-3"><strong>Profile Settings ⚙️</strong></h1>
+
+
+                <div class="grid lg:grid-cols-3 mt-12 gap-8">
+                    <div>
+                        <h2 class="text-xl mb-2"><strong> Hi {{user.username}}👋👋 !</strong> !</h2>
+                        <p></p>
+                    </div>
+                    <div class="bg-white rounded-md lg:shadow-lg shadow col-span-2">
+    
+                       <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
+                        <form action="settings" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                           <div>
+                               <label for=""> Profile Image </label>
+                               <img src="{{my_profile.profile_img.url}}" height="100" width="100">
+                               <input type="file" name="image" class="shadow-none bg-gray-100">
+                           </div>
+                           <div>
+                               <label for=""> Your Bio</label>
+                               <input type="text" name="bio" value="{{my_profile.bio}}" class="shadow-none bg-gray-100">
+                            </div>
+                            <div class="col-span-2">
+                                <label for=""> Location</label>
+                                <input type="text" name="loc" value="{{my_profile.location}}" class="shadow-none bg-gray-100">
+                            </div>
+                       </div> 
+    
+                       <div class="bg-gray-10 p-6 pt-0 flex justify-end space-x-3">
+                           <button class="p-2 px-4 rounded bg-gray-50 text-red-500"> Cancel </button>
+                           <button type="submit" class="button bg-blue-700"> Save </button>
+                       </div>
+                    </form>
+                    
+                    <br>
+
+                </div>
+
+            </div>
+            
+        </div>
+
+    </div>
+
+
+    
+
+ <!-- Scripts
+    ================================================== -->
+    <script src="{% static 'assets/js/tippy.all.min.js' %}"></script>  
+    <script src="{% static 'assets/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'assets/js/uikit.js' %}"></script>
+    <script src="{% static 'assets/js/simplebar.js' %}"></script>
+    <script src="{% static 'assets/js/custom.js' %}"></script>
+
+
+    <script src="{% static '../../unpkg.com/ionicons%405.2.3/dist/ionicons.js' %}"></script>
+</body>
+
+</html>
