@@ -1,0 +1,203 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="favicon.png" rel="icon" type="image/png">
+    <title>Home</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/uikit.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
+</head>
+
+<body>
+    
+    <header>
+        <div class="header_inner">
+            <div class="left-side">
+                <!-- Logo -->
+                <div id="logo" class=" uk-hidden@s">
+                    <a href="home.html">
+                        <b><h1 style="text-transform: uppercase;">Social Book</h1></b>
+                    </a>
+                </div>
+
+                <!--<div class="triger" uk-toggle="target: #wrapper ; cls: sidebar-active">
+                    <i class="uil-bars"></i>
+                </div>-->
+                <form method="POST" action="/search" >
+                {% csrf_token %}
+                <div class="header_search">
+                    <input type="text" name="username" placeholder="Search for username..">
+                    <div class="icon-search">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+                </div>
+
+            </div>
+            <button class="button bg-blue-700 rounded-full" type="submit">Search</button>
+            </form>
+            <style>
+                
+            </style>
+            <div class="right-side lg:pr-4">
+                 <!-- upload -->
+                <a href="#"
+                    class="bg-pink-500 flex font-bold hidden hover:bg-pink-600 hover:text-white inline-block items-center lg:block max-h-10 mr-4 px-4 py-2 rounded shado text-white">
+                    <ion-icon name="add-circle" class="-mb-1
+                     mr-1 opacity-90 text-xl uilus-circle"></ion-icon> Upload Post
+                </a>
+                 <!-- upload dropdown box -->
+                <div uk-dropdown="pos: top-right;mode:click ; animation: uk-animation-slide-bottom-small" class="header_dropdown">
+
+                    <!-- notivication header -->
+                    <div class="px-4 py-3 -mx-5 -mt-4 mb-5 border-b">
+                        <h4>Upload Post </h4>
+                    </div>
+
+                    <!-- notification contents -->
+                    <div class="flex justify-center flex-center text-center">
+
+                        <div class="flex flex-col choose-upload text-center">
+                           
+                            <div class="bg-gray-100 border-2 border-dashed flex flex-col h-24 items-center justify-center relative w-full rounded-lg  ">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12">
+                                    <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
+                                    <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
+                                </svg>
+                            </div>
+
+                            <p class="my-3 leading-6"> Upload your post 😏 <br> 
+                            </p>
+                            <form method="POST" action="upload" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="file" name="image">
+                            <br>
+                            <input type="text" name="Caption" placeholder="Your Caption">
+                            <br>
+                            <button type="submit" class="button bg-blue-700"> Post </button>
+                            </form>
+                        </div>
+
+                        <div class="uk-flex uk-flex-column choose-upload" hidden>
+                            <div class="mx-auto flex flex-col h-24 items-center justify-center relative w-full rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12">
+                                    <path fill-rule="evenodd" d="M2 9.5A3.5 3.5 0 005.5 13H9v2.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 15.586V13h2.5a4.5 4.5 0 10-.616-8.958 4.002 4.002 0 10-7.753 1.977A3.5 3.5 0 002 9.5zm9 3.5H9V8a1 1 0 012 0v5z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <p class="my-3 leading-6"> Import videos from YouTube <br> Copy / Paste your video link here </p>
+                            <form class="uk-grid-small" uk-grid>
+                                <div class="uk-width-expand">
+                                    <input type="text" class="uk-input uk-form-small  bg-gray-200 " style="box-shadow:none" placeholder="Paste link">
+                                </div>
+                                <div class="uk-width-auto"> <button type="submit" class="button soft-warning -ml-2">
+                                        Import </button> </div>
+                            </form>
+                            <a href="#" class="uk-text-muted mt-3 uk-link"
+                                uk-toggle="target: .choose-upload ; animation: uk-animation-slide-left-small, uk-animation-slide-right-medium; queued: true">
+                                Or Upload Video </a>
+                        </div>
+
+                    </div>
+                    <div class="px-4 py-3 -mx-5 -mb-4 mt-5 border-t text-sm">
+                        Your Image size Must be Maxmium 999MB
+                    </div>
+                </div>
+            
+                
+                 <!-- Notification -->
+
+                
+
+                <!-- Messages -->
+
+                
+
+                <!-- profile -->
+
+                <a href="#">
+                    <img src="{{my_profile.profile_img.url}}" class="header-avatar" alt="">
+                </a>
+                <div uk-drop="mode: click;offset:9" class="header_dropdown profile_dropdown border-t">
+                    <ul>
+                        <center><img src="{{ my_profile.profile_img.url }}" class="circular-image" alt="Profile Image"></center>
+                            <style>
+                                .circular-image {
+                                    border-radius: 50%;
+                                    width: 150px; /* You can adjust the width and height as needed */
+                                    height: 150px; /* Make sure the height and width are the same */
+                                    object-fit: cover; /* Ensures the image covers the circle shape properly */
+                                }
+                            </style>
+                            <br>
+                        <h2><strong><center>Hey {{my_profile.user.username.capitalize}} 👋👋 !!</center></strong></h2>
+                        <br>
+                        <li><a href="profile/{{user.username}}"> My Profile </a> </li>
+                        <li><a href="settings"> Settings </a> </li>
+                        <li><a href="logout"> Log Out</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </header>
+    
+    
+    <!-- Profiles List Section -->
+    <section class="bg-gray-100 py-12">
+        <div class="container mx-auto px-4">
+            <!-- <h2 class="text-2xl font-semibold mb-6">Recommended Profiles</h2> -->
+            <a href="/">
+                <button type="submit" class="button bg-blue-700 rounded-full" style="margin-bottom: 30px;">⬅</button>
+            </a>
+            <div class="lg:w-3/4 mx-auto">
+                <div class="bg-white shadow-md rounded-md overflow-hidden">
+                    <div class="bg-gray-50 border-b border-gray-100 flex items-baseline justify-between py-4 px-6">
+                        <h2 class="font-semibold text-lg">Search results for "{{caption}}"</h2>
+                    </div>
+                    
+                    {% for profile in search_users %}
+                    <!-- Profile List -->
+                    <div class="divide-y divide-gray-300">
+                        <!-- Profile 1 -->
+                        <div class="flex items-center justify-between py-3 px-4">
+                            <div class="flex items-center space-x-4">
+                                <img src="{{profile.profile.profile_img.url}}" alt="Profile 1" class="bg-gray-200 rounded-full w-10 h-10">
+                                <div class="flex flex-col">
+                                    <span class="block font-semibold">{{profile.profile.user.username.capitalize}}</span>
+                                    <span class="block text-sm text-gray-500">{{profile.profile.followers}} followers</span>
+                                    <span class="block text-sm text-gray-500"><strong>About: </strong>{{profile.bio}}....</span>
+                                </div>
+                            </div>
+                            <a href="profile/{{profile.profile.user.username}}" class="border border-gray-200 font-semibold px-4 py-1 rounded-full text-sm text-gray-700 hover:bg-pink-600 hover:text-white hover:border-pink-600">View Profile</a>
+                        </div>
+                        
+                    </div>
+                    <hr>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts ================================================== -->
+    <script src="{% static 'assets/js/tippy.all.min.js' %}"></script>
+    <script src="{% static 'assets/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'assets/js/uikit.js' %}"></script>
+    <script src="{% static 'assets/js/simplebar.js' %}"></script>
+    <script src="{% static 'assets/js/custom.js' %}"></script>
+    <script src="{% static '../../unpkg.com/ionicons%405.2.3/dist/ionicons.js' %}"></script>
+</body>
+
+</html>
+
