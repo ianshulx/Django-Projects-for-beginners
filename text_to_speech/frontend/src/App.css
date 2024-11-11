@@ -1,0 +1,151 @@
+/* Global styling for the dark theme */
+body {
+  background-color: #121212; /* Dark background */
+  color: #e0e0e0; /* Silver/white text */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+}
+
+/* Container for the app */
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box; /* Ensure padding doesn't cause overflow */
+}
+
+/* Title styling */
+h1 {
+  color: #b0b0b0; /* Silver color for the title */
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+/* Form styling */
+form {
+  background-color: #1e1e1e; /* Darker background for the form */
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 500px;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+}
+
+/* Input styling for text area */
+textarea {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border: 2px solid #444;
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  border-radius: 4px;
+  font-size: 1rem;
+  resize: none;
+  margin-bottom: 20px;
+  text-align: left; /* Align the text left inside the textarea */
+}
+
+textarea::placeholder {
+  color: #7f7f7f;
+}
+
+/* Styling for sliders (rate, volume) */
+input[type="range"] {
+  width: 100%;
+  height: 6px;
+  background: #333;
+  border-radius: 5px;
+  outline: none;
+  transition: background 0.3s ease;
+}
+
+input[type="range"]:hover {
+  background: #777;
+}
+
+span {
+  color: #bbb;
+  font-size: 1.2rem;
+  margin-left: 10px;
+}
+
+/* Label styling */
+label {
+  color: #ccc;
+  font-size: 1rem;
+  margin-right: 10px;
+}
+
+/* Select dropdown styling */
+select {
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  border: 2px solid #444;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+/* Button styling */
+button {
+  background-color: #6c63ff; /* Soft purple color for the button */
+  color: white;
+  font-size: 1.2rem;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #534bff;
+}
+
+/* Styling for the form container on smaller screens */
+@media (max-width: 600px) {
+  .App {
+    padding: 10px;
+  }
+
+  form {
+    padding: 20px;
+    width: 100%;
+  }
+}
+
+/* Center the audio player and download link */
+.audio-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+}
+
+audio {
+  width: 100%;
+  max-width: 400px; /* Make sure the audio player doesn't stretch too wide */
+}
+
+a {
+  color: #6c63ff;
+  font-size: 1.2rem;
+  margin-top: 10px;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #534bff;
+}

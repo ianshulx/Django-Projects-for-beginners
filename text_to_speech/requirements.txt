@@ -1,0 +1,15 @@
+asgiref==3.8.1
+backports.zoneinfo==0.2.1
+certifi==2024.8.30
+charset-normalizer==3.4.0
+click==8.1.7
+Django==4.2.16
+django-cors-headers==4.4.0
+djangorestframework==3.15.2
+gTTS==2.5.3
+idna==3.10
+python-decouple==3.8
+requests==2.32.3
+sqlparse==0.5.1
+typing-extensions==4.12.2
+urllib3==2.2.3
