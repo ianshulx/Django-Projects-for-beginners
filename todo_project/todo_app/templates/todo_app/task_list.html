@@ -1,0 +1,32 @@
+{% extends 'todo_app/base.html' %}
+
+{% block title %}To-Do List{% endblock %}
+
+{% block content %}
+    <div class="task-list">
+        <h2 class="text-center mb-4">To-Do List</h2>
+        <br>
+        <div class="task-actions">
+            <a href="{% url 'add_task' %}" class="btn btn-primary btn-sm">Add New Task</a>
+        </div>
+        {% for task in tasks %}
+            <div class="task-item">
+                <div>
+                    <span class="task-title">{{ task.title }}</span>
+                    <p class="task-description">{{ task.description }}</p>
+                    {% if task.completed %}
+                        <span class="completed">Completed</span>
+                    {% else %}
+                        <a href="{% url 'mark_completed' task.pk %}" class="btn btn-sm btn-success">Mark as Completed</a>
+                    {% endif %}
+                </div>
+                <div class="task-actions">
+                    <a href="{% url 'update_task' task.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{% url 'delete_task' task.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-center">No tasks available. Start by adding a task!</p>
+        {% endfor %}
+    </div>
+{% endblock %}
