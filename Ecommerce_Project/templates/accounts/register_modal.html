@@ -1,0 +1,50 @@
+<!-- Register User Modal-Popup Starts Here-->
+<div class="modal fade" id="registeruserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Create Account</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form class="row g-3" id="registerForm" method="POST" action=" {% url 'accounts:register_user' %} ">
+          {% csrf_token %}
+          <div id="registerformError" class="alert alert-danger" style="display: none;"></div>
+          <div class="col-md-6">
+            <label for="firstname" class="form-label">First Name</label>
+            <input type="text" class="form-control" name="firstname" id="fname">
+            <span id="fnameError" class="text-danger form-error" style="display: none;"></span>
+          </div>
+          <div class="col-md-6">
+            <label for="lastname" class="form-label">Last Name</label>
+            <input type="text" class="form-control" name="lastname" id="lname">
+            <span id="lnameError" class="text-danger form-error" style="display: none;"></span>
+          </div>
+          <div class="col-12">
+            <label for="username" class="form-label">Username</label>
+            <div class="input-group">
+              <div class="input-group-text">@</div>
+              <input type="text" class="form-control" name="username" id="uname" >
+            </div>
+            <span id="unameError" class="text-danger form-error" style="display: none;"></span>
+          </div>
+          <div class="col-12">
+            <label for="email" class="form-label">Email</label>
+            <input type="text" class="form-control" name="email" id="email">
+            <span id="emailError" class="text-danger form-error" style="display: none;"></span>
+          </div>
+          <div class="col-12">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password">
+            <span id="pwdError" class="text-danger form-error" style="display: none;"></span>
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Register User Modal-Popup Ends Here -->

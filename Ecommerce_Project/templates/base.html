@@ -21,5 +21,75 @@
 {% include 'footer.html' %}
 <script src="{% static 'js/popper.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function(){
+    // User registration request handling script starts here
+    $("#registerForm").submit(function(e) {
+        e.preventDefault();
+
+        $("#registerformError").hide().text('');
+        $('.form-error').text('').hide();
+
+        const form = $(this);
+
+        var firstname = $('#fname').val().trim();
+        var lastname = $('#lname').val().trim();
+        var username = $('#uname').val().trim();
+        var email = $('#email').val().trim();
+        var password = $('#password').val().trim();
+
+        var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        var usernamePattern = /^[a-zA-Z0-9._-]{3,20}$/;
+
+        if(firstname === ''){
+            $('#fnameError').text('First name  is required').show();
+            return false;
+        } else if(lastname === ''){
+            $('#lnameError').text('Last name field is required').show();
+            return false;
+        } else if(username === ''){
+            $('#unameError').text('Username field is required').show();
+            return false;
+        } else if(!usernamePattern.test(username)){
+            $('#unameError').text('Username must be 3-20 characters and can include letters, numbers, dots, underscores, or hyphens').show();
+            return false;
+        } else if(email === ''){
+            $('#emailError').text('Email Address field is required').show();
+            return false;
+        } else if(!emailPattern.test(email)){
+            $('#emailError').text('Please enter a valid email address').show();
+            return false;
+        } else if(password === ''){
+            $('#pwdError').text('Password field is required').show();
+            return false;
+        } else if(password.length < 6){
+            $('#pwdError').text('Password must be at least 6 characters long').show();
+            return false;
+        } else{
+            $.ajax({
+                url: form.attr('action'),
+                method: form.attr('method'),
+                data: form.serialize(),
+                success: function(response) {
+                    if(response.success){
+                        alert(response.message);
+                        $('#registeruserModal').modal('hide');
+                        location.reload();
+                    }
+                },
+                error: function(xhr) {
+                    if(xhr.responseJSON && xhr.responseJSON.error){
+                        $('#registerformError').text(xhr.responseJSON.error).show();
+                    } else {
+                        $('#registerformError').text("An unexpected error occurred !").show();
+                    }
+                }
+            });
+        }   
+    });
+    // User registration request handling script ends here
+});
+</script>
 </body>
 </html>
