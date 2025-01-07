@@ -91,3 +91,6 @@ padding-top:20px;
 .my_custom_button{
     margin-top:5px;
 }
+.form-error{
+    font-size: 12px;
+}
