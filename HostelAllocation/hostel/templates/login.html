@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <img src="{% static 'images/hostel.png' %}" alt="Logo" class="logo">
+            <h1 class="header-title">Hostel Allocation System</h1>
+        </div>
+    </header>
+    <div class="login">
+        <div class="login-image">
+            <img src="{% static 'images/bg.jpg' %}" alt="Login Image" class="img">
+        </div>
+        <form class="login-form" method="POST">
+            {% csrf_token %}
+            <h2>Login</h2>
+
+            <div class="input-container">
+                <i class="fas fa-user icon"></i>
+                <input type="text" name="name" placeholder="Username" class="login-input" required>
+            </div>
+
+            <div class="input-container">
+                <i class="fas fa-lock icon"></i>
+                <input type="password" name="password" placeholder="Password" class="login-input" required>
+            </div>
+
+            <button type="submit">Login</button>
+            {% if error %}
+                <p class="error">{{ error }}</p>
+            {% endif %}
+        </form>
+    </div>
+</body>
+</html>

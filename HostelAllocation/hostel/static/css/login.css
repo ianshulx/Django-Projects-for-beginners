@@ -1,0 +1,124 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: rgb(239, 248, 252);
+}
+
+header {
+    width: 100%;
+    background-color: rgb(9, 121, 226);
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 1200px;
+    width: 100%;
+}
+
+.logo {
+    width: 40px;
+    height: auto;
+    margin-right: 20px;
+}
+
+.header-title {
+    font-size: 28px;
+    color: white;
+    font-weight: bold;
+}
+
+.login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 950px;
+    height: 420px;
+    box-shadow: 0 2px 10px rgba(7, 42, 82, 0.637);
+    border-radius: 10px;
+    margin: 142px auto 0 auto; 
+    background-color: white;
+}
+
+.login-image {
+    display: flex;
+}
+
+.img {
+    max-width: max(10vh, 470px);
+}
+
+.login-form {
+    width: 280px;
+    height: 260px;
+    margin-left: 50px;
+    background: white;
+    padding: 20px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border: 1px solid rgb(199, 199, 199);
+    border-radius: 10px;
+}
+
+.login-form h2 {
+    font-weight: 500;
+    margin: 10px;
+}
+
+.input-container {
+    position: relative;
+    width: 100%;
+}
+
+.icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    font-size: 16px;
+}
+
+.login-input {
+    width: 82%;
+    padding: 8px 10px 8px 35px;
+    border: 1px solid #c9c9c9;
+    border-radius: 4px;
+    outline-color: rgb(9, 121, 226);
+    font-size: 16px;
+}
+
+.login-input::placeholder {
+    color: #bdbbbb;
+}
+
+.login-form button {
+    padding: 10px;
+    background-color: rgb(9, 121, 226);
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0a0463;
+}
+
+.error {
+    color: red;
+    text-align: center;
+    font-size: 14px;
+}

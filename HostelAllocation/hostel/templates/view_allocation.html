@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Allocation</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/view_allocation.css' %}">
+</head>
+<body>
+    <header>
+        <h2>View Allocated Seats</h2>
+        <nav>
+            <a href="{% url 'logout' %}">Logout</a>
+        </nav>
+    </header>
+    <div class="container">
+        <h3>Merit List - Open Category</h3>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Student ID</th>
+                <th>CET Marks</th>
+            </tr>
+            {% for allocation in open_allocations %}
+            <tr>
+                <td>{{ allocation.student.name }}</td>
+                <td>{{ allocation.student.student_id }}</td>
+                <td>{{ allocation.student.cet_marks }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No allocations in Open Category.</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h3>Merit List - Reserved Category</h3>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Student ID</th>
+                <th>CET Marks</th>
+            </tr>
+            {% for allocation in reserved_allocations %}
+            <tr>
+                <td>{{ allocation.student.name }}</td>
+                <td>{{ allocation.student.student_id }}</td>
+                <td>{{ allocation.student.cet_marks }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No allocations in Reserved Category.</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>

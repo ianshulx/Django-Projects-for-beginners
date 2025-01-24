@@ -1,0 +1,107 @@
+body {
+    font-family: Arial, sans-serif;
+    background-size: cover;
+    background-position: center;
+    color: #333;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background-color: rgb(9, 121, 226);
+    color: white;
+    text-align: center;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+}
+
+header h2 {
+    font-size: 26px;
+    margin-left: 20px;
+}
+
+header nav {
+    display: flex;
+    margin-right: 30px;
+}
+
+header nav a {
+    color: white;
+    text-decoration: none;
+    margin-right: 30px;
+    font-size: 16px;
+    text-decoration: underline;
+    transition: background-color 0.3s;
+}
+
+header nav a:hover {
+    background-color: #ffffff;
+    color: rgb(9, 121, 226);
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.main-content {
+    margin-top: 120px; 
+    padding: 20px;
+    text-align: center;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;  
+    gap: 20px;  
+    margin-bottom: 30px;
+}
+
+table {
+    width: 100%;
+    max-width: 960px;
+    margin-top: 30px;
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+button {
+    background-color: rgb(9, 121, 226);
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 200px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+button:hover {
+    background-color: #0b2847;
+}
