@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/student.css' %}">
+    <title>Student Dashboard</title>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <img src="{% static 'images/student.png' %}" alt="Profile Icon" class="header-img">
+            <h2>Student Dashboard</h2>
+        </div>
+    </header>
+
+    <div class="welcome-message">
+        <h1>Welcome, {{ student.name }}!</h1>
+    </div>
+
+    <div class="main-content">
+        <div class="left-section">
+            <img src="{% static 'images/student-dash.jpg' %}" alt="Profile Image Placeholder">
+        </div>
+        <div class="right-section">
+            <div class="button-box">
+                <a href="{% url 'view_application' %}" class="btn">
+                    <i class="fa-regular fa-eye" style="color: #ffffff;"></i> View Application
+                </a>
+                <a href="{% url 'view_allocation' %}" class="btn">
+                    <i class="fas fa-list-ul"></i> View Allocation
+                </a>
+                <a href="{% url 'logout' %}" class="btn">
+                    Logout
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

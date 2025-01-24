@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Application</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/view_application.css' %}">
+</head>
+<body>
+    <header>
+        <h2>Application Details</h2>
+        <nav>
+            <a href="{% url 'student_dashboard' %}">Student Dashboard</a>
+            <a href="{% url 'view_allocation' %}">View Allocations</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </nav>
+    </header>
+    <div class="container">
+        <h2>Student Information</h2>
+        <table>
+            <tr>
+                <th class="label-column">Name</th>
+                <td class="data-column">{{ student.name }}</td>
+            </tr>
+            <tr>
+                <th class="label-column">Student ID</th>
+                <td class="data-column">{{ student.student_id }}</td>
+            </tr>
+            <tr>
+                <th class="label-column">Category</th>
+                <td class="data-column">{{ student.category }}</td>
+            </tr>
+            <tr>
+                <th class="label-column">CET Marks</th>
+                <td class="data-column">{{ student.cet_marks }}</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

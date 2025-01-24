@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allocate Seats</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/allocation.css' %}">
+</head>
+<body>
+    <header>
+        <h2>Allocate Seats</h2>
+        <nav>
+            <a href="{% url 'rector_dashboard' %}">Rector Dashboard</a>
+            <a href="{% url 'view_allocation' %}">View Allocations</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </nav>
+    </header>
+    <div class="main-content">
+        <form method="POST" action="{% url 'allocate' %}">
+            {% csrf_token %}
+            <div class="button-container">
+                <button type="submit">Allocate</button>
+                <button type="submit" name="clear" value="true">Clear</button>
+            </div>
+        </form>
+
+        {% if open_allocations or reserved_allocations %}
+            <h3>Merit List - Open Category</h3>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Student ID</th>
+                    <th>CET Marks</th>
+                </tr>
+                {% for student in open_allocations %}
+                <tr>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.student_id }}</td>
+                    <td>{{ student.cet_marks }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">No allocations in Open Category.</td>
+                </tr>
+                {% endfor %}
+            </table>
+
+            <h3>Merit List - Reserved Category</h3>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Student ID</th>
+                    <th>CET Marks</th>
+                </tr>
+                {% for student in reserved_allocations %}
+                <tr>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.student_id }}</td>
+                    <td>{{ student.cet_marks }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">No allocations in Reserved Category.</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <h3>All Students</h3>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Student ID</th>
+                    <th>Category</th>
+                    <th>CET Marks</th>
+                </tr>
+                {% for student in all_students %}
+                <tr>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.student_id }}</td>
+                    <td>{{ student.category }}</td>
+                    <td>{{ student.cet_marks }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+    </div>
+</body>
+</html>

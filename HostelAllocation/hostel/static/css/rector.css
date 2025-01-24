@@ -1,0 +1,114 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: white;
+    color: #333;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow-x: hidden;
+}
+
+header {
+    background-color: rgb(9, 121, 226);
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+header img {
+    width: 40px;
+    margin-right: 15px;
+}
+
+header h2 {
+    font-size: 26px;
+}
+
+.main-content {
+    margin-top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    padding: 20px;
+}
+
+.left-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0;
+}
+
+.right-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0;
+}
+
+.welcome-message {
+    font-size: 24px;
+    color: black;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.left-section img {
+    width: 100%;
+    max-width: 650px;
+    border-radius: 10px;
+    margin-left: 80px;
+}
+
+.button-box {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 50px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.btn {
+    background-color: rgb(9, 121, 226);
+    color: white;
+    padding: 15px;
+    text-decoration: none;
+    font-size: 18px;
+    border-radius: 4px;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #0b2847;
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        flex-direction: column;
+    }
+
+    .left-section, .right-section {
+        width: 100%;
+    }
+
+    .left-section img {
+        max-width: 300px;
+    }
+
+    .button-box {
+        padding: 30px;
+    }
+}
