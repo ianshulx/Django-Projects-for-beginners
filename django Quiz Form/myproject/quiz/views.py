@@ -17,30 +17,35 @@ def quiz_view(request):
                 return redirect('quiz')  # Redirect to the quiz page
         else:
             # Handle quiz answers
-            form = QuizForm(request.POST, current_question=request.session.get('current_question'))
+            current_question = request.session.get('current_question', 1)
+            score = request.session.get('score', 0)
+            name = request.session.get('name', '')
+
+            # Ensure the session data is valid
+            correct_answers = {
+                'q1': 'b', 'q2': 'c', 'q3': 'b', 'q4': 'a', 'q5': 'b',
+                'q6': 'c', 'q7': 'c', 'q8': 'c', 'q9': 'b', 'q10': 'c'
+            }
+            total_questions = len(correct_answers)
+            
+            # Prevent invalid current_question values
+            if current_question > total_questions:
+                return redirect('quiz')  # Restart the quiz if the session state is invalid
+
+            form = QuizForm(request.POST, current_question=current_question)
             if form.is_valid():
-                current_question = request.session.get('current_question', 1)
-                score = request.session.get('score', 0)
-
-                # Correct answers for the quiz
-                correct_answers = {
-                    'q1': 'b', 'q2': 'c', 'q3': 'b', 'q4': 'a', 'q5': 'b',
-                    'q6': 'c', 'q7': 'c', 'q8': 'c', 'q9': 'b', 'q10': 'c'
-                }
-
                 user_answer = form.cleaned_data.get(f'q{current_question}')
                 correct_answer = correct_answers.get(f'q{current_question}')
+                
                 if user_answer == correct_answer:
                     score += 1
                 request.session['score'] = score
 
-                if current_question < len(correct_answers):
+                if current_question < total_questions:
                     request.session['current_question'] = current_question + 1
                     return redirect('quiz')
                 else:
                     # Quiz is complete
-                    name = request.session['name']
-                    total_questions = len(correct_answers)
                     percentage = (score / total_questions) * 100
 
                     # Save result in the database
@@ -51,26 +56,40 @@ def quiz_view(request):
                     )
 
                     # Render result page
-                    response = render(request, 'quiz/result.html', {
+                    response = render(request, 'quiz1/result.html', {
                         'name': name,
                         'score': score,
                         'percentage': percentage,
                         'total_questions': total_questions
                     })
 
-                    # Clear session data
-                    request.session.flush()
+                    # Clear only quiz-related session data
+                    request.session.pop('name', None)
+                    request.session.pop('current_question', None)
+                    request.session.pop('score', None)
                     return response
 
     # Handle GET requests
     else:
-        if 'name' in request.session:
+        name = request.session.get('name', '')
+        if name:
             # Continue quiz
             current_question = request.session.get('current_question', 1)
+            score = request.session.get('score', 0)
+            total_questions = 10  # Replace with `len(correct_answers)` if dynamic
+
+            # Prevent invalid question numbers
+            if current_question > total_questions:
+                return redirect('quiz')  # Restart quiz if out of range
+
             form = QuizForm(current_question=current_question)
-            name = request.session.get('name', '')
-            return render(request, 'quiz/quiz.html', {'form': form, 'name': name})
+            return render(request, 'quiz1/quiz.html', {
+                'form': form,
+                'name': name,
+                'current_question': current_question,
+                'score': score
+            })
         else:
             # Show name form
             form = NameForm()
-            return render(request, 'quiz/name.html', {'form': form})
+            return render(request, 'quiz1/name.html', {'form': form})
