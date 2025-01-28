@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz Results</title>
+</head>
+<style>
+
+    
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border: 3px solid green;
+            width:500px;
+            height: 300px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        p {
+            font-size: 18px;
+            color: #555;
+        }
+   
+
+</style>
+<body>
+    <div class="container">
+    <h1>Results for {{ name }}</h1>
+    <br>
+    <p>Your score: {{ score }}/{{ total_questions }}</p>
+    <br>
+    <p>Percentage: {{ percentage }}%</p>
+    </div>
+</body>
+</html>
