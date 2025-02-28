@@ -13,8 +13,3 @@ def home(request):
     api=json.loads(news_api_request.content)
     return render(request,'index.html',{'api':api})
 
-# def searchnews(request):
-#     news_api_request=requests.get(f"https://newsapi.org/v2/top-headlines?q={request.POST.get()}&apiKey=(apikey)")
-#     api=json.loads(news_api_request.content)
-#     return render(request,'index.html',{'api':api})
-
