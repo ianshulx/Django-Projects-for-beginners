@@ -1,0 +1,39 @@
+# GitHub Pages ke liye Static Content Deployment Workflow
+name: Deploy Static Content to GitHub Pages
+
+on:
+  push:
+    branches: ["main"]  # Sirf 'main' branch pe push hone pe chalega
+  workflow_dispatch:  # Manually Actions tab se bhi run kar sakte ho
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false  # Running deployment ko cancel nahi karega
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3  # Repository checkout karega
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v3  # GitHub Pages setup karega
+
+      - name: Upload Build Files
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: '.'  # Pura repository deploy karega
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
