@@ -97,15 +97,6 @@ h1, h2 {
     color: #777;
 }
 
-.task-item .task-actions a {
-    color: #007bff;
-    margin-left: 10px;
-    text-decoration: none;
-}
-
-.task-item .task-actions a:hover {
-    text-decoration: underline;
-}
 
 .task-item .completed {
     background-color: #28a745;

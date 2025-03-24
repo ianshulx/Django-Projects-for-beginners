@@ -1,4 +1,5 @@
 {% extends 'todo_app/base.html' %}
+{% load django_bootstrap5 %}
 
 {% block title %}Add Task{% endblock %}
 
@@ -7,18 +8,7 @@
         <h2 class="text-center mb-4" >Add New Task</h2>
         <form method="post">
             {% csrf_token %}
-            <div class="mb-3">
-                <label for="id_title" class="form-label">Task Title</label>
-                <input type="text" name="title" class="form-control" id="id_title" value="{{ form.title.value }}" required>
-            </div>
-            <div class="mb-3">
-                <label for="id_description" class="form-label">Task Description</label>
-                <textarea name="description" class="form-control" id="id_description" rows="4" required>{{ form.description.value }}</textarea>
-            </div>
-            <div class="mb-3 form-check">
-                <input type="checkbox" name="completed" class="form-check-input" id="id_completed" {% if form.completed.value %}checked{% endif %}>
-                <label class="form-check-label" for="id_completed">Mark as Completed</label>
-            </div>
+            {% bootstrap_form form %}
             <button type="submit" class="btn btn-primary">Save Task</button>
         </form>
         <a href="{% url 'task_list' %}" class="btn btn-link">Back to Task List</a>
