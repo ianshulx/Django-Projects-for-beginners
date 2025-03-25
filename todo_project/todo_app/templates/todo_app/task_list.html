@@ -16,13 +16,14 @@
                     <p class="task-description">{{ task.description }}</p>
                     {% if task.completed %}
                         <span class="completed">Completed</span>
+                        <a href="{% url 'mark_completed' task.pk %}" class="btn btn-sm btn-outline-info">Mark as Uncompleted</a>
                     {% else %}
                         <a href="{% url 'mark_completed' task.pk %}" class="btn btn-sm btn-success">Mark as Completed</a>
                     {% endif %}
                 </div>
                 <div class="task-actions">
-                    <a href="{% url 'update_task' task.pk %}" class="btn btn-warning btn-sm">Edit</a>
-                    <a href="{% url 'delete_task' task.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                    <a href="{% url 'update_task' task.pk %}" class="btn btn-outline-warning">Edit</a>
+                    <a href="{% url 'delete_task' task.pk %}" class="btn btn-outline-danger">Delete</a>
                 </div>
             </div>
         {% empty %}
