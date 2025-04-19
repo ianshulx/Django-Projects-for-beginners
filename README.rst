@@ -15,6 +15,8 @@ an ideal starting point for those new to Django or web development in general.
 
 If you are a beginner, you can check out these projects and contribute your own work as well.
 
+testing to see if commit works alsdkfj
+
 
 ************
 What to do ? 
