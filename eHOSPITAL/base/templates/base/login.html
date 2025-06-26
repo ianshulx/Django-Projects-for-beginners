@@ -1,0 +1,150 @@
+{% extends "base/base.html" %}
+{% block content_container_class %}{% endblock %}
+{% block title %}EHMS - Login {% endblock %}
+{% block content %}
+<style>
+  .login-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #F2F4F7;
+  }
+  
+  .login-title {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #2c3e50;
+    font-size: 28px;
+    font-weight: 600;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #34495e;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+  }
+  
+  .form-group input:focus {
+    border-color: #390796;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(57, 7, 150, 0.2);
+  }
+  
+  .errorlist {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 15px 0;
+    color: #e74c3c;
+    font-size: 14px;
+  }
+  
+  .errorlist.nonfield {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #fde8e8;
+    border-radius: 4px;
+    border-left: 4px solid #e74c3c;
+  }
+  
+  .login-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #390796;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .login-btn:hover {
+    background-color: #2d066e;
+  }
+  
+  .login-links {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .login-links a {
+    color: #390796;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  
+  .login-links a:hover {
+    color: #2d066e;
+    text-decoration: underline;
+  }
+  
+  .login-links p {
+    margin: 10px 0;
+    color: #7f8c8d;
+  }
+</style>
+
+<div class="login-container">
+  <h2 class="login-title">Login</h2>
+  <form method="post">
+    {% csrf_token %}
+    
+    {% if form.non_field_errors %}
+      <ul class="errorlist nonfield">
+        {% for error in form.non_field_errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    
+    <div class="form-group">
+      <label for="id_username">Username</label>
+      <input type="text" name="username" id="id_username" required autofocus
+             value="{{ form.username.value|default_if_none:'' }}">
+      {% if form.username.errors %}
+        <ul class="errorlist">
+          {% for error in form.username.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+    
+    <div class="form-group">
+      <label for="id_password">Password</label>
+      <input type="password" name="password" id="id_password" required>
+      {% if form.password.errors %}
+        <ul class="errorlist">
+          {% for error in form.password.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+    
+    <button type="submit" class="login-btn">Login</button>
+  </form>
+  
+  <div class="login-links">
+    <p><a href="{% url 'registration:forgot-password' %}">Forgot your password?</a></p>
+    <p>Don't have an account? <a href="{% url 'registration:signup' %}">Sign up</a></p>
+  </div>
+</div>
+{% endblock %}

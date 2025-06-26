@@ -1,0 +1,779 @@
+{% extends 'base/base.html' %}
+{% block title %}EHMS - Doctor Review{% endblock %}
+{% block content_container_class %}{% endblock %}
+{% block content %}
+<style>
+    .health-data-container {
+        max-width: 900px;
+        margin: 0 auto;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .patient-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        padding: 25px;
+        margin-bottom: 30px;
+    }
+    
+    .patient-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .patient-card-title {
+        color: var(--theme-color);
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .patient-info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    .info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: #7f8c8d;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .info-value {
+        font-size: 16px;
+        color: #2c3e50;
+        font-weight: 500;
+    }
+
+    /* Email Consultation Styles */
+    .consultation-card {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 25px;
+        margin-bottom: 30px;
+        border-left: 4px solid #3498db;
+    }
+
+    .consultation-card h3 {
+        color: #2c3e50;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .consultation-form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group.full-width {
+        grid-column: 1 / -1;
+    }
+
+    .form-group label {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 8px;
+        font-size: 14px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 14px;
+        transition: border-color 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    .send-consultation-btn {
+        background: #390796;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 600;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .send-consultation-btn:hover {
+        background: #2980b9;
+        transform: translateY(-1px);
+    }
+
+    .send-consultation-btn:disabled {
+        background: #bdc3c7;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .email-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .success-message {
+        background: #d4edda;
+        color: #155724;
+        padding: 12px 16px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        border: 1px solid #c3e6cb;
+    }
+
+    .error-message {
+        background: #f8d7da;
+        color: #721c24;
+        padding: 12px 16px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        border: 1px solid #f5c6cb;
+    }
+    
+    .health-record {
+        background: #d7e3f0;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .health-record.unreviewed {
+        border-left: 5px solid #ffc107;
+        background: #fff8e1;
+    }
+    
+    .health-record h3 {
+        color: #2c3e50;
+        margin-top: 0;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+    }
+    
+    .data-form {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .data-field {
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .data-field label {
+        display: block;
+        font-weight: 600;
+        color: #3498db;
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+    
+    .data-field p {
+        margin: 0;
+        font-size: 18px;
+        color: #2c3e50;
+    }
+    
+    .action-buttons {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 15px;
+    }
+    
+    .mark-reviewed-btn {
+        background: #3498db;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.3s;
+    }
+    
+    .mark-reviewed-btn:hover {
+        background: #2980b9;
+    }
+    
+    .review-status {
+        font-style: italic;
+        color: #7f8c8d;
+        font-size: 14px;
+    }
+    
+    #mark-all-reviewed {
+        background: #2ecc71;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        display: block;
+        margin: 30px auto;
+        transition: background 0.3s;
+    }
+    
+    #mark-all-reviewed:hover {
+        background: #27ae60;
+    }
+
+    /* Review Form Styles */
+    .review-form {
+        display: none;
+        margin-top: 15px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 8px;
+    }
+
+    .review-form.active {
+        display: block;
+    }
+
+    .status-dropdown {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        margin-bottom: 15px;
+        font-size: 14px;
+    }
+
+    .comment-textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        min-height: 100px;
+        margin-bottom: 15px;
+        font-size: 14px;
+    }
+
+    .submit-review-btn {
+        background: #390796;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.3s;
+    }
+
+    .submit-review-btn:hover {
+        background: #2980b9;
+    }
+
+    .cancel-review-btn {
+        background: #6c757d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        margin-left: 10px;
+        transition: all 0.3s;
+    }
+
+    .cancel-review-btn:hover {
+        background: #5a6268;
+    }
+
+    /* Review History Styles */
+    .review-history {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        padding: 25px;
+        margin-bottom: 30px;
+    }
+
+    .review-history h4 {
+        color: #2c3e50;
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #3498db;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .review-item {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 15px;
+        border-left: 4px solid #3498db;
+        transition: all 0.3s ease;
+    }
+
+    .review-item:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transform: translateY(-1px);
+    }
+
+    .review-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .review-item strong {
+        color: #2c3e50;
+        font-size: 16px;
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 10px;
+    }
+
+    .badge-normal {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .badge-attention {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .badge-critical {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .badge-good {
+        background: #d1ecf1;
+        color: #0c5460;
+    }
+
+    .review-item p {
+        color: #7f8c8d;
+        font-size: 14px;
+        margin: 8px 0;
+        font-style: italic;
+    }
+
+    .comment-box {
+        background: white;
+        border: 1px solid #e9ecef;
+        border-radius: 6px;
+        padding: 15px;
+        margin-top: 10px;
+        color: #2c3e50;
+        font-size: 14px;
+        line-height: 1.5;
+        position: relative;
+    }
+
+    .comment-box::before {
+        content: "💬";
+        position: absolute;
+        top: -8px;
+        left: 15px;
+        background: white;
+        padding: 0 5px;
+        font-size: 16px;
+    }
+
+    .no-reviews {
+        text-align: center;
+        color: #7f8c8d;
+        font-style: italic;
+        padding: 40px 20px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border: 2px dashed #dee2e6;
+    }
+
+    .no-reviews::before {
+        content: "📝";
+        display: block;
+        font-size: 48px;
+        margin-bottom: 15px;
+        opacity: 0.5;
+    }
+
+    .section-title {
+        color: #2c3e50;
+        font-size: 22px;
+        font-weight: 600;
+        margin: 40px 0 20px 0;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #ecf0f1;
+    }
+
+    @media (max-width: 768px) {
+        .consultation-form {
+            grid-template-columns: 1fr;
+        }
+
+        .data-form {
+            grid-template-columns: 1fr;
+        }
+
+        .patient-info-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .review-item {
+            padding: 15px;
+        }
+    }
+</style>
+
+<div class="health-data-container">
+    <!-- Patient Information Card -->
+    <div class="patient-card">
+        <div class="patient-card-header">
+            <h2 class="patient-card-title">Patient Information</h2>
+        </div>
+        <div class="patient-info-grid">
+            <div class="info-item">
+                <span class="info-label">Patient Name</span>
+                <span class="info-value">{{ patient.first_name }} {{ patient.last_name }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Age</span>
+                <span class="info-value">{{ patient.age }} years</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Phone Number</span>
+                <span class="info-value">{{ patient.phone_number }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Patient ID</span>
+                <span class="info-value">{{ patient.user.user_id }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Gender</span>
+                <span class="info-value">{{ patient.gender|default:"Not specified" }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Email</span>
+                <span class="info-value">{{ patient.user.email }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Assigned Doctor</span>
+                <span class="info-value">Dr. {{ patient.assigned_doctor.first_name }} {{ patient.assigned_doctor.last_name }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Registration Date</span>
+                <span class="info-value">{{ patient.created_at|date:"M d, Y" }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Consultation Card -->
+    <div class="consultation-card">
+        <h3>
+            <svg class="email-icon" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/>
+            </svg>
+            Schedule Consultation
+        </h3>
+        
+        <div id="email-message-container"></div>
+        
+        <form id="consultation-form">
+            <div class="consultation-form">
+                <div class="form-group">
+                    <label for="consultation-date">Consultation Date</label>
+                    <input type="date" id="consultation-date" name="consultation_date" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="consultation-time">Consultation Time</label>
+                    <input type="time" id="consultation-time" name="consultation_time" required>
+                </div>
+                
+                <div class="form-group full-width">
+                    <label for="consultation-message">Additional Message (Optional)</label>
+                    <textarea id="consultation-message" name="message" placeholder="Enter any additional information or instructions for the patient..."></textarea>
+                </div>
+            </div>
+            
+            <button type="submit" class="send-consultation-btn" id="send-consultation-btn">
+                <svg class="email-icon" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                </svg>
+                Send Consultation Request
+            </button>
+        </form>
+    </div>
+
+
+    <!-- Health Data Section -->
+    <h2 class="section-title">{{ patient.first_name }} {{ patient.last_name }}'s Health Data</h2>
+
+    {% for data in health_data %}
+    <div class="health-record {% if not data.reviewed_by_doctor %}unreviewed{% endif %}" data-id="{{ data.id }}">
+        <h3>{{ data.recorded_at|date:"M d, Y H:i" }}</h3>
+        
+        <div class="data-form">
+            <div class="data-field">
+                <label>Temperature</label>
+                <p>{{ data.temperature|default:"--" | floatformat:1}}°C</p>
+            </div>
+            
+            <div class="data-field">
+                <label>Heart Rate</label>
+                <p>{{ data.heart_rate|default:"--" }} bpm</p>
+            </div>
+            
+            <div class="data-field">
+                <label>SpO2</label>
+                <p>{{ data.spo2|default:"--" }}%</p>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            {% if not data.reviewed_by_doctor %}
+            <button class="mark-reviewed-btn" data-id="{{ data.id }}">
+                Add Review
+            </button>
+            {% else %}
+            <span class="review-status">
+                Reviewed by Dr. {{ data.reviewed_by.first_name|default:patient.assigned_doctor.first_name}} on {{ data.reviewed_at|date:"M d, Y H:i" }}
+            </span>
+            {% endif %}
+        </div>
+        
+        <!-- Review Form (hidden by default) -->
+        <div class="review-form" id="review-form-{{ data.id }}">
+            <select class="status-dropdown" id="status-{{ data.id }}">
+                <option value="">Select Review Status</option>
+                <option value="normal">Normal</option>
+                <option value="attention">Needs Attention</option>
+                <option value="critical">Critical</option>
+                <option value="good">Good</option>
+            </select>
+            <textarea class="comment-textarea" id="comment-{{ data.id }}" placeholder="Add your comments (optional)"></textarea>
+            <button class="submit-review-btn" data-id="{{ data.id }}">Submit Review</button>
+            <button class="cancel-review-btn" data-id="{{ data.id }}">Cancel</button>
+        </div>
+    </div>
+    {% empty %}
+    <div class="no-reviews">
+        <strong>No health data available</strong>
+        <p>Patient health data will appear here once vitals are recorded.</p>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+// Handle the "Add Review" button click
+document.querySelectorAll('.mark-reviewed-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const dataId = this.getAttribute('data-id');
+        const reviewForm = document.getElementById(`review-form-${dataId}`);
+        
+        // Hide all other review forms first
+        document.querySelectorAll('.review-form').forEach(form => {
+            form.classList.remove('active');
+        });
+        
+        // Show this review form
+        reviewForm.classList.add('active');
+        
+        // Scroll to the form for better UX
+        reviewForm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+});
+
+// Handle the cancel button click
+document.querySelectorAll('.cancel-review-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const dataId = this.getAttribute('data-id');
+        document.getElementById(`review-form-${dataId}`).classList.remove('active');
+    });
+});
+
+// Handle the review submission
+document.querySelectorAll('.submit-review-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const dataId = this.getAttribute('data-id');
+        const status = document.getElementById(`status-${dataId}`).value;
+        const comment = document.getElementById(`comment-${dataId}`).value;
+        
+        if (!status) {
+            alert('Please select a review status');
+            return;
+        }
+        
+        submitReview(dataId, status, comment);
+    });
+});
+
+function submitReview(dataId, status, comment) {
+    fetch("{% url 'registration:submit-review' %}", {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `patient_id={{ patient.id }}&data_id=${dataId}&review_status=${status}&review_comment=${encodeURIComponent(comment)}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.status === 'success') {
+            location.reload();
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while submitting the review.');
+    });
+}
+
+// Existing JavaScript for email consultation
+document.getElementById('consultation-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const btn = document.getElementById('send-consultation-btn');
+    const messageContainer = document.getElementById('email-message-container');
+    
+    // Get form data
+    const consultationDate = document.getElementById('consultation-date').value;
+    const consultationTime = document.getElementById('consultation-time').value;
+    const message = document.getElementById('consultation-message').value;
+    
+    // Validate required fields
+    if (!consultationDate || !consultationTime) {
+        showMessage('Please fill in the date and time for the consultation.', 'error');
+        return;
+    }
+    
+    // Validate date is not in the past
+    const selectedDate = new Date(consultationDate + 'T' + consultationTime);
+    const now = new Date();
+    if (selectedDate <= now) {
+        showMessage('Please select a future date and time for the consultation.', 'error');
+        return;
+    }
+    
+    // Disable button and show loading
+    btn.disabled = true;
+    btn.innerHTML = `
+        <svg class="email-icon" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z"/>
+        </svg>
+        Sending...
+    `;
+    
+    // Send AJAX request
+    fetch(window.location.href, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: JSON.stringify({
+            consultation_date: consultationDate,
+            consultation_time: consultationTime,
+            message: message
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            showMessage(data.message, 'success');
+            document.getElementById('consultation-form').reset();
+        } else {
+            showMessage(data.message || 'An error occurred while sending the email.', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showMessage('An error occurred while sending the email. Please try again.', 'error');
+    })
+    .finally(() => {
+        // Re-enable button
+        btn.disabled = false;
+        btn.innerHTML = `
+            <svg class="email-icon" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+            </svg>
+            Send Consultation Request
+        `;
+    });
+});
+
+function showMessage(message, type) {
+    const messageContainer = document.getElementById('email-message-container');
+    const messageClass = type === 'success' ? 'success-message' : 'error-message';
+    
+    messageContainer.innerHTML = `<div class="${messageClass}">${message}</div>`;
+    
+    // Remove message after 5 seconds
+    setTimeout(() => {
+        messageContainer.innerHTML = '';
+    }, 5000);
+}
+
+// Set minimum date to today
+const today = new Date().toISOString().split('T')[0];
+document.getElementById('consultation-date').min = today;
+</script>
+{% endblock %}

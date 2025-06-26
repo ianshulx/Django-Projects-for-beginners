@@ -1,0 +1,359 @@
+{% extends 'base/base.html' %}
+
+{% block title %}EHMS | Book a Doctor{% endblock %}
+
+{% block content %}
+<style>
+    .book-doctor-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .header-section {
+        text-align: center;
+        margin-bottom: 30px;
+        padding: 20px;
+        background: linear-gradient(135deg, #390796, #5a189a);
+        color: white;
+        border-radius: 10px;
+    }
+    
+    .search-section {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(57, 7, 150, 0.1);
+        margin-bottom: 30px;
+        border: 2px solid #390796;
+    }
+    
+    .search-form {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    
+    .search-input {
+        flex: 1;
+        min-width: 250px;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: border-color 0.3s ease;
+    }
+    
+    .search-input:focus {
+        outline: none;
+        border-color: #390796;
+        box-shadow: 0 0 0 3px rgba(57, 7, 150, 0.1);
+    }
+    
+    .search-btn {
+        background: #390796;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    
+    .search-btn:hover {
+        background: #2d0670;
+    }
+    
+    .clear-btn {
+        background: #6c757d;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        transition: background-color 0.3s ease;
+    }
+    
+    .clear-btn:hover {
+        background: #5a6268;
+        text-decoration: none;
+        color: white;
+    }
+    
+    .current-doctor-info {
+        background: #e8f5e8;
+        border: 2px solid #28a745;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+    }
+    
+    .current-doctor-info h3 {
+        color: #155724;
+        margin-top: 0;
+    }
+    
+    .doctors-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 25px;
+        margin-bottom: 30px;
+    }
+    
+    .doctor-card {
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        position: relative;
+    }
+    
+    .doctor-card:hover {
+        border-color: #390796;
+        box-shadow: 0 6px 25px rgba(57, 7, 150, 0.15);
+        transform: translateY(-2px);
+    }
+    
+    .doctor-info h3 {
+        color: #390796;
+        margin: 0 0 10px 0;
+        font-size: 22px;
+    }
+    
+    .doctor-specialty {
+        background: #f8f9ff;
+        color: #390796;
+        padding: 8px 15px;
+        border-radius: 20px;
+        display: inline-block;
+        margin: 10px 0;
+        font-weight: 600;
+        border: 1px solid #390796;
+    }
+    
+    .patient-count {
+        color: #666;
+        font-size: 14px;
+        margin: 10px 0;
+    }
+    
+    .select-btn {
+        background: #390796;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 600;
+        width: 100%;
+        margin-top: 15px;
+        transition: background-color 0.3s ease;
+    }
+    
+    .select-btn:hover {
+        background: #2d0670;
+    }
+    
+    .no-results {
+        text-align: center;
+        padding: 60px 20px;
+        color: #666;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .no-results h3 {
+        color: #390796;
+        margin-bottom: 15px;
+    }
+    
+    .pagination {
+        text-align: center;
+        margin: 30px 0;
+    }
+    
+    .pagination a, .pagination span {
+        display: inline-block;
+        padding: 10px 15px;
+        margin: 0 5px;
+        border: 2px solid #390796;
+        color: #390796;
+        text-decoration: none;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+    
+    .pagination a:hover {
+        background: #390796;
+        color: white;
+    }
+    
+    .pagination .current {
+        background: #390796;
+        color: white;
+    }
+    
+    .alert {
+        padding: 15px 20px;
+        margin-bottom: 25px;
+        border-radius: 8px;
+        font-weight: 500;
+    }
+    
+    .alert-success {
+        background: #d4edda;
+        border: 2px solid #28a745;
+        color: #155724;
+    }
+    
+    .alert-error {
+        background: #f8d7da;
+        border: 2px solid #dc3545;
+        color: #721c24;
+    }
+    
+    .search-hint {
+        color: #666;
+        font-size: 14px;
+        margin-top: 10px;
+        font-style: italic;
+    }
+    
+    @media (max-width: 768px) {
+        .search-form {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        .search-input {
+            min-width: auto;
+        }
+        
+        .doctors-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="book-doctor-container">
+    <div class="header-section">
+        <h1>Book Your Doctor</h1>
+        <p>Find and select the perfect doctor for your healthcare needs</p>
+    </div>
+
+    <!-- Display Messages -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Current Doctor Info -->
+    {% if has_assigned_doctor %}
+        <div class="current-doctor-info">
+            <h3>🩺 Currently Assigned Doctor</h3>
+            <p><strong>Dr. {{ current_patient.assigned_doctor.first_name }} {{ current_patient.assigned_doctor.last_name }}</strong></p>
+            <p><strong>Specialty:</strong> {{ current_patient.assigned_doctor.specialty }}</p>
+            <p><em>You can change your assigned doctor by selecting a new one below.</em></p>
+        </div>
+    {% endif %}
+
+    <!-- Search Section -->
+    <div class="search-section">
+        <form method="get" class="search-form">
+            <input 
+                type="text" 
+                name="search" 
+                value="{{ search_query }}" 
+                placeholder="Search by doctor's first name, last name, or specialty..."
+                class="search-input"
+            >
+            <button type="submit" class="search-btn">🔍 Search</button>
+            {% if search_query %}
+                <a href="{% url 'registration:book-doctor' %}" class="clear-btn">Clear</a>
+            {% endif %}
+        </form>
+        <div class="search-hint">
+            💡 You can search by first name, last name, specialty, or any combination
+        </div>
+    </div>
+
+    <!-- Search Results Info -->
+    {% if search_query %}
+        <div style="margin-bottom: 20px; padding: 15px; background-color: #f8f9ff; border-radius: 8px; border-left: 4px solid #390796;">
+            <strong>Search results for:</strong> "{{ search_query }}" 
+            ({{ doctors|length }} doctor{{ doctors|length|pluralize }} found)
+        </div>
+    {% endif %}
+
+    <!-- Available Doctors -->
+    {% if doctors %}
+        <div class="doctors-grid">
+            {% for doctor in doctors %}
+                <div class="doctor-card">
+                    <div class="doctor-info">
+                        <h3>Dr. {{ doctor.first_name }} {{ doctor.last_name }}</h3>
+                        <div class="doctor-specialty">{{ doctor.specialty }}</div>
+                        <div class="patient-count">
+                            👥 Current patients: {{ doctor.patient_count }}/{{ doctor.max_patients }}
+                        </div>
+                        
+                        <form method="post" style="margin: 0;">
+                            {% csrf_token %}
+                            <input type="hidden" name="doctor_id" value="{{ doctor.id }}">
+                            <button type="submit" class="select-btn" 
+                                    onclick="return confirm('Are you sure you want to select Dr. {{ doctor.first_name }} {{ doctor.last_name }} as your assigned doctor?')">
+                                {% if has_assigned_doctor and current_patient.assigned_doctor.id == doctor.id %}
+                                    ✅ Currently Selected
+                                {% else %}
+                                    Select This Doctor
+                                {% endif %}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if is_paginated %}
+            <div class="pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}">&laquo; First</a>
+                    <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">&lsaquo; Previous</a>
+                {% endif %}
+                
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </span>
+                
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Next &rsaquo;</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}">Last &raquo;</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="no-results">
+            <h3>{% if search_query %}No doctors found{% else %}No available doctors{% endif %}</h3>
+            {% if search_query %}
+                <p>No doctors match your search criteria: "{{ search_query }}"</p>
+                <p>Try searching with different terms or <a href="{% url 'registration:book-doctor' %}" style="color: #390796;">view all available doctors</a></p>
+            {% else %}
+                <p>All doctors are currently at full capacity. Please check back later.</p>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

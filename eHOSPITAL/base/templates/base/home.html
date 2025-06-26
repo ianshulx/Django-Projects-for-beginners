@@ -1,0 +1,191 @@
+{% extends 'base/base.html' %}
+
+{% block title %}EHMS - Welcome{% endblock %}
+{% block content_container_class %}{% endblock %}
+
+{% block content %}
+<style>
+    .welcome-container {
+        max-width: 1185px;
+        margin: 0 auto;
+        padding: 28px;
+        margin-bottom: 0;
+    }
+    
+    header {
+        background:#584a74;
+        color: white;
+        text-align: center;
+        padding: 24px;
+        border-radius: 0px;
+    
+    }
+    
+    header h1 {
+        font-size: 2.5rem;
+        margin: 0;
+        font-weight: 700;
+        line-height: 1.1;
+    }
+    
+    header p {
+        font-size: 1.1rem;
+        margin-top: 10px;
+        color: rgb(202, 253, 251);
+        opacity: 0.9;
+    }
+    
+    .role-selection {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        gap: 30px;
+        margin-top: 30px;
+    
+    
+    }
+    
+    .role-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        width: 340px;
+        overflow: hidden;
+        transition: transform 0.3s, box-shadow 0.3s;
+        cursor: pointer;
+        text-align: center;
+    }
+    
+    .role-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    .role-image {
+        height: 200px;
+        background-size: cover;
+        background-position: center;
+    }
+    
+    .role-content {
+        padding: 25px;
+    }
+    
+    .role-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: #333;
+    }
+    
+    .role-description {
+        color: #666;
+        margin-bottom: 20px;
+        font-size: 0.95rem;
+    }
+    
+    .role-button {
+        display: inline-block;
+        padding: 10px 25px;
+        border-radius: 30px;
+        background: #390796;
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        transition: background 0.3s;
+    }
+    
+    .role-button:hover {
+        background: #4a148c;
+    }
+    
+    .admin-card .role-button {
+        background: #390796;
+    }
+    
+    .admin-card .role-button:hover {
+        background:  #4a148c;
+    }
+    
+    .doctor-card .role-button {
+        background: #390796;
+    }
+    
+    .doctor-card .role-button:hover {
+        background:  #4a148c;
+    }
+    
+    /* Image backgrounds */
+    .patient-image {
+        background-image: url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');
+    }
+    
+    .doctor-image {
+        background-image: url('https://images.unsplash.com/photo-1550831107-1553da8c8464?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');
+    }
+    
+    .admin-image {
+        background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');
+    }
+</style>
+
+<div class="welcome-container">
+    <header>
+        <h1>Electronic Health Monitoring System</h1>
+        <p>Comprehensive healthcare management for patients, doctors, and administrators</p>
+    </header>
+
+    <div class="role-selection">
+        <!-- Patient Card -->
+        <div class="role-card patient-card" onclick="window.location.href='{% url 'login' %}'">
+            <div class="role-image patient-image"></div>
+            <div class="role-content">
+                <h3 class="role-title">Patient Portal</h3>
+                <p class="role-description">
+                    Access your health records, schedule appointments, and communicate with your healthcare providers.
+                </p>
+                <a href="{% url 'login' %}" class="role-button">Patient Login</a>
+            </div>
+        </div>
+
+        <!-- Doctor Card -->
+        <div class="role-card doctor-card" onclick="window.location.href='{% url 'login' %}'">
+            <div class="role-image doctor-image"></div>
+            <div class="role-content">
+                <h3 class="role-title">Doctor Portal</h3>
+                <p class="role-description">
+                    Manage patient records, view test results, and provide remote consultations.
+                </p>
+                <a href="{% url 'login' %}" class="role-button">Doctor Login</a>
+            </div>
+        </div>
+
+        <!-- Admin Card -->
+        <div class="role-card admin-card" onclick="window.location.href='{% url 'admin:index' %}'">
+            <div class="role-image admin-image"></div>
+            <div class="role-content">
+                <h3 class="role-title">Administrator Portal</h3>
+                <p class="role-description">
+                    Manage system settings, user accounts, and oversee the entire healthcare platform.
+                </p>
+                <a href="{% url 'admin:index' %}" class="role-button">Admin Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Make entire cards clickable
+    document.querySelectorAll('.role-card').forEach(card => {
+        card.addEventListener('click', function(e) {
+            // Don't trigger if clicking on the actual link
+            if (e.target.tagName !== 'A') {
+                const link = this.querySelector('a');
+                if (link) {
+                    window.location.href = link.href;
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

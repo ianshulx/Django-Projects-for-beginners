@@ -1,0 +1,16 @@
+asgiref==3.8.1
+certifi==2025.4.26        
+charset-normalizer==3.4.2 
+crispy-bootstrap4==2024.10
+Django==5.1.6
+django-cors-headers==4.7.0
+django-crispy-forms==2.3     
+idna==3.10
+psycopg2==2.9.10
+psycopg2-binary==2.9.10   
+python-dotenv==1.1.0      
+requests==2.32.3
+sqlparse==0.5.3
+typing_extensions==4.13.2
+tzdata==2025.1
+urllib3==2.4.0
