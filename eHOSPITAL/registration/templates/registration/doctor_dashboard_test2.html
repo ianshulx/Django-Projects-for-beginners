@@ -1,0 +1,614 @@
+{% extends 'base/base.html' %}
+{% block title %}EHMS - Doctor Dashboard{% endblock%}
+{% block content_container_class %}{% endblock %}
+{% block content %}
+<style>
+    :root {
+        --theme-primary: #390796;
+        --theme-primary-light: #4f1da8;
+        --theme-primary-lighter: #6533ba;
+        --theme-primary-dark: #2d0678;
+        --theme-primary-darker: #21055a;
+        --theme-secondary: #2a2a3e;
+        --theme-accent: #5a3dcc;
+        --theme-light: #f8f9fa;
+        --theme-success: #28a745;
+        --theme-warning: #dc3545;
+        --theme-info: #17a2b8;
+    }
+    
+    /* Header Styling */
+    .main-header {
+        background: linear-gradient(135deg, var(--theme-primary-darker), var(--theme-primary));
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 0.8rem 2rem;
+        color: white;
+    }
+    
+    .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .brand-logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        color: white;
+    }
+    
+    .brand-logo img {
+        height: 36px;
+    }
+    
+    .brand-text {
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+    
+    .nav-menu {
+        display: flex;
+        gap: 25px;
+    }
+    
+    .nav-link {
+        color: rgba(255, 255, 255, 0.9);
+        text-decoration: none;
+        font-weight: 500;
+        padding: 0.5rem 0;
+        position: relative;
+        transition: all 0.3s;
+    }
+    
+    .nav-link:hover, .nav-link.active {
+        color: white;
+    }
+    
+    .nav-link.active::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background-color: white;
+        border-radius: 3px 3px 0 0;
+    }
+    
+    .user-menu {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: var(--theme-accent);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    
+    /* Dashboard Styling */
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    .dashboard-title {
+        color: var(--theme-primary);
+        font-weight: 600;
+        margin: 0;
+        font-size: 1.8rem;
+    }
+    
+    .dashboard-actions {
+        display: flex;
+        gap: 15px;
+    }
+    
+    .btn-primary {
+        background-color: var(--theme-accent);
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 6px;
+        color: white;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .btn-primary:hover {
+        background-color: var(--theme-primary);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(57, 7, 150, 0.2);
+    }
+    
+    .section-title {
+        color: var(--theme-primary);
+        font-size: 1.5rem;
+        margin: 2rem 0 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--theme-primary);
+        position: relative;
+    }
+    
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 100px;
+        height: 2px;
+        background-color: var(--theme-accent);
+    }
+    
+    .card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+        margin-bottom: 2rem;
+        overflow: hidden;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(57, 7, 150, 0.1);
+    }
+    
+    .card-header {
+        background: linear-gradient(to right, var(--theme-primary), var(--theme-primary-light));
+        color: white;
+        padding: 1rem 1.5rem;
+        font-weight: 500;
+        font-size: 1.1rem;
+    }
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        margin-bottom: 1rem;
+    }
+    
+    th, td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+    
+    th {
+        background: linear-gradient(to right, var(--theme-primary), var(--theme-primary-light));
+        color: white;
+        font-weight: 500;
+        position: sticky;
+        top: 0;
+    }
+    
+    tr:hover {
+        background-color: rgba(57, 7, 150, 0.03);
+    }
+    
+    .status-badge {
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        display: inline-block;
+    }
+    
+    .status-normal {
+        background-color: rgba(40, 167, 69, 0.15);
+        color: var(--theme-success);
+    }
+    
+    .status-warning {
+        background-color: rgba(220, 53, 69, 0.15);
+        color: var(--theme-warning);
+    }
+    
+    .view-link {
+        color: var(--theme-accent);
+        font-weight: 500;
+        transition: all 0.2s;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+    
+    .view-link:hover {
+        color: var(--theme-primary);
+        text-decoration: underline;
+    }
+    
+    .data-summary {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+    }
+    
+    .summary-card {
+        background: white;
+        border-radius: 10px;
+        padding: 1.5rem;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        text-align: center;
+        border-top: 4px solid var(--theme-accent);
+        transition: all 0.3s;
+    }
+    
+    .summary-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(57, 7, 150, 0.1);
+    }
+    
+    .summary-card h3 {
+        margin-top: 0;
+        color: var(--theme-primary);
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .summary-card .value {
+        font-size: 2.2rem;
+        font-weight: 600;
+        color: var(--theme-accent);
+        margin: 0.5rem 0;
+        line-height: 1;
+    }
+    
+    .summary-card p {
+        color: #666;
+        margin-bottom: 0;
+        font-size: 0.9rem;
+    }
+    
+    .patient-info-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .patient-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--theme-primary), var(--theme-accent));
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+    }
+    
+    .patient-info-text h3 {
+        margin: 0 0 0.3rem;
+        color: var(--theme-primary);
+    }
+    
+    .patient-info-text p {
+        margin: 0;
+        color: #666;
+        font-size: 0.9rem;
+    }
+    
+    /* Reviewed status styles */
+    .reviewed-status {
+        display: inline-block;
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+    
+    .reviewed-yes {
+        background-color: rgba(40, 167, 69, 0.15);
+        color: var(--theme-success);
+    }
+    
+    .reviewed-no {
+        background-color: rgba(220, 53, 69, 0.15);
+        color: var(--theme-warning);
+    }
+    
+    .normal-value {
+        color: var(--theme-success);
+        font-weight: 500;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+        .dashboard-container {
+            padding: 1.5rem;
+        }
+        
+        .data-summary {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .dashboard-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        
+        .dashboard-actions {
+            width: 100%;
+            justify-content: space-between;
+        }
+        
+        .data-summary {
+            grid-template-columns: 1fr;
+        }
+        
+        table {
+            display: block;
+            overflow-x: auto;
+        }
+    }
+</style>
+
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1 class="dashboard-title">Doctor Dashboard</h1>
+        <div class="dashboard-actions">
+            <a href="#" class="btn-primary">
+                <i class="fas fa-plus"></i> New Consultation
+            </a>
+            <a href="#" class="btn-primary">
+                <i class="fas fa-calendar-alt"></i> View Calendar
+            </a>
+        </div>
+    </div>
+    
+    <div class="data-summary">
+        <div class="summary-card">
+            <h3>Total Patients</h3>
+            <div class="value">{{ patients|length }}</div>
+            <p>Under your care</p>
+        </div>
+        <div class="summary-card">
+            <h3>Critical Cases</h3>
+            <div class="value">{{ patients|length }}</div>
+            <p>Requiring attention</p>
+        </div>
+        <div class="summary-card">
+            <h3>Upcoming Appointments</h3>
+            <div class="value">2</div>
+            <p>Next 7 days</p>
+        </div>
+        <div class="summary-card">
+            <h3>Pending Reviews</h3>
+            <div class="value">8</div>
+            <p>Health records</p>
+        </div>
+    </div>
+    
+    <h2 class="section-title">Your Patients</h2>
+    <div class="card">
+        <div class="card-header">Patient List</div>
+        <table id="patientList">
+            <thead>
+                <tr>
+                    <th>Patient</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Contact</th>
+                    <th>Last Visit</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for patient in patients %}
+                <tr>
+                    <td>{{ patient.first_name }} {{ patient.last_name }}</td>
+                    <td>{{ patient.age }}</td>
+                    <td>{{ patient.user.gender  }}</td>
+                    <td>{{ patient.phone_number }}</td>
+                    <td>{{ patient.user.date_joined|date:"M d, Y" }}</td>
+                    <td>
+                        <span class="status-badge status-normal">Stable</span>
+                    </td>
+                    <td>
+                        <a href="{% url 'registration:patient-detail' patient.pk %}" class="view-link">
+                            <i class="fas fa-eye"></i> View
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    {% for patient in patients %}
+    <div class="patient-section">
+        <div class="patient-info-header">
+            <div class="patient-avatar">{{ patient.first_name|first }}{{ patient.last_name|first }}</div>
+            <div class="patient-info-text">
+                <h3>{{ patient.first_name }} {{ patient.last_name }}</h3>
+                <p>Patient since {{ patient.user.date_joined|date:"M Y" }} • Last check: Today</p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">Vital Signs History</div>
+            <table id="healthDataTable-{{ patient.id }}">
+                <thead>
+                    <tr>
+                        <th>Reviewed</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>SPO₂</th>
+                        <th>TEMP</th>
+                        <th>HR</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data in patient.recent_health_data %}
+                    <tr>
+                        <td>
+                            <span class="reviewed-status {% if data.reviewed_by_doctor %}reviewed-yes{% else %}reviewed-no{% endif %}">
+                                {% if data.reviewed_by_doctor %}Reviewed{% else %}Pending{% endif %}
+                            </span>
+                        </td>
+                        <td>{{ data.recorded_at|date:"M d, Y" }}</td>
+                        <td>{{ data.recorded_at|date:"h:i A" }}</td>
+                        <td class="{% if data.spo2 >= 95 %}normal-value{% else %}status-warning{% endif %}">
+                            {{ data.spo2|default:"0" }}%
+                        </td>
+                        <td class="{% if data.temperature >= 36.1 and data.temperature <= 37.2 %}normal-value{% else %}status-warning{% endif %}">
+                            {% if data.temperature == 20.0 %}
+                                N/A
+                            {% else %}
+                                {{ data.temperature }}°C
+                            {% endif %}
+                        </td>
+                        <td class="{% if data.heart_rate >= 60 and data.heart_rate <= 100 %}normal-value{% else %}status-warning{% endif %}">
+                            {{ data.heart_rate }} bpm
+                        </td>
+                        <td>
+                            {% if not data.reviewed_by_doctor %}
+                                <a href="#" class="view-link">
+                                    <i class="fas fa-edit"></i> Review
+                                </a>
+                            {% else %}
+                                <span class="reviewed-yes">Reviewed</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" style="text-align: center;">No health data available for this patient</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+   function sortTable(tableId, columnIndex) {
+        const table = document.getElementById(tableId);
+        const rows = Array.from(table.querySelectorAll("tbody tr"));
+        let sortDirection = table.getAttribute(`data-sort-${columnIndex}`) || 'asc';
+        
+        // Toggle sort direction
+        sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+        table.setAttribute(`data-sort-${columnIndex}`, sortDirection);
+        
+        // Update sort icons
+        const headers = table.querySelectorAll("th.sortable-header");
+        headers.forEach((header, index) => {
+            const icon = header.querySelector(".sort-icon");
+            if (icon) {
+                icon.textContent = index === columnIndex ? 
+                    (sortDirection === 'asc' ? '↑' : '↓') : '↕';
+            }
+        });
+        
+        rows.sort((a, b) => {
+            const aValue = a.cells[columnIndex].textContent.trim();
+            const bValue = b.cells[columnIndex].textContent.trim();
+            
+            // Numeric columns (SPO₂, TEMP, HR)
+            if (columnIndex >= 4 && columnIndex <= 6) {
+                const numA = parseFloat(aValue) || 0;
+                const numB = parseFloat(bValue) || 0;
+                return sortDirection === 'asc' ? numA - numB : numB - numA;
+            }
+            // Date sorting
+            else if (columnIndex === 2) {
+                const dateA = new Date(aValue);
+                const dateB = new Date(bValue);
+                return sortDirection === 'asc' ? dateA - dateB : dateB - dateA;
+            }
+            // Time sorting
+            else if (columnIndex === 3) {
+                const timeA = convertTimeTo24Hour(aValue);
+                const timeB = convertTimeTo24Hour(bValue);
+                return sortDirection === 'asc' ? timeA.localeCompare(timeB) : timeB.localeCompare(timeA);
+            }
+            // Reviewed status sorting (Yes/No)
+            else if (columnIndex === 1) {
+                return sortDirection === 'asc' ? 
+                    aValue.localeCompare(bValue) : 
+                    bValue.localeCompare(aValue);
+            }
+            // Default text sorting
+            else {
+                return sortDirection === 'asc' ? 
+                    aValue.localeCompare(bValue) : 
+                    bValue.localeCompare(aValue);
+            }
+        });
+        
+        // Rebuild table with sorted rows
+        const tbody = table.querySelector("tbody");
+        tbody.innerHTML = '';
+        rows.forEach(row => tbody.appendChild(row));
+    }
+    
+    function convertTimeTo24Hour(timeStr) {
+        const [time, modifier] = timeStr.split(' ');
+        let [hours, minutes] = time.split(':');
+        
+        if (modifier === 'PM' && hours !== '12') {
+            hours = parseInt(hours, 10) + 12;
+        }
+        if (modifier === 'AM' && hours === '12') {
+            hours = '00';
+        }
+        
+        return `${hours}:${minutes}`;
+    }
+    
+    // Initialize tooltips
+    document.addEventListener('DOMContentLoaded', function() {
+        const statusBadges = document.querySelectorAll('.status-badge');
+        statusBadges.forEach(badge => {
+            badge.addEventListener('mouseover', function() {
+                // Add tooltip functionality here if needed
+            });
+        });
+    });
+</script>
+{% endblock content %}

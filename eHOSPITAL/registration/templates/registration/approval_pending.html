@@ -1,0 +1,444 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Approval Pending{% endblock %}
+
+{% block content %}
+<style>
+    .approval-container {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        margin: -20px;
+        padding: 20px;
+    }
+    
+    .approval-card {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem 2rem;
+        box-shadow: 0 20px 40px rgba(48, 7, 150, 0.3);
+        text-align: center;
+        max-width: 600px;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(48, 7, 150, 0.1);
+    }
+    
+    .approval-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #300796, #4a0e8a, #5c1588, #6d1c86, #7e2384);
+        animation: gradient-shift 3s ease-in-out infinite;
+        background-size: 200% 100%;
+    }
+    
+    @keyframes gradient-shift {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+    
+    .status-icon {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 2rem;
+        background: linear-gradient(135deg, #300796, #5c1588);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        animation: pulse 2s infinite;
+        position: relative;
+        color: white;
+    }
+    
+    .status-icon::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #300796, #5c1588);
+        opacity: 0.3;
+        animation: ripple 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+    
+    @keyframes ripple {
+        0% { transform: scale(1); opacity: 0.3; }
+        100% { transform: scale(1.4); opacity: 0; }
+    }
+    
+    .approval-title {
+        color: #2d3436;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #300796, #5c1588);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .approval-subtitle {
+        color: #636e72;
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+    }
+    
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+    }
+    
+    .info-card {
+        background: linear-gradient(135deg, #f8f9ff, #f5f6ff);
+        padding: 1.5rem;
+        border-radius: 15px;
+        border-left: 4px solid #300796;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .info-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: -20px;
+        width: 40px;
+        height: 40px;
+        background: rgba(48, 7, 150, 0.1);
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+    
+    .info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(48, 7, 150, 0.2);
+        background: linear-gradient(135deg, #f5f6ff, #eef0ff);
+    }
+    
+    .info-card:hover::before {
+        transform: scale(2);
+        background: rgba(48, 7, 150, 0.05);
+    }
+    
+    .info-card h4 {
+        color: #300796;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+    
+    .info-card p {
+        color: #4a5568;
+        margin: 0;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+    
+    .timeline {
+        background: linear-gradient(135deg, #f8f9ff, #f0f2ff);
+        border-radius: 15px;
+        padding: 2rem;
+        margin: 2rem 0;
+        position: relative;
+        border: 1px solid rgba(48, 7, 150, 0.1);
+    }
+    
+    .timeline h4 {
+        color: #300796;
+        margin-bottom: 1.5rem;
+        font-size: 1.3rem;
+        text-align: center;
+        font-weight: 600;
+    }
+    
+    .timeline-steps {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+    }
+    
+    .timeline-step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+        position: relative;
+    }
+    
+    .step-circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        z-index: 2;
+    }
+    
+    .step-circle.completed {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    }
+    
+    .step-circle.current {
+        background: linear-gradient(135deg, #300796, #5c1588);
+        color: white;
+        animation: pulse 2s infinite;
+        box-shadow: 0 4px 15px rgba(48, 7, 150, 0.4);
+    }
+    
+    .step-circle.pending {
+        background: #e2e8f0;
+        color: #64748b;
+        border: 2px solid #cbd5e0;
+    }
+    
+    .step-label {
+        font-size: 0.9rem;
+        color: #4a5568;
+        text-align: center;
+        max-width: 100px;
+        font-weight: 500;
+    }
+    
+    .timeline-line {
+        position: absolute;
+        top: 20px;
+        left: 60px;
+        right: 60px;
+        height: 3px;
+        background: linear-gradient(90deg, #10b981 30%, #300796 30%, #300796 60%, #e2e8f0 60%);
+        z-index: 1;
+        border-radius: 2px;
+    }
+    
+    .contact-section {
+        background: linear-gradient(135deg, #300796, #5c1588);
+        color: white;
+        padding: 2rem;
+        border-radius: 15px;
+        margin-top: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .contact-section::before {
+        content: '';
+        position: absolute;
+        top: -50px;
+        right: -50px;
+        width: 100px;
+        height: 100px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+    }
+    
+    .contact-section::after {
+        content: '';
+        position: absolute;
+        bottom: -30px;
+        left: -30px;
+        width: 60px;
+        height: 60px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 50%;
+    }
+    
+    .contact-section h4 {
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .contact-info {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        gap: 1rem;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .contact-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.95rem;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0.75rem 1rem;
+        border-radius: 10px;
+        transition: background 0.3s ease;
+    }
+    
+    .contact-item:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .loading-dots {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 20px;
+        margin-left: 10px;
+    }
+    
+    .loading-dots div {
+        position: absolute;
+        top: 50%;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #300796;
+        animation: loading 1.2s linear infinite;
+        transform: translateY(-50%);
+    }
+    
+    .loading-dots div:nth-child(1) { left: 8px; animation-delay: 0s; }
+    .loading-dots div:nth-child(2) { left: 32px; animation-delay: -0.4s; }
+    .loading-dots div:nth-child(3) { left: 56px; animation-delay: -0.8s; }
+    
+    @keyframes loading {
+        0%, 80%, 100% { transform: translateY(-50%) scale(0); opacity: 0.5; }
+        40% { transform: translateY(-50%) scale(1); opacity: 1; }
+    }
+    
+    .status-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #300796, #5c1588);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        box-shadow: 0 4px 15px rgba(48, 7, 150, 0.3);
+    }
+    
+    @media (max-width: 768px) {
+        .approval-card {
+            margin: 1rem;
+            padding: 2rem 1rem;
+        }
+        
+        .approval-title {
+            font-size: 2rem;
+        }
+        
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .timeline-steps {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .timeline-line {
+            display: none;
+        }
+        
+        .contact-info {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .contact-item {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+
+<div class="approval-container">
+    <div class="approval-card">
+        <div class="status-badge">
+            🔍 Under Medical Review
+        </div>
+        
+        <div class="status-icon">
+            ⏳
+        </div>
+        
+        <h1 class="approval-title">Account Under Review</h1>
+        <p class="approval-subtitle">
+            Your doctor registration is being carefully reviewed by our medical administration team. 
+            We appreciate your patience during this important verification process.
+        </p>
+        
+        <div class="info-grid">
+            <div class="info-card">
+                <h4>📋 What's Being Reviewed</h4>
+                <p>Medical credentials, license verification, and professional background</p>
+            </div>
+            <div class="info-card">
+                <h4>⏰ Expected Timeline</h4>
+                <p>Typically 2-5 business days for complete verification</p>
+            </div>
+            <div class="info-card">
+                <h4>📧 Notification Method</h4>
+                <p>Email confirmation will be sent upon approval completion</p>
+            </div>
+            <div class="info-card">
+                <h4>🔒 Security Priority</h4>
+                <p>Ensuring patient safety through thorough verification</p>
+            </div>
+        </div>
+        
+        <div class="timeline">
+            <h4>Approval Process</h4>
+            <div class="timeline-steps">
+                <div class="timeline-line"></div>
+                <div class="timeline-step">
+                    <div class="step-circle completed">✓</div>
+                    <span class="step-label">Application Submitted</span>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-circle current">2</div>
+                    <span class="step-label">Under Review</span>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-circle pending">3</div>
+                    <span class="step-label">Final Approval</span>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-circle pending">4</div>
+                    <span class="step-label">Account Activated</span>
+                </div>
+            </div>
+        </div>
+    
+        
+        <div style="margin-top: 2rem; color: #4a5568; font-size: 0.9rem;">
+            <strong style="color: #300796;">Processing your application</strong>
+            <div class="loading-dots">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,208 @@
+{% extends "base/base.html" %}
+{% block title %}EHMS - Patient Profile{% endblock %}
+{% block content %}
+<header>
+  
+<style>
+  .profile-container {
+    max-width: 600px;
+    margin: 10px auto;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    background-color: #F2F4F7;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-height: calc(100vh - 40px);
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .profile-title {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #2c3e50;
+    font-size: 18px;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 10px;
+  }
+
+  .profile-title:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 25%;
+    width: 50%;
+    height: 3px;
+    background: #390796;
+    border-radius: 3px;
+  }
+
+  .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -15px;
+  }
+
+  .form-group {
+    flex: 0 0 50%;
+    padding: 0 15px;
+    margin-bottom: 0px;
+  }
+
+  .form-group.full-width {
+    flex: 0 0 100%;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #5a5c69;
+    font-size: 14px;
+  }
+
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #d1d3e2;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #f8f9fc;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus {
+    border-color: #390796;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(57, 7, 150, 0.25);
+    background-color: #fff;
+  }
+
+  .radio-group {
+    display: flex;
+    gap: 20px;
+    margin-top: 8px;
+  }
+
+  .radio-option {
+    display: flex;
+    align-items: center;
+  }
+
+  .radio-option input {
+    margin-right: 8px;
+  }
+
+  .radio-option input[type="radio"]:checked {
+    accent-color: #390796;
+  }
+
+  .save-btn {
+    display: block;
+    width: 200px;
+    margin: 40px auto 0;
+    padding: 12px;
+    background-color: #390796;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .save-btn:hover {
+    background-color: #2d066e;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .readonly-field {
+    background-color: #eaecf4 !important;
+    color: #6e707e;
+    cursor: not-allowed;
+  }
+</style>
+
+<div class="profile-container">
+  <h2 class="profile-title">Complete Your Profile</h2>
+  <form method="post">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+      <div class="error-message" style="color: #e74a3b; margin-bottom: 20px; padding: 10px; background-color: #fde8e8; border-radius: 6px; border-left: 4px solid #e74a3b;">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="id_first_name">First name</label>
+        <input type="text" name="first_name" id="id_first_name" value="{{ form.first_name.value|default_if_none:'' }}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="id_last_name">Last name</label>
+        <input type="text" name="last_name" id="id_last_name" value="{{ form.last_name.value|default_if_none:'' }}" required>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="id_gender">Gender</label>
+        <input type="text" name="gender" id="id_gender"
+               value="{% if form.gender.value == 'M' %}Male{% elif form.gender.value == 'F' %}Female{% else %}{{ form.gender.value|default_if_none:'' }}{% endif %}"
+               class="readonly-field" readonly>
+      </div>
+
+      <div class="form-group">
+        <label for="id_user_id">User ID</label>
+        <input type="text" name="user_id" id="id_user_id"
+               value="{{ form.user_id.value|default_if_none:'' }}"
+               class="readonly-field" readonly>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="id_year_of_birth">Year of birth</label>
+        <input type="number" name="year_of_birth" id="id_year_of_birth"
+               value="{{ form.year_of_birth.value|default_if_none:'' }}"
+               min="1900" max="{% now 'Y' %}" required>
+      </div>
+
+      <div class="form-group">
+        <label for="id_age">Age</label>
+        <input type="number" name="age" id="id_age"
+               value="{{ form.age.value|default_if_none:'' }}"
+               class="readonly-field" readonly>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="id_phone_number">Phone Number</label>
+        <input type="tel" name="phone_number" id="id_phone_number"
+               value="{{ form.phone_number.value|default_if_none:'' }}"
+               required>
+      </div>
+    </div>
+
+    <button type="submit" class="save-btn">Save Profile</button>
+  </form>
+</div>
+
+<script>
+  document.getElementById('id_year_of_birth').addEventListener('change', function () {
+    const yearOfBirth = parseInt(this.value);
+    if (!isNaN(yearOfBirth)) {
+      const currentYear = new Date().getFullYear();
+      document.getElementById('id_age').value = currentYear - yearOfBirth;
+    }
+  });
+</script>
+{% endblock %}

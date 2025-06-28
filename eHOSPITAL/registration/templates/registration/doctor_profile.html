@@ -1,0 +1,292 @@
+{% extends "base/base.html" %}
+{% block title %}EHMS - Doctor Profile{% endblock %}
+{% block content %}
+<style>
+  .profile-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    background-color: #ffffff;
+  }
+  
+  .profile-title {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #2c3e50;
+    font-size: 28px;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 10px;
+  }
+  
+  .profile-title:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 25%;
+    width: 50%;
+    height: 3px;
+    background: linear-gradient(to right, #390796, #5b1db8);
+    border-radius: 3px;
+  }
+  
+  .form-group {
+    margin-bottom: 25px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #34495e;
+    font-size: 16px;
+  }
+  
+  .form-group label .required {
+    color: #e74c3c;
+    margin-left: 3px;
+  }
+  
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+  }
+  
+  .form-group input:focus,
+  .form-group select:focus {
+    border-color: #390796;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(57, 7, 150, 0.2);
+  }
+  
+  .form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+  }
+  
+  .form-row .form-group {
+    flex: 1;
+    margin-bottom: 0;
+  }
+  
+  .save-btn {
+    display: block;
+    width: 200px;
+    margin: 30px auto 0;
+    padding: 12px;
+    background: linear-gradient(135deg, #390796, #5b1db8);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(57, 7, 150, 0.3);
+  }
+  
+  .save-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(57, 7, 150, 0.4);
+    background: linear-gradient(135deg, #2d0573, #4a1694);
+  }
+  
+  .save-btn:active {
+    transform: translateY(0);
+  }
+  
+  .errorlist {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 0 0;
+    color: #e74c3c;
+    font-size: 14px;
+  }
+  
+  .form-group.has-error input,
+  .form-group.has-error select {
+    border-color: #e74c3c;
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+  }
+  
+  .info-text {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin-top: 5px;
+    font-style: italic;
+  }
+  
+  .error-message {
+    color: #e74c3c;
+    margin-bottom: 20px;
+    padding: 12px;
+    background-color: #fde8e8;
+    border-radius: 6px;
+    border-left: 4px solid #e74c3c;
+  }
+  
+  .form-icon {
+    position: relative;
+  }
+  
+  .form-icon::before {
+    content: '👤';
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    z-index: 1;
+  }
+  
+  .form-icon input {
+    padding-left: 40px;
+  }
+  
+  @media (max-width: 768px) {
+    .profile-container {
+      margin: 20px;
+      padding: 20px;
+    }
+    
+    .form-row {
+      flex-direction: column;
+      gap: 0;
+    }
+    
+    .form-row .form-group {
+      margin-bottom: 25px;
+    }
+    
+    .save-btn {
+      width: 100%;
+    }
+  }
+</style>
+
+<div class="profile-container">
+  <h2 class="profile-title">Complete Your Profile (Doctor)</h2>
+  <form method="post">
+    {% csrf_token %}
+    
+    {% if form.non_field_errors %}
+      <div class="error-message">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+    
+    <!-- Personal Information Section -->
+    <div class="form-row">
+      <div class="form-group {% if form.first_name.errors %}has-error{% endif %}">
+        <label for="id_first_name">First Name <span class="required">*</span></label>
+        {{ form.first_name }}
+        {% if form.first_name.errors %}
+          <ul class="errorlist">
+            {% for error in form.first_name.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        <p class="info-text">Enter your legal first name</p>
+      </div>
+      
+      <div class="form-group {% if form.last_name.errors %}has-error{% endif %}">
+        <label for="id_last_name">Last Name <span class="required">*</span></label>
+        {{ form.last_name }}
+        {% if form.last_name.errors %}
+          <ul class="errorlist">
+            {% for error in form.last_name.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        <p class="info-text">Enter your legal last name</p>
+      </div>
+    </div>
+    
+    <div class="form-group {% if form.year_of_birth.errors %}has-error{% endif %}">
+      <label for="id_year_of_birth">Year of Birth <span class="required">*</span></label>
+      {{ form.year_of_birth }}
+      {% if form.year_of_birth.errors %}
+        <ul class="errorlist">
+          {% for error in form.year_of_birth.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      <p class="info-text">Enter the year you were born (e.g., 1985)</p>
+    </div>
+    
+    <!-- Professional Information Section -->
+    <div class="form-group {% if form.specialty.errors %}has-error{% endif %}">
+      <label for="id_specialty">Medical Specialty <span class="required">*</span></label>
+      {{ form.specialty }}
+      {% if form.specialty.errors %}
+        <ul class="errorlist">
+          {% for error in form.specialty.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      <p class="info-text">Select your primary medical specialty from the dropdown</p>
+    </div>
+    
+    <div class="form-group {% if form.registration_id.errors %}has-error{% endif %}">
+      <label for="id_registration_id">Medical Registration ID <span class="required">*</span></label>
+      {{ form.registration_id }}
+      {% if form.registration_id.errors %}
+        <ul class="errorlist">
+          {% for error in form.registration_id.errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      <p class="info-text">Enter your official medical board registration number</p>
+    </div>
+    
+    <button type="submit" class="save-btn">Save Profile</button>
+  </form>
+</div>
+
+<script>
+// Add some interactive features
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const inputs = form.querySelectorAll('input, select');
+    
+    // Add focus animation to form elements
+    inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.style.transform = 'scale(1.02)';
+            this.parentElement.style.transition = 'transform 0.2s ease';
+        });
+        
+        input.addEventListener('blur', function() {
+            this.parentElement.style.transform = 'scale(1)';
+        });
+    });
+    
+    // Form validation feedback
+    form.addEventListener('submit', function(e) {
+        const button = form.querySelector('.save-btn');
+        button.innerHTML = 'Saving...';
+        button.disabled = true;
+        
+        // Re-enable button after 3 seconds in case of error
+        setTimeout(() => {
+            button.innerHTML = 'Save Profile';
+            button.disabled = false;
+        }, 3000);
+    });
+});
+</script>
+{% endblock %}

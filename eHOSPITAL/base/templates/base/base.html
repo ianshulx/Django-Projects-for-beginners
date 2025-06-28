@@ -1,0 +1,720 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{% block title %} EHMS {% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'base/main.css' %}'">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!--DARK MODE SCRIPT-->
+    <script>
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const hamburger = document.querySelector('.hamburger');
+            
+            mobileMenu.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const navbar = document.querySelector('.navbar');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const hamburger = document.querySelector('.hamburger');
+            
+            if (!navbar.contains(event.target) && mobileMenu && mobileMenu.classList.contains('active')) {
+                mobileMenu.classList.remove('active');
+                hamburger.classList.remove('active');
+            }
+        });
+    </script>
+    
+    <style>
+        .center{
+            position: relative;
+            margin: auto;
+            width: 400px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 10px 10px 15px rgba(0,0,0,0.05);
+            padding: 20px;
+        }
+        .center h1{
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid silver;
+        }
+        .center form{
+            padding: 0 40px;
+            box-sizing: border-box;
+        }
+        form .txt_field{
+            position: relative;
+            border-bottom: 2px solid #adadad;
+            margin: 30px 0;
+        }
+        .txt_field input{
+            width: 100%;
+            padding: 0 5px;
+            height: 40px;
+            font-size: 16px;
+            border: none;
+            background: none;
+            outline: none;
+        }
+        .txt_field label{
+            position: absolute;
+            top: 50%;
+            left: 5px;
+            color: #adadad;
+            transform: translateY(-50%);
+            font-size: 16px;
+            pointer-events: none;
+            transition: .5s;
+        }
+        .txt_field span::before{
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: #2691d9;
+            transition: .5s;
+        }
+        .txt_field input:focus ~ label,
+        .txt_field input:valid ~ label{
+            top: -5px;
+            color: #2691d9;
+        }
+        .txt_field input:focus ~ span::before,
+        .txt_field input:valid ~ span::before{
+            width: 100%;
+        }
+        .pass{
+            margin: -5px 0 20px 5px;
+            color: #a6a6a6;
+            cursor: pointer;
+        }
+        .pass:hover{
+            text-decoration: underline;
+        }
+        input[type="submit"]{
+            width: 100%;
+            height: 50px;
+            border: 1px solid;
+            background: #2691d9;
+            border-radius: 25px;
+            font-size: 18px;
+            color: #e9f4fb;
+            font-weight: 700;
+            cursor: pointer;
+            outline: none;
+        }
+        input[type="submit"]:hover{
+            border-color: #2691d9;
+            transition: .5s;
+        }
+        .signup_link{
+            margin: 30px 0;
+            text-align: center;
+            font-size: 16px;
+            color: #666666;
+        }
+        .signup_link a{
+            color: #2691d9;
+            text-decoration: none;
+        }
+        .signup_link a:hover{
+            text-decoration: underline;
+        }
+        
+        .py-16 {
+            padding-top: 4rem;
+            padding-bottom: 4rem; 
+            text-align: center;
+        }
+        .text-nav {
+            color: #1a1a2e; 
+        }
+        
+        .centered-content { 
+            margin: 0 auto;
+            max-width: 800px;
+            width: 90%;
+            padding: 20px; 
+            background-color: #F2F4F7; 
+            color: #1a1a2e; 
+            border-radius: 10px; 
+            box-sizing: border-box;
+        }
+        
+        .footer {
+        
+            bottom: 0;
+            width: 100%;
+            background-color: #300796; 
+            color: #dcdcdc; 
+            text-align: center;
+            padding: 10px 0;
+            z-index: 1000;
+            font-size: 0.9em;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+        /* RESPONSIVE NAVIGATION BAR */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background:#390796;
+            z-index: 1001;
+            box-shadow:#390796;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content:space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            width:100%;
+            margin: 0 auto;
+        }
+
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffffff;
+            text-decoration: none;
+            display: flex;
+            align-items: left;
+            gap: 0.5rem;
+            margin-right: 30px;
+        }
+
+        .nav-brand i {
+            color: #00d8ff;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .nav-links a:hover {
+            color: #00d8ff;
+            
+            transform: translateY(-2px);
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: #fbfcfc;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::before {
+            width: 80%;
+        }
+
+        /* Auth Buttons */
+        .auth-buttons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid transparent;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-login {
+            color: white;
+        }
+
+        .btn-login:hover {
+            background: white;
+            color: #390796;
+            transform: translateY(-2px);
+        }
+
+        .btn-register {
+            color: white;
+        }
+
+        .btn-register:hover {
+            background: white;
+            color: #390796;
+            transform: translateY(-2px);
+        }
+
+        .btn-logout {
+            color: white;
+        }
+
+        .btn-logout:hover {
+            background: white;
+            color: #390796;
+            transform: translateY(-2px);
+        }
+
+        .slider {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 28px;
+        }
+        
+        .slider:before {
+            background-color: #fff;
+            bottom: 4px;
+            content: "";
+            height: 20px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 20px;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        input:checked + .slider {
+            background: linear-gradient(135deg, #00d8ff, #0284c7);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(28px);
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger:hover {
+            background-color: rgba(0, 216, 255, 0.1);
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background-color: #dcdcdc;
+            margin: 3px 0;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(135deg, #390796 0%, #1a1a2e 100%);
+            transform: translateY(-100%);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(57, 7, 150, 0.3);
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+
+        .mobile-menu.active {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-menu-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .mobile-nav-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .mobile-nav-section h3 {
+            color: #00d8ff;
+            font-size: 1.1rem;
+            margin: 0 0 0.5rem 0;
+            font-weight: 600;
+        }
+
+        .mobile-menu a {
+            color: #dcdcdc;
+            text-decoration: none;
+            padding: 1rem;
+            border-radius: 12px;
+            background-color: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-weight: 500;
+        }
+
+        .mobile-menu a:hover {
+            background-color: rgba(0, 216, 255, 0.1);
+            color: #00d8ff;
+            transform: translateX(5px);
+        }
+
+        .mobile-menu a i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .mobile-auth-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1024px) {
+            .nav-container {
+                padding: 1rem 1.5rem;
+            }
+            
+            .nav-links {
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 1rem;
+            }
+            
+            .nav-links,
+            .auth-buttons {
+                display: none;
+            }
+            
+            .hamburger {
+                display: flex;
+            }
+            
+            .theme-switch-wrapper {
+                margin-left: 0.5rem;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-container {
+                padding: 0.75rem;
+            }
+            
+            .nav-brand {
+                font-size: 1.25rem;
+            }
+            
+            .theme-switch {
+                height: 24px;
+                width: 48px;
+            }
+            
+            .slider:before {
+                height: 16px;
+                width: 16px;
+            }
+            
+            input:checked + .slider:before {
+                transform: translateX(24px);
+            }
+            
+            .mobile-menu {
+                top: 70px;
+                padding: 1.5rem;
+            }
+        }
+
+        /* Animation for page load */
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .navbar {
+            animation: slideDown 0.5s ease-out;
+        }
+
+        /* Hover effects for mobile touch */
+        @media (hover: none) and (pointer: coarse) {
+            .nav-links a:hover,
+            .btn:hover,
+            .mobile-menu a:hover {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Responsive Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <!-- Brand/Logo -->
+            <a href="{% url 'home' %}" class="nav-brand">
+                <i class="fas fa-heartbeat"></i>
+                EHMS
+            </a>
+
+            <!-- Desktop Navigation Links -->
+            <ul class="nav-links">
+                {% if user.is_authenticated %}
+                    {% if user.doctor %}
+                        <li><a href="{% url 'registration:doctor-dashboard' %}">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span class="nav-text">Dashboard</span>
+                        </a></li>
+                        <li><a href="{% url 'registration:doctor-profile' %}">
+                            <i class="fas fa-user-md"></i>
+                            <span class="nav-text">Profile</span>
+                        </a></li>
+                    {% elif user.patient %}
+                        <li><a href="{% url 'registration:book-doctor' %}">
+                            <i class="fas fa-calendar-plus"></i>
+                            <span class="nav-text">Book Doctor</span>
+                        </a></li>
+                        <li><a href="{% url 'registration:patient-dashboard' pk=user.patient.pk %}">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span class="nav-text">Dashboard</span>
+                        </a></li>
+                        <li><a href="{% url 'registration:patient-profile' %}">
+                            <i class="fas fa-user"></i>
+                            <span class="nav-text">Profile</span>
+                        </a></li>
+                    {% endif %}
+                {% endif %}
+                <li><a href="{% url 'home' %}">
+                    <i class="fas fa-home"></i>
+                    <span class="nav-text">Home</span>
+                </a></li>
+                <li><a href="{% url 'about' %}">
+                    <i class="fas fa-info-circle"></i>
+                    <span class="nav-text">About</span>
+                </a></li>
+            </ul>
+
+            <!-- Desktop Auth Buttons & Theme Toggle -->
+            <div class="auth-buttons">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'logout' %}" class="btn btn-logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-login">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>Login</span>
+                    </a>
+                    <a href="{% url 'registration:signup' %}" class="btn btn-register">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Register</span>
+                    </a>
+                {% endif %}
+            </div>
+
+            <!-- Hamburger -->
+            <div style="display: flex; align-items: center;">
+                <div class="hamburger" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobile-menu">
+            <div class="mobile-menu-content">
+                <!-- Navigation Links -->
+                <div class="mobile-nav-section">
+                    <h3><i class="fas fa-bars"></i> Navigation</h3>
+                    <a href="{% url 'home' %}">
+                        <i class="fas fa-home"></i>
+                        Home
+                    </a>
+                    <a href="#">
+                        <i class="fas fa-info-circle"></i>
+                        About
+                    </a>
+                    <a href="#">
+                        <i class="fas fa-stethoscope"></i>
+                        Services
+                    </a>
+                    <a href="#">
+                        <i class="fas fa-envelope"></i>
+                        Contact
+                    </a>
+                </div>
+
+                {% if user.is_authenticated %}
+                    <!-- User-specific Links -->
+                    <div class="mobile-nav-section">
+                        <h3><i class="fas fa-user"></i> Your Account</h3>
+                        {% if user.doctor %}
+                            <a href="{% url 'registration:doctor-dashboard' %}">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Doctor Dashboard
+                            </a>
+                            <a href="{% url 'registration:doctor-profile' %}">
+                                <i class="fas fa-user-md"></i>
+                                Doctor Profile
+                            </a>
+                        {% elif user.patient %}
+                            <a href="{% url 'registration:book-doctor' %}">
+                                <i class="fas fa-calendar-plus"></i>
+                                Book Doctor
+                            </a>
+                            <a href="{% url 'registration:patient-dashboard' pk=user.patient.pk %}">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Patient Dashboard
+                            </a>
+                            <a href="{% url 'registration:patient-profile' %}">
+                                <i class="fas fa-user"></i>
+                                Patient Profile
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+
+                <!-- Auth Buttons -->
+                <div class="mobile-auth-buttons">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'logout' %}" class="btn btn-logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-login">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Login
+                        </a>
+                        <a href="{% url 'registration:signup' %}" class="btn btn-register">
+                            <i class="fas fa-user-plus"></i>
+                            Register
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <br><br><br>
+    <div class="{% block content_container_class %}centered-content{% endblock %}">
+        {% block content %}
+    
+        {% endblock %}
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2025 EHMS </p>
+    </footer>
+
+    <script>
+        // Close mobile menu when window is resized to desktop
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                const mobileMenu = document.getElementById('mobile-menu');
+                const hamburger = document.querySelector('.hamburger');
+                
+                if (mobileMenu && mobileMenu.classList.contains('active')) {
+                    mobileMenu.classList.remove('active');
+                    hamburger.classList.remove('active');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

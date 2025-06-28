@@ -1,0 +1,269 @@
+{% extends "base/base.html" %}
+{% block title %}EHMS - Signup Page{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<style>
+  .signup-container {
+    max-width: 900px;
+    margin: 10px auto;
+    padding: 18px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .signup-title {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #390796; /* Theme color applied */
+    font-size: 20px;
+    font-weight: 600;
+    position: relative;
+  }
+
+  .signup-title:after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 25%;
+    width: 50%;
+    height: 3px;
+    background: linear-gradient(to right, #390796, #6a1b9a); /* Theme color gradient */
+    border-radius: 3px;
+  }
+
+  .form-flex {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+  }
+
+  .form-left, .form-right {
+    flex: 1;
+    min-width: 250px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    font-weight: 500;
+    color: #390796; /* Theme color applied */
+    margin-bottom: 8px;
+  }
+
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus {
+    border-color: #390796; /* Theme color applied */
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(57, 7, 150, 0.2); /* Theme color with opacity */
+  }
+
+  .help-text {
+    font-size: 13px;
+    color: #6c757d;
+    margin-top: 5px;
+  }
+
+  .errorlist {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 0 0;
+    color: #dc3545;
+    font-size: 14px;
+  }
+
+  .form-group.has-error input,
+  .form-group.has-error select {
+    border-color: #dc3545;
+  }
+
+  .signup-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(to right, #390796, #6a1b9a); /* Theme color gradient */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 30px;
+    box-shadow: 0 4px 8px rgba(57, 7, 150, 0.1); /* Theme color shadow */
+  }
+
+  .signup-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(57, 7, 150, 0.15); /* Theme color shadow */
+    background: linear-gradient(to right, #2d067a, #5a1680); /* Darker theme color gradient */
+  }
+
+  .is-invalid {
+    border-color: #dc3545 !important;
+  }
+
+  .invalid-feedback {
+    color: #dc3545;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+
+  /* Custom dropdown arrow - now using theme color */
+  .form-group select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23390796' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 16px 12px;
+    padding-right: 40px;
+  }
+</style>
+
+<div class="signup-container">
+  <h2 class="signup-title">Sign Up</h2>
+  <form method="post">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger" role="alert">
+        {% for error in form.non_field_errors %}
+          {{ error }}
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="form-flex">
+      <!-- Left Side - Username, Email, Password -->
+      <div class="form-left">
+        <div class="form-group {% if form.username.errors %}has-error{% endif %}">
+          <label for="id_username">Username*</label>
+          <input type="text" name="username" id="id_username"
+                 class="form-control {% if form.username.errors %}is-invalid{% endif %}"
+                 required
+                 value="{{ form.username.value|default_if_none:'' }}">
+          {% if form.username.errors %}
+            <div class="invalid-feedback">
+              {% for error in form.username.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+          <small class="help-text">
+            Required. 150 characters or fewer. Letters, digits and @/+/-/_ only.
+          </small>
+        </div>
+
+        <div class="form-group {% if form.email.errors %}has-error{% endif %}">
+          <label for="id_email">Email address</label>
+          <input type="email" name="email" id="id_email"
+                 class="form-control {% if form.email.errors %}is-invalid{% endif %}"
+                 value="{{ form.email.value|default_if_none:'' }}">
+          {% if form.email.errors %}
+            <div class="invalid-feedback">
+              {% for error in form.email.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="form-group {% if form.password1.errors %}has-error{% endif %}">
+          <label for="id_password1">Password*</label>
+          <input type="password" name="password1" id="id_password1"
+                 class="form-control {% if form.password1.errors %}is-invalid{% endif %}"
+                 required>
+          {% if form.password1.errors %}
+            <div class="invalid-feedback">
+              {% for error in form.password1.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+          <small class="help-text">
+            <ul style="padding-left: 20px; margin-top: 5px;">
+              <li>Your password can't be too similar to your other personal information</li>
+              <li>Your password must contain at least 8 characters</li>
+              <li>Your password can't be a commonly used password</li>
+              <li>Your password can't be entirely numeric</li>
+            </ul>
+          </small>
+        </div>
+      </div>
+
+      <!-- Right Side - Password Confirmation, User Role, Gender, Signup Button -->
+      <div class="form-right">
+        <div class="form-group {% if form.password2.errors %}has-error{% endif %}">
+          <label for="id_password2">Password confirmation*</label>
+          <input type="password" name="password2" id="id_password2"
+                 class="form-control {% if form.password2.errors %}is-invalid{% endif %}"
+                 required>
+          {% if form.password2.errors %}
+            <div class="invalid-feedback">
+              {% for error in form.password2.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+          <small class="help-text">
+            Enter the same password as before, for verification.
+          </small>
+        </div>
+
+        <div class="form-group {% if form.user_role.errors %}has-error{% endif %}">
+          <label for="id_user_role">User role*</label>
+          <select name="user_role" id="id_user_role"
+                  class="form-control {% if form.user_role.errors %}is-invalid{% endif %}"
+                  required>
+            {% for value, name in form.user_role.field.choices %}
+              <option value="{{ value }}" {% if form.user_role.value == value %}selected{% endif %}>{{ name }}</option>
+            {% endfor %}
+          </select>
+          {% if form.user_role.errors %}
+            <div class="invalid-feedback">
+              {% for error in form.user_role.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="form-group {% if form.gender.errors %}has-error{% endif %}">
+          <label for="id_gender">Gender*</label>
+          <select name="gender" id="id_gender"
+                  class="form-control {% if form.gender.errors %}is-invalid{% endif %}"
+                  required>
+            <option value="">Select Gender</option>
+            <option value="Male" {% if form.gender.value == 'Male' %}selected{% endif %}>Male</option>
+            <option value="Female" {% if form.gender.value == 'Female' %}selected{% endif %}>Female</option>
+          </select>
+          {% if form.gender.errors %}
+            <div class="invalid-feedback">
+              {% for error in form.gender.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+
+        <button type="submit" class="signup-btn">Sign Up</button>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

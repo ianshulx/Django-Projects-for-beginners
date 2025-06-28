@@ -1,0 +1,537 @@
+{% extends "base/base.html" %}
+{% block title %}About Us{% endblock %}
+{% block content %}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Enhanced Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+            padding: 2rem;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            animation: pulse 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.8; }
+            100% { opacity: 1; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            opacity: 0;
+            animation: slideInUp 1s ease-out 0.3s forwards;
+        }
+
+        .hero p {
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            opacity: 0;
+            animation: slideInUp 1s ease-out 0.6s forwards;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: slideInUp 1s ease-out 0.9s forwards;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            font-weight: 600;
+            margin-top: 2rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            animation: slideInUp 1s ease-out 1.2s forwards;
+        }
+
+        .cta-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Floating particles animation */
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-opacity='0.1'%3E%3Cpolygon fill='%23ffffff' points='50 0 60 40 100 50 60 60 50 100 40 60 0 50 40 40'/%3E%3C/g%3E%3C/svg%3E") 0 0/100px 100px;
+            animation: float 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.8);
+            animation: bounce 2s infinite;
+            cursor: pointer;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* Enhanced Content Sections */
+        .content-section {
+            background: white;
+            padding: 6rem 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .content-text h3 {
+            font-size: 2.2rem;
+            color: #300796;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .content-text p {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .content-image {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(48, 7, 150, 0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .content-image:hover {
+            transform: translateY(-10px);
+        }
+
+        .content-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .content-image:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Team Section */
+        .team-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, #f8f9ff, #f0f2ff);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #300796;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .team-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(48, 7, 150, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(48, 7, 150, 0.2);
+        }
+
+        .team-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .team-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .team-card:hover .team-avatar {
+            transform: scale(1.1);
+        }
+
+        .team-card h4 {
+            font-size: 1.4rem;
+            color: #300796;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .team-role {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .team-description {
+            color: #888;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Values Section */
+        .values-section {
+            padding: 6rem 2rem;
+            background: white;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .value-card {
+            background: linear-gradient(135deg, #f8f9ff, #f0f2ff);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .value-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 20px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .value-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(48, 7, 150, 0.15);
+        }
+
+        .value-card:hover::before {
+            opacity: 1;
+        }
+
+        .value-card h4 {
+            color: #300796;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .value-card p {
+            color: #666;
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-stats {
+                gap: 2rem;
+            }
+            
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <!-- Enhanced Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>About Our Health Monitoring System</h1>
+            <p>Revolutionizing healthcare through innovative technology and patient-centered solutions that transform lives and empower medical professionals worldwide.</p>
+            
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">500+</span>
+                    <span class="stat-label">Healthcare Partners</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">1M+</span>
+                    <span class="stat-label">Patients Monitored</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">99.9%</span>
+                    <span class="stat-label">Uptime Reliability</span>
+                </div>
+            </div>
+            
+            <a href="#mission" class="cta-button">Learn More About Us</a>
+        </div>
+        
+        <div class="scroll-indicator">
+            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2L8 6h8l-4-4zM12 22l4-4H8l4 4z"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="content-section" id="mission">
+        <div class="container">
+            <div class="content-grid">
+                <div class="content-text">
+                    <h3>Our Mission</h3>
+                    <p>
+                        We are committed to transforming healthcare delivery through cutting-edge technology that empowers both patients and providers. Our mission is to make continuous health monitoring accessible, accurate, and actionable.
+                    </p>
+                    <p>
+                        Founded in 2024 by a team of healthcare professionals and technologists, we've grown from a small startup to a trusted partner for hundreds of healthcare organizations worldwide.
+                    </p>
+                </div>
+                <div class="content-image">
+                    <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Healthcare team">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Meet Our Team</h2>
+                <p>Dedicated professionals working together to improve healthcare outcomes</p>
+            </div>
+            
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-avatar">👩‍⚕️</div>
+                    <h4>Dr. Maria Mwashighadi</h4>
+                    <p class="team-role">Chief Medical Officer</p>
+                    <p class="team-description">Board-certified cardiologist with 15 years of clinical experience</p>
+                </div>
+                
+                <div class="team-card">
+                    <div class="team-avatar">👨‍💻</div>
+                    <h4>SR Omollo</h4>
+                    <p class="team-role">Chief Technology Officer</p>
+                    <p class="team-description">AI and machine learning expert with healthcare specialization</p>
+                </div>
+                
+                <div class="team-card">
+                    <div class="team-avatar">👨‍💼</div>
+                    <h4>David Wanyua</h4>
+                    <p class="team-role">Chief Executive Officer</p>
+                    <p class="team-description">Healthcare technology entrepreneur with 20+ years of experience</p>
+                </div>
+                
+                <div class="team-card">
+                    <div class="team-avatar">👩‍🔬</div>
+                    <h4>Priya Patel</h4>
+                    <p class="team-role">Head of Research</p>
+                    <p class="team-description">Biomedical engineer specializing in remote monitoring</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="values-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Core Values</h2>
+                <p>The principles that guide everything we do</p>
+            </div>
+            
+            <div class="values-grid">
+                <div class="value-card">
+                    <h4>Patient-Centered Care</h4>
+                    <p>We prioritize patient outcomes and experiences in all our technology decisions.</p>
+                </div>
+                
+                <div class="value-card">
+                    <h4>Innovation</h4>
+                    <p>We continuously push boundaries to develop groundbreaking healthcare solutions.</p>
+                </div>
+                
+                <div class="value-card">
+                    <h4>Data Security</h4>
+                    <p>We maintain the highest standards of privacy and security for all health data.</p>
+                </div>
+                
+                <div class="value-card">
+                    <h4>Collaboration</h4>
+                    <p>We work closely with healthcare providers to create solutions that truly meet their needs.</p>
+                </div>
+                
+                <div class="value-card">
+                    <h4>Accessibility</h4>
+                    <p>We believe advanced healthcare technology should be available to everyone.</p>
+                </div>
+                
+                <div class="value-card">
+                    <h4>Evidence-Based</h4>
+                    <p>All our solutions are grounded in clinical research and proven methodologies.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
