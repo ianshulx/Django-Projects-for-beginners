@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>LeetCode Helper</title>
+  <link rel="stylesheet" href="popup.css">
+  <script src="marked.min.js"></script><!--Markdown display package-->
+</head>
+
+<body>
+  <h3>Need Help with LeetCode?</h3>
+  <button id="getHelp">Get Step-by-Step Help</button>
+
+  <!-- <div id="copyContainer"> -->
+  <div id="copyContainer" style="display: none; position: relative;">
+    <button id="copyBtn" title="Copy steps">
+      Copy
+    </button>
+  </div>
+
+
+  <!-- Loader Spinner -->
+  <div id="loader" style="display: none; text-align: center;">
+    <div class="spinner"></div>
+  </div>
+
+
+  <div id="output"></div><!-- This is where the guided steps will appear -->
+
+  <script src="popup.js"></script>
+</body>
+
+</html>

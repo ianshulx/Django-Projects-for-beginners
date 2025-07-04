@@ -1,0 +1,179 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 6px;
+    padding: 20px;
+    width: 320px;
+    height: auto;
+    background: #262626;
+    color: #f0f0f0;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+h3 {
+    margin-top: 0;
+    color: #fff;
+}
+
+#getHelp {
+    background: rgba(140, 100, 0, 0.15);
+    color: #FFA726;
+    font-weight: 500;
+    font-size: 0.80rem;
+    padding: 16px 18px;
+    border: none;
+    border-radius: 12px;
+    width: 100%;
+    margin: 0 auto 15px;
+    display: block;
+    cursor: pointer;
+    transition: background 0.5s ease-in-out;
+}
+
+#getHelp:hover {
+    background: rgba(255, 162, 24, 0.15);
+    transform: scale(1.01);
+}
+
+#copyContainer {
+    position: relative;
+    height: 0;
+    margin-top: 50px;
+    margin-right: -8px;
+}
+
+#copyBtn {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #FFA726;
+    border: none;
+    border-radius: 10px;
+    width: 64px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    transition: background 0.2s ease-in-out;
+    font-size: 12px;
+}
+
+#copyBtn:hover {
+    background: rgba(157, 105, 28, 0.2);
+    transform: scale(1.01);
+}
+
+
+
+ul {
+    padding-left: 20px;
+}
+
+li {
+    margin-bottom: 5px;
+}
+
+/* Typography for rendered markdown */
+#output h1 {
+    font-size: 1.4rem;
+    margin: 1rem 0 0.5rem;
+    font-weight: bold;
+    color: #000000;
+}
+
+#output h2 {
+    font-size: 1.2rem;
+    margin: 1rem 0 0.5rem;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+#output h3 {
+    font-size: 1.05rem;
+    margin: 1rem 0 0.5rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+#output p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0.5rem 0;
+    color: #f2f2f2;
+}
+
+#output ul {
+    padding-left: 1.2rem;
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+    color: #e6e6e6;
+}
+
+#output li {
+    margin-bottom: 0.4rem;
+    line-height: 1.4;
+}
+
+/* Optional: style emphasis */
+#output em {
+    font-style: italic;
+    color: #ffd1dc;
+}
+
+#output strong {
+    font-weight: bold;
+    color: #ffffff;
+}
+
+/* For inline code */
+#output code {
+    font-family: 'Courier New', monospace;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 2px 5px;
+    border-radius: 4px;
+}
+
+/* For code blocks */
+#output pre {
+    background-color: rgba(255, 255, 255, 0.08);
+    padding: 10px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 0.9rem;
+    margin: 0.5rem 0;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+/* Loader spinner */
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    border-top: 4px solid white;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    animation: spin 1s linear infinite;
+    margin: auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
