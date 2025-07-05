@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "LeetCode Helper",
+  "version": "1.0",
+  "description": "Get AI-powered help while solving LeetCode problems",
+  "permissions": ["activeTab", "scripting", "tabs"],
+  "host_permissions": ["https://leetcode.com/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "128": "icon.png"
+    }
+  }
+}

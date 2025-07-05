@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+*.env
+.idea/  # For PyCharm/IntelliJ users
+.vscode/ # For VS Code users (if you have user-specific settings)
+*.egg-info/
+.pytest_cache/
+.DS_Store # macOS specific
+
+# Django
+db.sqlite3
+/media/
+/static_root/ # Or whatever your STATIC_ROOT is set to
+.env           # If you use a .env file for environment variables
+*.log
+local_settings.py # If you have a local settings file not meant for production
+
+# Other OS-specific files
+Thumbs.db
