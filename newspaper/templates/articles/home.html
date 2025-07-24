@@ -1,0 +1,16 @@
+{% extends "base.html" %} {% block content %} {% for article in articles %}
+<div class="mb-4 p-3 border rounded bg-light">
+  <h3 class="mb-1 fw-bold">
+    <a href="{% url 'article_details' article.pk %}">{{ article.title }}</a>
+    <small class="text-muted ms-2" style="font-size: 0.5em"
+      >{{ article.create_at }}</small
+    >
+  </h3>
+  <div class="mb-1">
+    <span class="text-secondary">by {{ article.author }}</span>
+  </div>
+  <div>{{ article.body }}</div>
+</div>
+{% empty %}
+<p>No articles available.</p>
+{% endfor %} {% endblock %}

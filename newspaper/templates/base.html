@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Newspaper</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Bootstrap CSS CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet" />
+  </head>
+  <body class="d-flex flex-column min-vh-100">
+    <!-- Header Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="{% url 'home' %}">Newspaper</a>
+        <div>
+          {% if user.is_authenticated %}
+          <a class="btn btn-outline-light ms-3" href="{% url 'add_article' %}"
+            >Add Article</a
+          >
+          <a class="btn btn-secondary ms-2" href="{% url 'password_change' %}"
+            >Change Password</a
+          >
+          <form action="{% url 'logout' %}" method="post" class="d-inline ms-2">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Logout</button>
+          </form>
+          {% else %}
+          <a class="btn btn-outline-light ms-3" href="{% url 'login' %}"
+            >Login</a
+          >
+          <a class="btn btn-primary ms-2" href="{% url 'signup' %}">Sign Up</a>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-fill container my-4">
+      {% block content %} {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-3 mt-auto">
+      &copy; {{ year|default:2025 }} Newspaper. All rights reserved.
+    </footer>
+
+    <!-- Bootstrap JS Bundle CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
