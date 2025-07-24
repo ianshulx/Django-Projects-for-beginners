@@ -1,0 +1,48 @@
+{% extends "base.html" %} {% block content %}
+<div class="p-4 border rounded bg-light">
+  <h2 class="fw-bold">
+    {{ article.title }}
+    <small class="text-muted ms-2" style="font-size: 0.9em"
+      >{{ article.create_at }}</small
+    >
+  </h2>
+  <div class="mb-2">
+    <span class="text-secondary">by {{ article.author }}</span>
+  </div>
+  <div>{{ article.body }}</div>
+  {% if article.author == user%}
+  <a href="{% url 'edit_article' article.pk %}" class="btn btn-warning mt-3"
+    >Edit Article</a
+  >
+  <a
+    href="{% url 'delete_article' article.pk %}"
+    class="btn btn-danger mt-3 ms-2"
+    >Delete Article</a
+  >
+  {%endif%}
+</div>
+
+{% comment %} Comments Section {% endcomment %}
+
+<div class="mt-5">
+  <h4>Comments</h4>
+  {% if comments %} {% for comment in comments %}
+  <div class="border rounded p-2 mb-2 bg-white">
+    <strong>{{ comment.writer }}</strong>
+    <small class="text-muted ms-2">{{ comment.date }}</small>
+    <div>{{ comment.content }}</div>
+  </div>
+  {% endfor %} {% else %}
+  <p class="text-muted">No comments yet.</p>
+  {% endif %} {% if user.is_authenticated %}
+  <form method="post" class="mt-4">
+    {% csrf_token %} {{ comment_form.as_p }}
+    <button type="submit" class="btn btn-primary">Post Comment</button>
+  </form>
+  {% else %}
+  <div class="mt-3">
+    <a href="{% url 'login' %}">Log in</a> to add a comment.
+  </div>
+  {% endif %}
+</div>
+{% endblock content %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %} {% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-sm">
+        <div class="card-header bg-danger text-white fw-bold">
+          Confirm Delete
+        </div>
+        <div class="card-body">
+          <p>
+            Are you sure you want to delete the article "<strong
+              >{{ article.title }}</strong
+            >"?
+          </p>
+          <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            <a
+              href="{% url 'article_details' article.pk %}"
+              class="btn btn-secondary ms-2"
+              >Cancel</a
+            >
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
