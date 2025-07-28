@@ -1,0 +1,11 @@
+{% extends 'layouts/base.html' %} {# -------------- Books Page --------------#}
+{% block title %}Books{% endblock %} {% block content %}
+<section class="form">
+  <h1>Add a new book</h1>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %} {{ form.as_p }}
+    <button>Add</button>
+  </form>
+  {{error}}
+</section>
+{% endblock %}

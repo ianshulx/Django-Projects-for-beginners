@@ -1,0 +1,23 @@
+{% extends "layouts/base.html" %} {# ------------- Movies Page -------------#}
+{% block title %}Movies{% endblock %} {% block content %}
+<section>
+  <h1 class="title">Movies</h1>
+  <p>
+    This is the Movies page, here you can find all the movies that we have in
+    our database. Each movie has a name, a cover image and a link to more
+    details. You can also add a new movie clicking the "Add a new movie" button.
+  </p>
+  <div class="cards-container">
+    {% for movie in movies %}
+    <div class="card">
+      <img src="{{ movie.cover.url }}" alt="{{ movie.name }}" />
+      <h2>{{ movie.name }}</h2>
+      <a href="{% url 'movies:movie_detail' movie.id %}">Details</a>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="btn-add">
+    <a href="{% url 'movies:movie_create' %}">Add a new movie</a>
+  </div>
+</section>
+{% endblock %}

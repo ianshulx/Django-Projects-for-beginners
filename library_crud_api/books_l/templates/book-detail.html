@@ -1,0 +1,17 @@
+{% extends "layouts/base.html" %} {# -------------- Book Detail --------------#}
+{% block title %}Book detail{% endblock %} {% block content %}
+<section>
+  <h1>Book detail</h1>
+  <div>
+    <h2>{{ book.name }} by {{ book.author }}</h2>
+    <p>Year: {{ book.year}}</p>
+    <img src="{{ book.cover.url }}" alt="{{ book.name }}" class="view_detail" />
+  </div>
+  <div>
+    <a href="{% url 'books:book_update' book.id %}">Edit</a>
+    <form action="{% url 'books:book_delete' book.id %}" method="POST">
+      <button>Delete</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

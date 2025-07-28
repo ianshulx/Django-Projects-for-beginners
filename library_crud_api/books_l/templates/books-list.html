@@ -1,0 +1,23 @@
+{% extends "layouts/base.html" %} {# -------------- Books Page --------------#}
+{% block title %}Books{% endblock %} {% block content %}
+<section>
+  <h1 class="title">Books</h1>
+  <p>
+    This is the Books page, here you can find all the books that we have in our
+    database. Each book has a name, a cover image and a link to more details.
+    You can also add a new book clicking the "Add a new book" button.
+  </p>
+  <div class="cards-container">
+    {% for book in books %}
+    <div class="card">
+      <img src="{{ book.cover.url }}" alt="{{ book.name }}" />
+      <h2>{{ book.name }}</h2>
+      <a href="{% url 'books:book_detail' book.id %}">Details</a>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="btn-add">
+    <a href="{% url 'books:book_create' %}">Add a new book</a>
+  </div>
+</section>
+{% endblock %}

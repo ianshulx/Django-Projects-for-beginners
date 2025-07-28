@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <title>{% block title %}Name{% endblock %}</title>
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="{% url 'home' %}">Books and Movies</a>
+      <ul>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'about' %}">About</a></li>
+        {% if user.is_authenticated %}
+        <li><a href="{% url 'books:books_list' %}">Books</a></li>
+        <li><a href="{% url 'movies:movies_list' %}">Movies</a></li>
+        {% endif %} {% if not user.is_authenticated %}
+        <li><a href="{% url 'register_view' %}">Signup</a></li>
+        <li><a href="{% url 'login_view' %}">Login</a></li>
+        {% else %}
+        <li><a href="{% url 'logout_view' %}">Logout</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+    <main class="container">{% block content %}{% endblock %}</main>
+  </body>
+</html>

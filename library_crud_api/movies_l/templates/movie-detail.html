@@ -1,0 +1,17 @@
+{% extends 'layouts/base.html' %} {# -------------- Movies Page --------------#}
+{% block title %}Movie detail{% endblock %} {% block content %}
+<section class="view_detail">
+  <h1>Movie detail</h1>
+  <div>
+    <h2>{{ movie.title }}</h2>
+    <p>Year: {{ movie.year}}-- Genre: {{ movie.genre}}</p>
+    <img src="{{ movie.cover.url }}" alt="{{ movie.title }}" />
+  </div>
+  <div>
+    <a href="{% url 'movies:movie_update' movie.id %}">Edit</a>
+    <form action="{% url 'movies:movie_delete' movie.id %}" method="POST">
+      <button>Delete</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

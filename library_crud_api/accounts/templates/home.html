@@ -1,0 +1,55 @@
+{% extends 'layouts/base.html' %} {# -------------- Home Page --------------#}
+{% block title %}Home{% endblock %} {% block content %}
+<h1>Home</h1>
+
+<section>
+  <h2>Welcome to the Home Page</h2>
+  <p>This is the Home Page of the application.</p>
+</section>
+
+<section>
+  <h2>About the application</h2>
+  <p>
+    This is a simple application that shows the CRUD operations, it is a web
+    application that allows you to create, read, update and delete books and
+    movies.
+  </p>
+</section>
+
+<section>
+  <h2>Functionalities</h2>
+  <ul class="list">
+    <li>Create books and movies</li>
+    <li>Read books and movies</li>
+    <li>Update books and movies</li>
+    <li>Delete books and movies</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Technologies used</h2>
+  <ul class="list">
+    <li>Python</li>
+    <li>Django</li>
+    <li>HTML</li>
+    <li>CSS</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Contact information</h2>
+  <p>Email: info@example.com</p>
+  <p>Phone: 123456789</p>
+</section>
+
+<section>
+  <h2>Links</h2>
+  <ul>
+    <li><a href="{% url 'about' %}">About</a></li>
+    <li><a href="{% url 'movies:movies_list' %}">Movies</a></li>
+    <li><a href="{% url 'books:books_list' %}">Books</a></li>
+    <li><a href="{% url 'login_view' %}">Login</a></li>
+    <li><a href="{% url 'register_view' %}">Signup</a></li>
+  </ul>
+</section>
+{% endblock %}

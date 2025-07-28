@@ -1,0 +1,10 @@
+{% extends 'layouts/base.html' %} {# -------------- Login Page --------------#}
+{% block title %}Login{% endblock %} {% block content %}
+<section>
+  <h1>Login</h1>
+  <form method="post">
+    {% csrf_token %} {{ form.as_p }}
+    <button>Login</button>
+  </form>
+</section>
+{% endblock %}

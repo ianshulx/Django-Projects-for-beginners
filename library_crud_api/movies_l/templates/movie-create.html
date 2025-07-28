@@ -1,0 +1,11 @@
+{% extends 'layouts/base.html' %} {# -------------- Movies Page --------------#}
+{% block title %}New Movie{% endblock %} {% block content %}
+<section>
+  <h1>Add a new movie</h1>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %} {{ form.as_p }}
+    <button>Add</button>
+  </form>
+  {{error}}
+</section>
+{% endblock %}
