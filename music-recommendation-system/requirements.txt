@@ -1,0 +1,46 @@
+# Core Django Framework
+Django==4.2.16
+
+# Database
+mysql-connector-python==9.0.0
+
+# Machine Learning & Data Processing
+numpy==1.26.4
+pandas==2.2.2
+scikit-learn==1.5.1
+
+# Web Requests & API Integration
+requests==2.32.3
+
+# Streamlit Web App
+streamlit==1.37.0
+
+# Data Visualization (Optional)
+matplotlib==3.9.2
+seaborn==0.13.2
+
+# Development Dependencies
+pillow==10.4.0
+
+# Jupyter Notebook Support
+jupyter==1.1.1
+ipykernel==6.29.5
+
+# Code Quality & Testing
+pytest==8.3.2
+pytest-django==4.8.0
+flake8==7.1.1
+black==24.8.0
+
+# Security & Environment Management
+python-decouple==3.8
+django-cors-headers==4.4.0
+
+# Development Tools
+django-debug-toolbar==4.4.6
+django-extensions==3.2.3
+
+# Production Deployment
+gunicorn==22.0.0
+whitenoise==6.7.0
+psycopg2-binary==2.9.9
