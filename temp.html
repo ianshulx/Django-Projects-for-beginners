@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Django Projects for Beginners</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+  <style>
+    nav {
+      background-color: #000000;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo img {
+      margin-right: 10px;
+      /* Add spacing between the logo and text */
+    }
+
+    .github-icon img {
+      cursor: pointer;
+      /* Add a pointer cursor to the GitHub icon */
+    }
+
+
+    /* Aesthetic background */
+    body {
+      background: linear-gradient(to bottom, #7117ea, #ea6060, #9544ff);
+      color: white;
+    }
+
+    .navbar {
+
+      margin: 70px 50px 50px 50px;
+      border-radius: 20px;
+      background-color: #000000;
+    }
+
+    nav {
+      background-color: rgba(0, 0, 0, 0.408);
+
+      color: rgba(255, 255, 255, 0.399);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo img {
+      margin-right: 10px;
+      /* Add spacing between the logo and text */
+    }
+
+    .github-icon img {
+      cursor: pointer;
+      /* Add a pointer cursor to the GitHub icon */
+    }
+
+    /* Styling for the section with background image */
+    .hero-section {
+      background-image: url('your-background-image.jpg');
+      /* Add your image URL here */
+      background-size: cover;
+      background-position: center;
+      padding: 30px 0;
+      text-align: center;
+      color: white;
+    }
+
+    .hero-text {
+      color: #000000;
+      font-size: 3rem;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+
+
+    #contributors-box {
+      background-color: rgba(255, 255, 255, 0.2);
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      margin: 0 auto;
+
+    }
+
+    #contributors-list {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+
+    }
+
+    #contributors-list li {
+      flex: 1 1 calc(20% - 40px);
+      text-align: center;
+      margin: 20px;
+    }
+
+    #contributors-list li a {
+      text-decoration: none;
+      color: black;
+      font-size: 20px;
+    }
+
+    #contributors-list li img {
+      border-radius: 50%;
+      object-fit: cover;
+      border: 8px solid rgb(51, 192, 192);
+
+    }
+
+    /* Responsive layout adjustments */
+    @media (max-width: 1200px) {
+      #contributors-list li {
+        flex: 1 1 calc(25% - 40px);
+        /* 4 cards per row for medium screens */
+      }
+    }
+
+    @media (max-width: 768px) {
+      #contributors-list li {
+        flex: 1 1 calc(33.33% - 40px);
+        /* 3 cards per row for smaller screens */
+      }
+    }
+
+    @media (max-width: 480px) {
+      #contributors-list li {
+        flex: 1 1 calc(50% - 40px);
+        /* 2 cards per row for mobile screens */
+      }
+    }
+
+    .custom-navbar {
+      height: 200px;
+      padding: 10px 20px;
+      /* Adjust padding */
+      /* padding-top: 20px; Adjust padding to center content vertically */
+      padding-bottom: 20px;
+      background-color: #343a40;
+      /* Dark background color */
+    }
+
+
+
+    .navbar-brand-content {
+
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      /* Space between logo/title and badges */
+    }
+
+    .github-badges a {
+
+      margin-right: 7px;
+
+      /* Space between badges */
+    }
+
+    .github-badges img {
+      height: 25px;
+    }
+
+    .card {
+      height: 250px;
+      width: 200px;
+      border-radius: 50px;
+      overflow: hidden;
+      background-color: #f3e5f5;
+    }
+
+    .card-title {
+      background-color: #ce93d8;
+      padding: 10px;
+      border-radius: 20px;
+
+    }
+
+    .card-title a {
+      text-decoration: none;
+      color: #000000;
+    }
+
+    .card-body {
+      padding: 15px;
+    }
+
+    .image {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .card-img {
+      width: 100px;
+      /* Adjust size as needed */
+      height: 100px;
+      /* Keep the same height for a circle */
+      border-radius: 50%;
+      /* Makes the image circular */
+      object-fit: cover;
+      /* Ensures the image covers the entire circle */
+      border: 2px solid white;
+      /* Optional: Add border for better visibility */
+    }
+
+    .github-link {
+      font-size: larger;
+      position: absolute;
+      top: 10px;
+      right: 30px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar start -->
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark custom-navbar">
+    <div class="container">
+      <!-- Box containing Logo, Title, and GitHub Badges -->
+      <div class="navbar-content-box">
+        <!-- Logo and Title -->
+        <div class="navbar-brand-content">
+          <a class="navbar-brand" href="#">
+            <img src="./django.png" height="50" alt="Logo" class="mr-2">
+            Django Projects for Beginners
+          </a>
+        </div>
+        <!-- GitHub Badges below the title -->
+        <div class="github-badges">
+          <a href="https://github.com/ianshulx/Django-Projects-for-beginners/stargazers">
+            <img src="https://img.shields.io/github/stars/ianshulx/Django-Projects-for-beginners?style=flat-square"
+              alt="GitHub stars">
+          </a>
+          <a href="https://github.com/ianshulx/Django-Projects-for-beginners/network">
+            <img src="https://img.shields.io/github/forks/ianshulx/Django-Projects-for-beginners?style=flat-square"
+              alt="GitHub forks">
+          </a>
+          <a href="https://github.com/ianshulx/Django-Projects-for-beginners/graphs/contributors">
+            <img
+              src="https://img.shields.io/github/contributors/ianshulx/Django-Projects-for-beginners?style=flat-square"
+              alt="GitHub contributors">
+          </a>
+          <a href="https://github.com/ianshulx/Django-Projects-for-beginners/issues">
+            <img src="https://img.shields.io/github/issues/ianshulx/Django-Projects-for-beginners?style=flat-square"
+              alt="GitHub issues">
+          </a>
+          <a href="https://github.com/ianshulx/Django-Projects-for-beginners/pulls">
+            <img src="https://img.shields.io/github/issues-pr/ianshulx/Django-Projects-for-beginners?style=flat-square"
+              alt="GitHub pull requests">
+          </a>
+          <a href="https://github.com/ianshulx/Django-Projects-for-beginners/watchers">
+            <img src="https://img.shields.io/github/watchers/ianshulx/Django-Projects-for-beginners?style=flat-square"
+              alt="GitHub watchers">
+          </a>
+        </div>
+      </div>
+      <!-- Navbar toggler button for mobile -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Navbar links -->
+      <div class="collapse github-link navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Github</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://github.com/ianshulx/Django-Projects-for-beginners" target="_blank">
+              <i class="bi bi-github"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+
+<section id="projects" class="projects">
+  <h2>My Django Projects</h2>
+  <div class="projects-grid">
+
+    <!-- Django Web Crawler -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?web,crawler" alt="Django Web Crawler">
+      <h3>Django Web Crawler</h3>
+      <a href="./projects/django-web-crawler/index.html">View Project</a>
+    </div>
+
+    <!-- Finance Tracker -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?finance,money" alt="Finance Tracker">
+      <h3>Finance Tracker</h3>
+      <a href="./projects/finance-tracker/index.html">View Project</a>
+    </div>
+
+    <!-- Student Management System -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?students,school" alt="Student Management System">
+      <h3>Student Management System</h3>
+      <a href="./projects/student-management-system/index.html">View Project</a>
+    </div>
+
+    <!-- User Authentication System -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?security,login" alt="User Authentication System">
+      <h3>User Authentication System</h3>
+      <a href="./projects/user-authentication-system/index.html">View Project</a>
+    </div>
+
+    <!-- Weather Application Django -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?weather,forecast" alt="Weather Application Django">
+      <h3>Weather Application</h3>
+      <a href="./projects/weather-app-django/index.html">View Project</a>
+    </div>
+
+    <!-- Django Banking App -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?banking,finance" alt="Django Banking App">
+      <h3>Django Banking App</h3>
+      <a href="./projects/django-banking-app/index.html">View Project</a>
+    </div>
+
+    <!-- Django News App -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?news,media" alt="Django News App">
+      <h3>Django News App</h3>
+      <a href="./projects/django-news-app/index.html">View Project</a>
+    </div>
+
+    <!-- Django Poll App -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?poll,vote" alt="Django Poll App">
+      <h3>Django Poll App</h3>
+      <a href="./projects/django-poll-app/index.html">View Project</a>
+    </div>
+
+    <!-- Django Blog App -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?blog,writing" alt="Django Blog App">
+      <h3>Django Blog App</h3>
+      <a href="./projects/django-blog-app/index.html">View Project</a>
+    </div>
+
+    <!-- Django Todo -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?todo,list" alt="Django Todo">
+      <h3>Django Todo</h3>
+      <a href="./projects/django-todo/index.html">View Project</a>
+    </div>
+
+    <!-- Email Project -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?email,communication" alt="Email Project">
+      <h3>Email Project</h3>
+      <a href="./projects/email-project/index.html">View Project</a>
+    </div>
+
+    <!-- Library Management System -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?library,books" alt="Library Management System">
+      <h3>Library Management System</h3>
+      <a href="./projects/library-management-system-master/index.html">View Project</a>
+    </div>
+
+    <!-- Facebook Clone -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?social,network" alt="Facebook Clone">
+      <h3>Facebook Clone</h3>
+      <a href="./projects/facebook_clone/index.html">View Project</a>
+    </div>
+
+    <!-- Django + PayPal Online Payment -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?paypal,payment" alt="Django + PayPal Online Payment">
+      <h3>Django + PayPal Online Payment</h3>
+      <a href="./projects/django-paypal-online-payment/index.html">View Project</a>
+    </div>
+
+    <!-- django Quiz Form -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?quiz,questions" alt="Django Quiz Form">
+      <h3>Django Quiz Form</h3>
+      <a href="./projects/django-quiz-form/index.html">View Project</a>
+    </div>
+
+    <!-- django-leetcode-extension -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?code,leetcode" alt="Django LeetCode Extension">
+      <h3>Django LeetCode Extension</h3>
+      <a href="./projects/django-leetcode-extension/index.html">View Project</a>
+    </div>
+
+    <!-- Django Social Media App -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?socialmedia,app" alt="Django Social Media App">
+      <h3>Django Social Media App</h3>
+      <a href="./projects/django-socialmedia-app/index.html">View Project</a>
+    </div>
+
+    <!-- Ecommerce Project -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?ecommerce,shopping" alt="Ecommerce Project">
+      <h3>Ecommerce Project</h3>
+      <a href="./projects/ecommerce_project/index.html">View Project</a>
+    </div>
+
+    <!-- eHOSPITAL -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?hospital,health" alt="eHOSPITAL">
+      <h3>eHOSPITAL</h3>
+      <a href="./projects/ehospital/index.html">View Project</a>
+    </div>
+
+    <!-- event_manager -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?event,calendar" alt="Event Manager">
+      <h3>Event Manager</h3>
+      <a href="./projects/event_manager/index.html">View Project</a>
+    </div>
+
+    <!-- HostelAllocation -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?hostel,rooms" alt="Hostel Allocation">
+      <h3>Hostel Allocation</h3>
+      <a href="./projects/hostelallocation/index.html">View Project</a>
+    </div>
+
+    <!-- Movie Project -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?movies,cinema" alt="Movie Project">
+      <h3>Movie Project</h3>
+      <a href="./projects/movie_project/index.html">View Project</a>
+    </div>
+
+    <!-- Music Recommendation System -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?music,playlist" alt="Music Recommendation System">
+      <h3>Music Recommendation System</h3>
+      <a href="./projects/music-recommendation-system/index.html">View Project</a>
+    </div>
+
+    <!-- Newspaper -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?newspaper,articles" alt="Newspaper">
+      <h3>Newspaper</h3>
+      <a href="./projects/newspaper/index.html">View Project</a>
+    </div>
+
+    <!-- Text to Speech -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?text,speech" alt="Text to Speech">
+      <h3>Text to Speech</h3>
+      <a href="./projects/text_to_speech/index.html">View Project</a>
+    </div>
+
+    <!-- To-Do App -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?todo,task" alt="To-Do App">
+      <h3>To-Do App</h3>
+      <a href="./projects/to-do_app/index.html">View Project</a>
+    </div>
+
+    <!-- Todo Project -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?todo,notes" alt="Todo Project">
+      <h3>Todo Project</h3>
+      <a href="./projects/todo_project/index.html">View Project</a>
+    </div>
+
+    <!-- URL Shortener -->
+    <div class="project-card">
+      <img src="https://source.unsplash.com/400x250/?shortener,url" alt="URL Shortener">
+      <h3>URL Shortener</h3>
+      <a href="./projects/url-shortener/index.html">View Project</a>
+    </div>
+
+  </div>
+</section>
+
+
+  <section class="text-center">
+    <section class="text-center" style="padding: 20px;">
+      <h1 class="hero-text">Our Contributors</h1>
+      <div class="" id="contributors-box">
+        <ul id="contributors-list">
+          <!-- Contributors will be displayed here -->
+        </ul>
+      </div>
+    </section>
+  </section>
+
+  <!-- Footer -->
+
+  <footer class="bg-dark text-light text-center py-3">
+    <div class="container">
+      <p>&copy; 2023 <a href="https://hacktoberfest.com/">HacktoberFest</a></p>
+      <a href="https://github.com/ianshulx" class="text-light" target="_blank">
+        <i class="bi bi-github"></i> GitHub
+      </a>
+      <p></p>
+      <p>This repository is licensed under the MIT license. See the <a
+          href="https://github.com/ianshulx/Django-Projects-for-beginners/blob/main/LICENSE">license.</a> file for more
+        information.</p>
+    </div>
+  </footer>
+  <script>
+    // Replace with your GitHub repository URL
+    const repoUrl = 'https://api.github.com/repos/ianshulx/Django-Projects-for-beginners/contributors';
+
+    // Fetch contributors data from GitHub API
+    fetch(repoUrl)
+      .then(response => response.json())
+      .then(data => {
+        const contributorsList = document.getElementById('contributors-list');
+
+        // Loop through the contributors and create list items
+        data.forEach(contributor => {
+          const listItem = document.createElement('li');
+          listItem.innerHTML = `
+                        <a href="${contributor.html_url}" target="_blank">
+                            <img src="${contributor.avatar_url}" alt="${contributor.login}" width="100" height="100">
+                            <p>${contributor.login}</p>
+                        </a>
+                    `;
+          contributorsList.appendChild(listItem);
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+
+</html>
