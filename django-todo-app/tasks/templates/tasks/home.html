@@ -1,0 +1,24 @@
+{% extends "tasks/base.html" %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 2rem auto; padding: 2rem; border-radius: 1rem; background: #f9f9f9; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center;">
+
+    <h1 style="color: #4CAF50; margin-bottom: 1rem;">Welcome, {{ user.username }}!</h1>
+
+    {% if user.is_authenticated %}
+        <p style="font-size: 1.1rem; color: #333;">You are successfully logged in. 🎉</p>
+        
+        <div style="margin-top: 1.5rem;">
+            <a href="{% url 'task_list' %}" style="display:inline-block; margin: .5rem; padding: .75rem 1.5rem; background-color: #4CAF50; color: white; border-radius: .5rem; text-decoration: none; font-weight: bold;">Go to My Tasks</a>
+            <form action="{% url 'logout' %}" method="post" style="display:inline-block; margin: .5rem;">
+                {% csrf_token %}
+                <button type="submit" style="padding: .75rem 1.5rem; background-color: #f44336; color: white; border: none; border-radius: .5rem; font-weight: bold; cursor: pointer;">Logout</button>
+            </form>
+        </div>
+
+    {% else %}
+        <p style="font-size: 1.1rem; color: #555;">Please <a href="{% url 'login' %}" style="color:#4CAF50; text-decoration: underline;">login</a> or <a href="{% url 'signup' %}" style="color:#4CAF50; text-decoration: underline;">signup</a> to manage your tasks.</p>
+    {% endif %}
+
+</div>
+{% endblock content %}

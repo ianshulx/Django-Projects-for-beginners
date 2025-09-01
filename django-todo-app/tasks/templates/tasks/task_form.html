@@ -1,0 +1,63 @@
+
+{% extends "tasks/base.html" %}
+
+
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">
+            {% if form.instance.pk %} Edit Task {% else %} Add Task {% endif %}
+        </h4>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="id_title" class="form-label">Title</label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <div class="text-danger small">{{ form.title.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label for="id_description" class="form-label">Description</label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <div class="text-danger small">{{ form.description.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-check mb-3">
+                {{ form.is_completed }}
+                <label for="id_is_completed" class="form-check-label">Completed</label>
+                {% if form.is_completed.errors %}
+                    <div class="text-danger small">{{ form.is_completed.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label for="id_priority" class="form-label">Priority</label>
+                {{ form.priority }}
+                {% if form.priority.errors %}
+                    <div class="text-danger small">{{ form.priority.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label for="id_due_date" class="form-label">Due Date</label>
+                {{ form.due_date }}
+                {% if form.due_date.errors %}
+                    <div class="text-danger small">{{ form.due_date.errors }}</div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-success">
+                {% if form.instance.pk %} Update {% else %} Save {% endif %}
+            </button>
+            <a href="{% url 'task_list' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock content %}
