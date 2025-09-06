@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="mx-auto col-md-8 col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h3 class="card-title mb-4">📝 {{ title|default:"Create / Edit Post" }}</h3>
+
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          {% for field in form %}
+            <div class="mb-3">
+              <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+              {{ field }} 
+              {% if field.help_text %}
+                <div class="form-text">{{ field.help_text }}</div>
+              {% endif %}
+              {% for error in field.errors %}
+                <div class="text-danger small">{{ error }}</div>
+              {% endfor %}
+            </div>
+          {% endfor %}
+
+          <button type="submit" class="btn btn-primary">💾 Save</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
