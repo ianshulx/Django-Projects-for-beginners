@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+  {% if post %}
+    <div class="card shadow-sm">
+      {% if post.image %}
+        <img src="{{ post.image.url }}" class="card-img-top img-fluid" style="object-fit: cover; max-height: 400px;">
+      {% endif %}
+      <div class="card-body">
+        <h2 class="card-title">{{ post.post_header }}</h2>
+        <p class="text-muted">{{ post.post_date }} | {{ post.post_time|time:"H:i" }}</p>
+        <p class="card-text">{{ post.post_text|linebreaksbr }}</p>
+
+        <!-- Лайк форма -->
+        <form action="{% url 'blog:like_post' post.id %}" class="d-flex flex-wrap align-items-center gap-2 mt-3">
+          {% csrf_token %}
+          {% if user in post.likes.all %}
+            <button type="submit" class="btn btn-sm btn-outline-danger">
+              💔 Remove Like
+            </button>
+          {% else %}
+            <button type="submit" class="btn btn-sm btn-outline-primary">
+              ❤️ Like
+            </button>
+          {% endif %}
+          <span class="badge bg-secondary">{{ post.get_like_count }} Likes</span>
+        </form>
+
+        <!-- Кнопки управления постом -->
+        {% if user == post.author or user.is_superuser %}
+          <div class="d-flex flex-wrap gap-2 mt-4">
+            <a href="{% url 'blog:update_post' post.id %}" class="btn btn-sm btn-outline-warning">Update</a>
+            <form action="{% url 'blog:delete_post' post.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+            </form>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  {% else %}
+    <div class="alert alert-warning" role="alert">
+      Post not found.
+    </div>
+  {% endif %}
+</div>
+{% endblock content %}
