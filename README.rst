@@ -76,3 +76,35 @@ Steps to Contribute in repository:
    :target: https://www.djangoproject.com/
     :alt: Django
 
+* This is my ever first contribution to open source.
+
+DJANGO INSTALLATION AND STEP BY STEP GUIDE.
+
+Installation of Python.
+.. Python. https://www.python.org/ftp/python/3.13.7/python-3.13.7-amd64.exe
+Go through the Instructions.
+
+Create a Virtual environment.
+
+python-m venv venv: For windows
+python3 -m venv venv: For macos
+
+Start your virtual environment.
+
+*venv\Scripts\activate: For Windos
+*venv/bin/activate: For macos
+
+*Install Django
+pip install django
+
+Create your Django project
+django-admin startproject myprojejct
+
+Change directory
+cd myprojejct
+
+Then Migrate.
+python manage.py migrate
+
+start The Server.
+python manage.py runserver 
