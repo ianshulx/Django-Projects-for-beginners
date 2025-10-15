@@ -75,4 +75,5 @@ Steps to Contribute in repository:
 .. |Django| image:: https://img.shields.io/badge/Python-Django-green
    :target: https://www.djangoproject.com/
     :alt: Django
+* This is my first code contribution to Django-Projects-for-beginners.
 
