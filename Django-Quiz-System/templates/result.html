@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz Result</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="result">
+            <h1>🎉 Quiz Completed!</h1>
+            <h2>{{ quiz.title }}</h2>
+            
+            <div class="score">
+                <p>Your Score:</p>
+                <h1>{{ score }} / {{ total }}</h1>
+                <p class="percentage">{{ score|floatformat:0 }}/{{ total|floatformat:0 }} = {% widthratio score total 100 %}%</p>
+            </div>
+            
+            <a href="{% url 'home' %}" class="btn">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz System</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Online Quiz System</h1>
+        
+        {% if quizzes %}
+            <div class="quiz-list">
+                {% for quiz in quizzes %}
+                    <div class="quiz-card">
+                        <h2>{{ quiz.title }}</h2>
+                        <p>{{ quiz.description }}</p>
+                        <a href="{% url 'quiz' quiz.id %}" class="btn">Take Quiz</a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="no-quiz">No quizzes available. Create one in admin panel!</p>
+        {% endif %}
+    </div>
+</body>
+</html>

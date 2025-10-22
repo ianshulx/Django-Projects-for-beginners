@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ quiz.title }}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>{{ quiz.title }}</h1>
+        <p>{{ quiz.description }}</p>
+        
+        <form method="post">
+            {% csrf_token %}
+            {% for question in quiz.questions.all %}
+                <div class="question">
+                    <h3>{{ forloop.counter }}. {{ question.text }}</h3>
+                    {% for choice in question.choices.all %}
+                        <label class="choice">
+                            <input type="radio" name="question_{{ question.id }}" value="{{ choice.id }}" required>
+                            {{ choice.text }}
+                        </label>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            
+            <button type="submit" class="btn">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
