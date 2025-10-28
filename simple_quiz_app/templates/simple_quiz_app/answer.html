@@ -1,0 +1,17 @@
+{% load dict_extras %}
+<h1>Quiz Results</h1>
+<p>Your score: <strong>{{ score }}/{{ total }}</strong></p>
+
+<h3>Review:</h3>
+<ol>
+  {% for key, value in answers.items %}
+  <li>
+    <strong>Question {{ forloop.counter }}:</strong><br />
+    Your answer: {{ value|default:"No answer" }}<br />
+    Correct answer: {{ correct_answers|get_item:key }}
+  </li>
+  <br />
+  {% endfor %}
+</ol>
+
+<a href="{% url 'user_request' %}">Try Again</a>
