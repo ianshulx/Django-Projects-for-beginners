@@ -1,0 +1,86 @@
+<h1>Computer Science Fundamentals Quiz</h1>
+<p>Answer all questions carefully.</p>
+
+<form method="POST" action="{% url 'submit_form' %}">
+  {% csrf_token %}
+
+  <h3>1. What does CPU stand for?</h3>
+  <input type="radio" name="q1" value="Central Process Unit" /> Central Process
+  Unit<br />
+  <input type="radio" name="q1" value="Central Processing Unit" /> Central
+  Processing Unit<br />
+  <input type="radio" name="q1" value="Computer Personal Unit" /> Computer
+  Personal Unit<br />
+  <input type="radio" name="q1" value="Central Peripheral Unit" /> Central
+  Peripheral Unit<br /><br />
+
+  <h3>2. Which of the following is a volatile memory?</h3>
+  <input type="radio" name="q2" value="ROM" /> ROM<br />
+  <input type="radio" name="q2" value="RAM" /> RAM<br />
+  <input type="radio" name="q2" value="Hard Disk" /> Hard Disk<br />
+  <input type="radio" name="q2" value="CD-ROM" /> CD-ROM<br /><br />
+
+  <h3>3. Which data structure uses LIFO (Last In First Out)?</h3>
+  <input type="radio" name="q3" value="Queue" /> Queue<br />
+  <input type="radio" name="q3" value="Stack" /> Stack<br />
+  <input type="radio" name="q3" value="Linked List" /> Linked List<br />
+  <input type="radio" name="q3" value="Tree" /> Tree<br /><br />
+
+  <h3>4. What is the time complexity of Binary Search?</h3>
+  <input type="radio" name="q4" value="O(n)" /> O(n)<br />
+  <input type="radio" name="q4" value="O(log n)" /> O(log n)<br />
+  <input type="radio" name="q4" value="O(n^2)" /> O(n²)<br />
+  <input type="radio" name="q4" value="O(1)" /> O(1)<br /><br />
+
+  <h3>5. Which layer in the OSI model is responsible for routing?</h3>
+  <input type="radio" name="q5" value="Transport Layer" /> Transport Layer<br />
+  <input type="radio" name="q5" value="Network Layer" /> Network Layer<br />
+  <input type="radio" name="q5" value="Data Link Layer" /> Data Link Layer<br />
+  <input type="radio" name="q5" value="Physical Layer" /> Physical Layer<br /><br />
+
+  <h3>6. Which of the following is not a programming language?</h3>
+  <input type="radio" name="q6" value="Python" /> Python<br />
+  <input type="radio" name="q6" value="Java" /> Java<br />
+  <input type="radio" name="q6" value="HTML" /> HTML<br />
+  <input type="radio" name="q6" value="C++" /> C++<br /><br />
+
+  <h3>7. What does SQL stand for?</h3>
+  <input type="radio" name="q7" value="Structured Query Language" /> Structured
+  Query Language<br />
+  <input type="radio" name="q7" value="Sequential Query Language" /> Sequential
+  Query Language<br />
+  <input type="radio" name="q7" value="Structured Question Language" />
+  Structured Question Language<br />
+  <input type="radio" name="q7" value="Stylish Query Logic" /> Stylish Query
+  Logic<br /><br />
+
+  <h3>
+    8. Which of the following sorting algorithms is the fastest on average?
+  </h3>
+  <input type="radio" name="q8" value="Bubble Sort" /> Bubble Sort<br />
+  <input type="radio" name="q8" value="Insertion Sort" /> Insertion Sort<br />
+  <input type="radio" name="q8" value="Quick Sort" /> Quick Sort<br />
+  <input type="radio" name="q8" value="Selection Sort" /> Selection Sort<br /><br />
+
+  <h3>9. What is the smallest unit of data in a computer?</h3>
+  <input type="radio" name="q9" value="Byte" /> Byte<br />
+  <input type="radio" name="q9" value="Bit" /> Bit<br />
+  <input type="radio" name="q9" value="Nibble" /> Nibble<br />
+  <input type="radio" name="q9" value="Word" /> Word<br /><br />
+
+  <h3>10. Which of the following best describes an operating system?</h3>
+  <input
+    type="radio"
+    name="q10"
+    value="Software that manages computer hardware"
+  />
+  Software that manages computer hardware<br />
+  <input type="radio" name="q10" value="Software that compiles programs" />
+  Software that compiles programs<br />
+  <input type="radio" name="q10" value="Hardware device driver" /> Hardware
+  device driver<br />
+  <input type="radio" name="q10" value="Programming environment" /> Programming
+  environment<br /><br />
+
+  <button type="submit">Submit</button>
+</form>
