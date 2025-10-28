@@ -1,0 +1,23 @@
+.env
+
+.vscode
+
+gps_env
+
+env
+
+.pytest_cache
+.python
+__pycache__
+
+mayank
+*.pyc
+*.pyo
+*.pyd
+*.pyw
+*.pyz
+*.pywz
+*.pyc
+
+# C extensions
+*.so

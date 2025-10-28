@@ -1,0 +1,75 @@
+{% load static %}
+<!-- trip_form.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Trip</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Create a Trip</h2>
+        <form method="post" class="needs-validation" novalidate>
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_starting_point">Starting Point</label>
+                {{ form.starting_point }}
+                <div class="invalid-feedback">
+                    Please provide a valid starting point.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="id_ending_point">Ending Point</label>
+                {{ form.ending_point }}
+                <div class="invalid-feedback">
+                    Please provide a valid ending point.
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="id_vehicle_number">Vehicle Number</label>
+                {{ form.vehicle_number }}
+                <div class="invalid-feedback">
+                    Please select a valid vehicle number.
+                </div>
+            </div>
+            <!-- Optional fields -->
+            <div class="form-group">
+                <label for="id_total_km">Total Kilometers</label>
+                {{ form.total_km }}
+            </div>
+            <div class="form-group">
+                <label for="id_total_amount">Total Amount</label>
+                {{ form.total_amount }}
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <!-- Include Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Form validation script -->
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                var form = document.getElementsByClassName('needs-validation')[0];
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            }, false);
+        })();
+    </script>
+</body>
+</html>
