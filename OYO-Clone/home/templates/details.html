@@ -1,0 +1,38 @@
+{% extends "utils/base.html" %}
+{% block start %}
+    <div class="container mt-5">
+<div class="card-body">
+    <h5 class="card-title">{{ hotel.name}}</h5><hr>
+    <p class="card-text">₹<s>{{ hotel.hotel_price }}</s> ₹{{ hotel.hotel_offer_price }}</p><hr>
+    <p class="card-text">{{ hotel.hotel_location }}</p>
+      {% for amenity in hotel.amenities.all %}
+      <span class="badge text-bg-primary">{{ amenity.name }}</span>
+          {% endfor %}
+    <p class="mt-3">{{ hotel.description | safe }}</p>
+<div class="row">
+    {% for image in hotel.images.all %}
+        <div class="col-2">
+            <img src="{{ image.image.url }}" class="img-fluid" alt="..." style="height: 200px">
+        </div>
+    {% endfor %}
+</div>
+{% if user.is_authenticated %}
+    <form method="POST" class="mt-3">
+  {% csrf_token %}
+  <div class="mb-3">
+    <label for="checkIn" class="form-label">Check In Date</label>
+    <input type="date" name="check_in" class="form-control" id="checkIn" required>
+  </div>
+  <div class="mb-3">
+    <label for="checkOut" class="form-label">Check Out Date</label>
+    <input type="date" name="check_out" class="form-control" id="checkOut" required>
+  </div>
+  <button type="submit" class="btn btn-success mt-4">Book Now</button>
+</form>
+
+{% else %}
+<a class="btn btn-danger mt-4" href="{% url 'user-login' %}">Login</a>
+{% endif %}
+  </div>
+    </div>
+{% endblock %}

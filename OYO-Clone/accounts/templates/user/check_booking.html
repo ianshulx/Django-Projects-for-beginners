@@ -1,0 +1,34 @@
+{% extends 'utils/base.html' %}
+
+{% block start %}
+<div class="container mt-5">
+  <h1>Your Bookings</h1>
+  <hr>
+  {% if bookings %}
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Hotel Name</th>
+          <th>Check In</th>
+          <th>Check Out</th>
+          <th>Amount</th>
+          <th>Location</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for booking in bookings %}
+        <tr>
+          <td>{{ booking.hotel.name }}</td>
+          <td>{{ booking.booking_start_date }}</td>
+          <td>{{ booking.booking_end_date }}</td>
+          <td>{{ booking.booking_price }}</td>
+          <td>{{ booking.hotel.hotel_location }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>You currently have no bookings.</p>
+  {% endif %}
+</div>
+{% endblock %}

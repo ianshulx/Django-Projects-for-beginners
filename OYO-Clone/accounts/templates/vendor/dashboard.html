@@ -1,0 +1,30 @@
+{% extends "utils/vendor_base.html" %}
+{% block start %}
+<div class="container mt-5 text-center">
+  <a href="{% url 'add_hotel' %}" class="btn btn-success">Add Hotels</a>
+</div>
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    {% for hotel in hotels %}
+      <div class="col-md-4 mb-4">
+        <div class="card shadow h-100">
+          <img src="{{ hotel.images.first.image.url }}"
+               class="card-img-top" alt="{{ hotel.name }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ hotel.name }}</h5>
+            <p class="card-text">{{ hotel.description }}</p>
+            {% for amenity in hotel.amenities.all %}
+              <span class="badge text-bg-primary">{{ amenity.name }}</span>
+            {% endfor %}
+          </div>
+          <div class="card-footer d-flex justify-content-between">
+            <a href="{% url 'vendor_check_bookings' hotel.hotel_slug %}" class="btn btn-info">Check Bookings</a>
+            <a href="{% url 'upload_hotel_images' hotel.hotel_slug %}" class="btn btn-success">Image</a>
+            <a href="{% url 'edit_hotel' hotel.hotel_slug %}" class="btn btn-warning">Edit</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

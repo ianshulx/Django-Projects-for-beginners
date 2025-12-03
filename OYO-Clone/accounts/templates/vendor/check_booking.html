@@ -1,0 +1,39 @@
+{% extends "utils/vendor_base.html" %}
+{% block start %}
+<div class="container mt-5">
+  <h2 class="text-center">Bookings for {{ hotel.name }}</h2>
+  <div class="card mt-4">
+    <div class="card-body">
+      {% if bookings %}
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Booking ID</th>
+              <th>Guest Name</th>
+              <th>Check-in Date</th>
+              <th>Check-out Date</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for booking in bookings %}
+              <tr>
+                <td>{{ booking.id }}</td>
+                <td>{{ booking.user.first_name }} {{ booking.user.last_name }}</td>
+                <td>{{ booking.booking_start_date }}</td>
+                <td>{{ booking.booking_end_date }}</td>
+                <td>{{ booking.booking_price }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p class="text-center">No bookings found for this hotel.</p>
+      {% endif %}
+    </div>
+  </div>
+  <div class="text-center mt-4">
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary">Back to Hotel List</a>
+  </div>
+</div>
+{% endblock %}
