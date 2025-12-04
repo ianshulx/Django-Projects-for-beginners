@@ -1,0 +1,28 @@
+{% extends "utils/base.html" %}
+{% block start %}
+    <div class="container mt-5 pt-5 pb-5">
+        <div class="row">
+            {% for hotel in hotels %}
+            <div class="col-md-3 mt-3">
+                <div class="card shadow" style="width: 18rem;">
+                <a href="{% url 'hotel_details' hotel.hotel_slug %}">
+                {% if hotel.images.first %}
+                <img src="{{ hotel.images.first.image.url }}" class="card-img-top" alt="Atlantis">
+                {% else %}
+                <img src="https://media.istockphoto.com/vectors/no-image-available-sign-vector-id1138179183?k=6&m=1138179183&s=612x612&w=0&h=prMYPP9mLRNpTp3XIykjeJJ8oCZRhb2iez6vKs8a8eE=" class="card-img-top" alt="Atlantis">
+                {% endif %}
+  <div class="card-body">
+    <h5 class="card-title">{{ hotel.name}}</h5><hr>
+    <p class="card-text">₹<s>{{ hotel.hotel_price }}</s> ₹{{ hotel.hotel_offer_price }}</p><hr>
+    <p class="card-text">{{ hotel.hotel_location }}</p>
+    <p class="card-text">{{ hotel.hotel_owner.business_name }}</p>
+      {% for amenity in hotel.amenities.all %}
+      <span class="badge text-bg-primary">{{ amenity.name }}</span>
+          {% endfor %}
+  </div></a>
+</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

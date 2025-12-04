@@ -1,0 +1,15 @@
+{% extends "utils/base.html" %}
+{% block start %}
+<div class="container mt-5 pt-5 pb-5">
+<div class="col-6 mx-auto card shadow p-4" style="border:none">
+    <form method="POST">
+        {% csrf_token %}
+  <div class="mb-3">
+    <label for="otp" class="form-label">OTP</label>
+    <input type="text" class="form-control" name="otp" id="otp">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+</div>
+</div>
+{% endblock %}

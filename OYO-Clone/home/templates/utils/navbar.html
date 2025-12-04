@@ -1,0 +1,39 @@
+<nav class="navbar navbar-dark shadow-lg navbar-expand-lg" style="background-color: #ed302b">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'index' %}">
+        <img src="https://static.vecteezy.com/system/resources/previews/018/970/034/non_2x/oyo-white-logo-on-red-background-free-vector.jpg" height="60">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          {% if user.is_authenticated %}
+            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+          {% else %}
+            <a class="nav-link" href="{% url 'user-login' %}">Login</a>
+          {% endif %}
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'user-register' %}">Register</a>
+        </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link btn btn-primary ms-2" href="{% url 'user_check_bookings' %}">Check your bookings</a>
+        </li>
+        {% endif %}
+      </ul>
+      <form class="d-flex" role="search">
+        <input name="search" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-light" type="submit">Search</button>
+        <select name="sort" class="form-select ms-2">
+          <option value="" disabled selected>Sort by</option>
+          <option value="sort_low">Low to High</option>
+          <option value="sort_high">High to Low</option>
+        </select>
+      </form>
+    </div>
+  </div>
+</nav>
