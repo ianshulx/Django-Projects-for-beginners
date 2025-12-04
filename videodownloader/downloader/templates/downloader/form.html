@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Video Downloader</title>
+</head>
+<body>
+  <h1>Video Downloader (Public MP4 URLs only)</h1>
+  <form method="post">
+    {% csrf_token %}
+    <label>Video URL (direct .mp4 link):</label><br>
+    <input type="url" name="video_url" size="80" required><br><br>
+    <button type="submit">Download</button>
+  </form>
+  <p style="color:gray">Note: Use only public/direct mp4 URLs you have permission to download.</p>
+</body>
+</html>
