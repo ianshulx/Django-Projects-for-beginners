@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Count
 from django.contrib import messages
-from .models import Poll, Choice, Vote
+from .models import Poll, Choice, Vote, Comment  # ✅ Comment import করা হয়েছে
 from .forms import PollAddForm, EditPollForm, ChoiceAddForm
 from django.http import HttpResponse
 
@@ -25,7 +25,7 @@ def polls_list(request):
         search_term = request.GET['search']
         all_polls = all_polls.filter(text__icontains=search_term)
 
-    paginator = Paginator(all_polls, 6)  # Show 6 contacts per page
+    paginator = Paginator(all_polls, 6)
     page = request.GET.get('page')
     polls = paginator.get_page(page)
 
@@ -43,7 +43,7 @@ def polls_list(request):
 @login_required()
 def list_by_user(request):
     all_polls = Poll.objects.filter(owner=request.user)
-    paginator = Paginator(all_polls, 7)  # Show 7 contacts per page
+    paginator = Paginator(all_polls, 7)
 
     page = request.GET.get('page')
     polls = paginator.get_page(page)
@@ -179,6 +179,7 @@ def poll_detail(request, poll_id):
 
     if not poll.active:
         return render(request, 'polls/poll_result.html', {'poll': poll})
+
     loop_count = poll.choice_set.count()
     context = {
         'poll': poll,
@@ -200,13 +201,11 @@ def poll_vote(request, poll_id):
         choice = Choice.objects.get(id=choice_id)
         vote = Vote(user=request.user, poll=poll, choice=choice)
         vote.save()
-        print(vote)
         return render(request, 'polls/poll_result.html', {'poll': poll})
     else:
         messages.error(
             request, "No choice selected!", extra_tags='alert alert-warning alert-dismissible fade show')
         return redirect("polls:detail", poll_id)
-    return render(request, 'polls/poll_result.html', {'poll': poll})
 
 
 @login_required
@@ -221,3 +220,37 @@ def endpoll(request, poll_id):
         return render(request, 'polls/poll_result.html', {'poll': poll})
     else:
         return render(request, 'polls/poll_result.html', {'poll': poll})
+
+
+# ✅ নতুন Comment Views
+
+@login_required
+def add_comment(request, poll_id):
+    poll = get_object_or_404(Poll, id=poll_id)
+
+    if request.method == 'POST':
+        text = request.POST.get('text', '').strip()
+        if text:
+            Comment.objects.create(poll=poll, user=request.user, text=text)
+            messages.success(
+                request, "Comment added!", extra_tags='alert alert-success alert-dismissible fade show')
+        else:
+            messages.error(
+                request, "Comment cannot be empty!", extra_tags='alert alert-warning alert-dismissible fade show')
+
+    return redirect('polls:result', poll_id)
+
+
+@login_required
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+
+    # শুধু comment owner বা poll owner delete করতে পারবে
+    if request.user == comment.user or request.user == comment.poll.owner:
+        poll_id = comment.poll.id
+        comment.delete()
+        messages.success(
+            request, "Comment deleted!", extra_tags='alert alert-success alert-dismissible fade show')
+        return redirect('polls:result', poll_id)
+
+    return redirect('home')

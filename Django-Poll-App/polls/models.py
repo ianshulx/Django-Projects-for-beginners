@@ -66,3 +66,14 @@ class Vote(models.Model):
 
     def __str__(self):
         return f'{self.poll.text[:15]} - {self.choice.choice_text[:15]} - {self.user.username}'
+
+
+# ✅ নতুন Comment Model
+class Comment(models.Model):
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user.username} - {self.poll.text[:20]} - {self.text[:20]}'
