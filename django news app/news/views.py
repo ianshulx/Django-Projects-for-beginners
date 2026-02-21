@@ -1,11 +1,15 @@
 from django.shortcuts import render
-from django.http import JsonResponse
-import json
-
+from .models import News
 
 def home(request):
-    import requests
-    import json
-    news_api_request=requests.get("https://newsapi.org/v2/top-headlines?country=us&apiKey=(apikey)")
-    api=json.loads(news_api_request.content)
-    return render(request,'index.html',{'api':api})
+    query = request.GET.get('search', '')  # URL থেকে search term নেওয়া
+    if query:
+        news_items = News.objects.filter(title__icontains=query)
+    else:
+        news_items = News.objects.all()
+
+    context = {
+        'news_items': news_items,
+        'search_query': query,
+    }
+    return render(request, 'news/news_list.html', context)
