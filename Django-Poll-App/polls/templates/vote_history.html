@@ -1,0 +1,38 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-4">
+  <h2>My Vote History</h2>
+  {% if votes %}
+  <table class="table table-bordered table-hover mt-3">
+    <thead class="thead-dark">
+      <tr>
+        <th>#</th>
+        <th>Poll</th>
+        <th>My Choice</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for vote in votes %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ vote.poll.text }}</td>
+        <td>{{ vote.choice.choice_text }}</td>
+        <td>
+          {% if vote.poll.active %}
+          <span class="badge badge-success">Active</span>
+          {% else %}
+          <span class="badge badge-secondary">Ended</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="mt-3">You haven't voted in any poll yet!</p>
+  {% endif %}
+  <a href="{% url 'polls:list' %}" class="btn btn-primary mt-2"
+    >Back to Polls</a
+  >
+</div>
+{% endblock %}

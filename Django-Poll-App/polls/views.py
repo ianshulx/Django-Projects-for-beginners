@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Count
 from django.contrib import messages
-from .models import Poll, Choice, Vote, Comment  # ✅ Comment import করা হয়েছে
+from .models import Poll, Choice, Vote, Comment
 from .forms import PollAddForm, EditPollForm, ChoiceAddForm
 from django.http import HttpResponse
 
@@ -222,7 +222,14 @@ def endpoll(request, poll_id):
         return render(request, 'polls/poll_result.html', {'poll': poll})
 
 
-# ✅ নতুন Comment Views
+@login_required
+def vote_history(request):
+    votes = Vote.objects.filter(user=request.user).select_related('poll', 'choice').order_by('-id')
+    context = {
+        'votes': votes,
+    }
+    return render(request, 'polls/vote_history.html', context)
+
 
 @login_required
 def add_comment(request, poll_id):
@@ -245,7 +252,6 @@ def add_comment(request, poll_id):
 def delete_comment(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
 
-    # শুধু comment owner বা poll owner delete করতে পারবে
     if request.user == comment.user or request.user == comment.poll.owner:
         poll_id = comment.poll.id
         comment.delete()
