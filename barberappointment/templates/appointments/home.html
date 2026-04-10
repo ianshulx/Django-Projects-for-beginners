@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Barber Shops - BarberBook{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container text-center">
+        <h1 class="display-4 mb-4">Welcome to BarberBook</h1>
+        <p class="lead mb-4">Book your perfect haircut appointment with ease</p>
+        <a href="{% url 'book_appointment' %}" class="btn btn-light btn-lg">Book Appointment Now</a>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="text-center mb-4">Our Barber Shops</h2>
+        </div>
+    </div>
+    
+    {% if shops %}
+        <div class="row">
+            {% for shop in shops %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card shop-card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ shop.name }}</h5>
+                            <p class="card-text">
+                                <i class="fas fa-map-marker-alt"></i> {{ shop.address }}<br>
+                                <i class="fas fa-phone"></i> {{ shop.phone }}<br>
+                                {% if shop.email %}
+                                    <i class="fas fa-envelope"></i> {{ shop.email }}<br>
+                                {% endif %}
+                                <i class="fas fa-clock"></i> {{ shop.opening_time }} - {{ shop.closing_time }}
+                            </p>
+                            <div class="d-flex justify-content-between">
+                                <a href="{% url 'shop_detail' shop.id %}" class="btn btn-primary">View Details</a>
+                                <a href="{% url 'book_appointment' %}?shop={{ shop.id }}" class="btn btn-outline-primary">Book Here</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center">
+            <div class="alert alert-info">
+                <h4>No Barber Shops Available</h4>
+                <p>There are currently no barber shops registered in the system.</p>
+                <p>Please contact the administrator to add barber shops.</p>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-4 text-center mb-4">
+            <div class="feature-box">
+                <i class="fas fa-calendar-check fa-3x text-primary mb-3"></i>
+                <h4>Easy Booking</h4>
+                <p>Book your appointment in just a few clicks</p>
+            </div>
+        </div>
+        <div class="col-md-4 text-center mb-4">
+            <div class="feature-box">
+                <i class="fas fa-user-tie fa-3x text-primary mb-3"></i>
+                <h4>Choose Your Barber</h4>
+                <p>Select from experienced barbers at your preferred shop</p>
+            </div>
+        </div>
+        <div class="col-md-4 text-center mb-4">
+            <div class="feature-box">
+                <i class="fas fa-mobile-alt fa-3x text-primary mb-3"></i>
+                <h4>Manage Online</h4>
+                <p>View and manage your appointments from anywhere</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
