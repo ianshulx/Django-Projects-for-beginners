@@ -9,63 +9,87 @@ Beginner level django projects
 Introduction
 ************
 
-``Django-Projects-for-beginners`` is a collaborative collection of beginner-friendly Django projects designed to help developers learn 
-the fundamentals of Django web development. Each project showcases essential concepts like models, views, templates, and forms, making it 
-an ideal starting point for those new to Django or web development in general.
+``Django-Projects-for-beginners`` is a collection of beginner-friendly Django projects created to help developers understand the basics of web development using Django.
 
-If you are a beginner, you can check out these projects and contribute your own work as well.
+Each project in this repository focuses on core concepts such as models, views, templates, and forms. It is a great starting point for anyone who is new to Django and wants to learn by building simple and practical applications.
+
+If you are a beginner, you can explore these projects to understand how Django works and also contribute your own projects to improve your skills.
 
 
 ************
 What to do ? 
 ************
 
-* Create a basic Django project, such as a simple blog, a to-do list app, or a basic e-commerce site.
-* Add the project folder in this repo.
-* Don't Forget to add a requirements.txt file in it.
-* Don't use any other framework rather than django.
+* Create a simple Django project such as a blog, to-do app, or basic e-commerce system.
+* Add your project folder to this repository.
+* Make sure to include a requirements.txt file in your project.
+* Use only Django (avoid using other frameworks).
 
-* For more information on Django, check out the official documentation at https://docs.djangoproject.com/en/stable/.
-  
+
+************
+Getting Started (Simple Guide)
+************
+
+To run any project from this repository, follow these steps:
+
+* Make sure Python and Django are installed on your system.
+* Clone this repository to your local machine.
+* Open the project folder in your code editor.
+* Navigate to the specific project you want to run.
+* Install required dependencies using the requirements.txt file (if available).
+* Run the development server using Django commands.
+* Open your browser and go to the local server address to view the project.
+
+This guide helps beginners quickly understand how to start working with the projects.
+
+
 *******************
 When to Use Django:
 *******************
 
-* You need to build a web application quickly: Django’s bundled tools and the automatic admin interface save a lot of development time.
-* Your app needs to scale: Django is well-suited for projects that might grow large and require scalability.
-* Security is important: Django’s built-in security features make it a great choice for applications that need to handle sensitive data.
+* When you want to build a web application quickly.
+* When your application may grow and needs scalability.
+* When security is important and you need built-in protection features.
 
 
 ************************************
 Steps to Contribute in repository:
 ************************************
 
-* Click the “Fork” button at the top of this repository page to create your own copy of the repository in your GitHub account.
-* Clone your forked repository to your local machine to work on it.
-* Open a terminal and run:
+* Click the “Fork” button at the top of this repository page to create your own copy.
+* Clone your forked repository to your local machine:
 ``git clone https://github.com/YOUR-USERNAME/Django-Projects-for-beginners.git``
 
-* Navigate to project directory.
+* Navigate to the project directory:
 ``cd Django-Projects-for-beginners``
 
-* Before making any changes, create a new branch for your contribution. This keeps your work organized and separate from the main branch:
+* Create a new branch:
 ``git checkout -b my-new-branch``
 
-* Add your Django project or make the necessary changes to the repository.
-* Ensure your project follows the Django project structure and includes a requirements.txt file with all necessary dependencies.
+* Add your Django project or make improvements.
 
-* Stage your changes using the following command:
+* Stage your changes:
 ``git add .``
 
-* Commit your changes.
-``git commit -m "Relevant message"``
+* Commit your changes:
+``git commit -m "Improved documentation and added beginner guide"``
 
-* Push your changes to the new branch in your forked repository:
+* Push your changes:
 ``git push origin my-new-branch``
 
-* Create a Pull Request (PR):
-* Go to your forked repository on GitHub, and you’ll see a “Compare & pull request” button. Click on it to submit your changes.
-* Write a detailed description of what you’ve added or changed. Be sure to include the purpose of the contribution and any relevant details about the project.
+* Create a Pull Request on GitHub and describe your contribution clearly.
+
+
+************
+Additional Notes
+************
+
+* Keep your project simple and beginner-friendly.
+* Make sure your code is clean and understandable.
+* Add comments wherever necessary to explain your logic.
+
+This will help other beginners learn more effectively.
+
 
 .. |PyVersion| image:: https://img.shields.io/pypi/pyversions/djangocms-installer.svg?style=flat-square
     :target: https://pypi.python.org/pypi/djangocms-installer
@@ -75,4 +99,3 @@ Steps to Contribute in repository:
 .. |Django| image:: https://img.shields.io/badge/Python-Django-green
    :target: https://www.djangoproject.com/
     :alt: Django
-
