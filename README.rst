@@ -5,9 +5,9 @@ Beginner level django projects
 |Django| |PyVersion| 
 
 
-************
+***********
 Introduction
-************
+***********
 
 ``Django-Projects-for-beginners`` is a collaborative collection of beginner-friendly Django projects designed to help developers learn 
 the fundamentals of Django web development. Each project showcases essential concepts like models, views, templates, and forms, making it 
