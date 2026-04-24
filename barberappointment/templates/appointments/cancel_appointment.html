@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Cancel Appointment - BarberBook{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card border-warning">
+                <div class="card-header bg-warning text-dark">
+                    <h3 class="mb-0"><i class="fas fa-exclamation-triangle"></i> Cancel Appointment</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <h5 class="alert-heading">Are you sure you want to cancel this appointment?</h5>
+                        <p>This action cannot be undone. Please verify your appointment details before proceeding.</p>
+                    </div>
+
+                    <div class="appointment-details mb-4">
+                        <h5>Appointment Details</h5>
+                        <table class="table table-borderless">
+                            <tr>
+                                <td><strong>Customer:</strong></td>
+                                <td>{{ appointment.customer_name }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Shop:</strong></td>
+                                <td>{{ appointment.shop.name }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Barber:</strong></td>
+                                <td>{{ appointment.barber.name }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Service:</strong></td>
+                                <td>{{ appointment.service.name }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Date:</strong></td>
+                                <td>{{ appointment.date|date:"l, F j, Y" }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Time:</strong></td>
+                                <td>{{ appointment.time|time:"g:i A" }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Price:</strong></td>
+                                <td>${{ appointment.service.price }}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address *</label>
+                            <input type="email" class="form-control" id="email" name="email" 
+                                   placeholder="Enter your email address" required>
+                            <small class="form-text text-muted">Please enter the email used for booking</small>
+                        </div>
+                        <div class="mb-4">
+                            <label for="phone" class="form-label">Phone Number *</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" 
+                                   placeholder="Enter your phone number" required>
+                            <small class="form-text text-muted">Please enter the phone number used for booking</small>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'my_appointments' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-times"></i> Cancel Appointment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="alert alert-info mt-3">
+                <h6><i class="fas fa-info-circle"></i> Cancellation Policy</h6>
+                <ul class="mb-0">
+                    <li>Please cancel at least 2 hours before your appointment time</li>
+                    <li>Late cancellations may incur a fee</li>
+                    <li>You can always reschedule instead of cancelling</li>
+                    <li>For urgent changes, please call the shop directly</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
