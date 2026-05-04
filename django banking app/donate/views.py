@@ -1,7 +1,7 @@
 from django.shortcuts import render
 import razorpay
 from django.conf import settings
-from django.views.decorators.csrf import csrf_exempt
+import django.views.decorators.csrf
 from django.http import HttpResponse, HttpResponseBadRequest
  
  
