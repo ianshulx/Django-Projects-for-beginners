@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+{% block title %}My Appointments - BarberBook{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">My Appointments</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Search Form -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5><i class="fas fa-search"></i> Find Your Appointments</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="email" name="email" 
+                                           value="{{ search_email }}" placeholder="Enter your email">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="phone" name="phone" 
+                                           value="{{ search_phone }}" placeholder="Enter your phone number">
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Search Appointments
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Appointments List -->
+            {% if appointments %}
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-calendar-alt"></i> Your Appointments</h5>
+                    </div>
+                    <div class="card-body">
+                        {% for appointment in appointments %}
+                            <div class="appointment-card mb-3 p-3 border rounded">
+                                <div class="row align-items-center">
+                                    <div class="col-md-8">
+                                        <h6 class="mb-2">{{ appointment.service.name }} at {{ appointment.shop.name }}</h6>
+                                        <p class="mb-1">
+                                            <i class="fas fa-user"></i> Barber: {{ appointment.barber.name }}
+                                        </p>
+                                        <p class="mb-1">
+                                            <i class="fas fa-calendar"></i> {{ appointment.date|date:"l, F j, Y" }}
+                                            <i class="fas fa-clock ms-3"></i> {{ appointment.time|time:"g:i A" }}
+                                        </p>
+                                        <p class="mb-1">
+                                            <i class="fas fa-dollar-sign"></i> {{ appointment.service.price }}
+                                            <i class="fas fa-hourglass-half ms-3"></i> {{ appointment.service.duration_minutes }} min
+                                        </p>
+                                        <span class="badge status-{{ appointment.status }}">
+                                            {{ appointment.get_status_display }}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-4 text-end">
+                                        {% if appointment.status == 'scheduled' or appointment.status == 'confirmed' %}
+                                            <a href="{% url 'cancel_appointment' appointment.id %}" 
+                                               class="btn btn-sm btn-outline-danger">
+                                                <i class="fas fa-times"></i> Cancel
+                                            </a>
+                                        {% endif %}
+                                        <button class="btn btn-sm btn-outline-primary" onclick="window.print()">
+                                            <i class="fas fa-print"></i> Print
+                                        </button>
+                                    </div>
+                                </div>
+                                {% if appointment.notes %}
+                                    <div class="mt-2">
+                                        <small class="text-muted">
+                                            <i class="fas fa-sticky-note"></i> {{ appointment.notes }}
+                                        </small>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% elif search_email or search_phone %}
+                <div class="alert alert-info">
+                    <h5><i class="fas fa-info-circle"></i> No Appointments Found</h5>
+                    <p>We couldn't find any appointments associated with the provided email or phone number.</p>
+                    <p>Please check your information and try again, or contact the shop directly.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-info-circle"></i> Status Guide</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <span class="badge bg-primary">Scheduled</span>
+                        <p class="small mt-1 mb-0">Appointment is booked and pending confirmation</p>
+                    </div>
+                    <div class="mb-3">
+                        <span class="badge bg-success">Confirmed</span>
+                        <p class="small mt-1 mb-0">Appointment has been confirmed by the shop</p>
+                    </div>
+                    <div class="mb-3">
+                        <span class="badge bg-info">Completed</span>
+                        <p class="small mt-1 mb-0">Appointment has been completed</p>
+                    </div>
+                    <div class="mb-3">
+                        <span class="badge bg-danger">Cancelled</span>
+                        <p class="small mt-1 mb-0">Appointment was cancelled</p>
+                    </div>
+                    <div class="mb-3">
+                        <span class="badge bg-warning">No Show</span>
+                        <p class="small mt-1 mb-0">Customer did not arrive for the appointment</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h5><i class="fas fa-phone"></i> Need Help?</h5>
+                </div>
+                <div class="card-body">
+                    <p>If you need to modify your appointment or have questions, please contact the shop directly.</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-envelope"></i> Email: support@barberbook.com</li>
+                        <li><i class="fas fa-phone"></i> Phone: 1-800-BARBER</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.status-scheduled { background-color: #007bff; }
+.status-confirmed { background-color: #28a745; }
+.status-completed { background-color: #17a2b8; }
+.status-cancelled { background-color: #dc3545; }
+.status-no_show { background-color: #ffc107; color: #212529; }
+
+.appointment-card {
+    transition: box-shadow 0.2s;
+}
+
+.appointment-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+@media print {
+    .no-print {
+        display: none !important;
+    }
+}
+</style>
+{% endblock %}

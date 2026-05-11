@@ -1,0 +1,2 @@
+Django==4.2.7
+python-dateutil==2.8.2

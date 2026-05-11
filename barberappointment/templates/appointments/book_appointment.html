@@ -1,0 +1,369 @@
+{% extends 'base.html' %}
+
+{% block title %}Book Appointment - BarberBook{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-section {
+        background: #f8f9fa;
+        padding: 2rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+    }
+    .time-slots {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 10px;
+        margin-top: 1rem;
+    }
+    .time-slot {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .time-slot:hover {
+        background: #f0f0f0;
+    }
+    .time-slot.selected {
+        background: #667eea;
+        color: white;
+        border-color: #667eea;
+    }
+    .time-slot.disabled {
+        background: #e9ecef;
+        color: #6c757d;
+        cursor: not-allowed;
+    }
+    .loading {
+        display: none;
+        text-align: center;
+        padding: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="breadcrumb-item active">Book Appointment</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <h1 class="mb-4">Book Your Appointment</h1>
+            
+            <form method="post" id="appointmentForm">
+                {% csrf_token %}
+                
+                <div class="form-section">
+                    <h3><i class="fas fa-store"></i> Shop Selection</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.shop.id_for_label }}" class="form-label">Barber Shop *</label>
+                                {{ form.shop }}
+                                {% if form.shop.errors %}
+                                    <div class="text-danger">{{ form.shop.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section" id="barberServiceSection" style="display: none;">
+                    <h3><i class="fas fa-user-cut"></i> Barber & Service</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.barber.id_for_label }}" class="form-label">Barber *</label>
+                                {{ form.barber }}
+                                {% if form.barber.errors %}
+                                    <div class="text-danger">{{ form.barber.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.service.id_for_label }}" class="form-label">Service *</label>
+                                {{ form.service }}
+                                {% if form.service.errors %}
+                                    <div class="text-danger">{{ form.service.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section" id="dateTimeSection" style="display: none;">
+                    <h3><i class="fas fa-calendar"></i> Date & Time</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.date.id_for_label }}" class="form-label">Date *</label>
+                                {{ form.date }}
+                                {% if form.date.errors %}
+                                    <div class="text-danger">{{ form.date.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.time.id_for_label }}" class="form-label">Time *</label>
+                                {{ form.time }}
+                                {% if form.time.errors %}
+                                    <div class="text-danger">{{ form.time.errors }}</div>
+                                {% endif %}
+                                <div class="loading" id="loadingSlots">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p class="mt-2">Checking available time slots...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section" id="customerSection" style="display: none;">
+                    <h3><i class="fas fa-user"></i> Your Information</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.customer_name.id_for_label }}" class="form-label">Your Name *</label>
+                                {{ form.customer_name }}
+                                {% if form.customer_name.errors %}
+                                    <div class="text-danger">{{ form.customer_name.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.customer_email.id_for_label }}" class="form-label">Email *</label>
+                                {{ form.customer_email }}
+                                {% if form.customer_email.errors %}
+                                    <div class="text-danger">{{ form.customer_email.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.customer_phone.id_for_label }}" class="form-label">Phone *</label>
+                                {{ form.customer_phone }}
+                                {% if form.customer_phone.errors %}
+                                    <div class="text-danger">{{ form.customer_phone.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="{{ form.notes.id_for_label }}" class="form-label">Additional Notes</label>
+                                {{ form.notes }}
+                                <small class="form-text text-muted">Any special requests or preferences</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg" id="submitBtn" style="display: none;">
+                        <i class="fas fa-check"></i> Book Appointment
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-info-circle"></i> Booking Tips</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Select your preferred barber shop</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Choose your barber and service</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Pick a convenient date and time</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Fill in your contact information</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Receive confirmation via email</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card mt-3" id="summaryCard" style="display: none;">
+                <div class="card-header">
+                    <h5><i class="fas fa-clipboard-list"></i> Booking Summary</h5>
+                </div>
+                <div class="card-body" id="summaryContent">
+                    <!-- Summary will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const shopSelect = document.getElementById('{{ form.shop.id_for_label }}');
+    const barberSelect = document.getElementById('{{ form.barber.id_for_label }}');
+    const serviceSelect = document.getElementById('{{ form.service.id_for_label }}');
+    const dateInput = document.getElementById('{{ form.date.id_for_label }}');
+    const timeInput = document.getElementById('{{ form.time.id_for_label }}');
+    
+    const barberServiceSection = document.getElementById('barberServiceSection');
+    const dateTimeSection = document.getElementById('dateTimeSection');
+    const customerSection = document.getElementById('customerSection');
+    const submitBtn = document.getElementById('submitBtn');
+    const summaryCard = document.getElementById('summaryCard');
+    const summaryContent = document.getElementById('summaryContent');
+    const loadingSlots = document.getElementById('loadingSlots');
+    
+    let shopData = {};
+
+    // Show barber/service section when shop is selected
+    shopSelect.addEventListener('change', function() {
+        if (this.value) {
+            loadBarbersAndServices(this.value);
+            barberServiceSection.style.display = 'block';
+        } else {
+            barberServiceSection.style.display = 'none';
+            dateTimeSection.style.display = 'none';
+            customerSection.style.display = 'none';
+            submitBtn.style.display = 'none';
+            summaryCard.style.display = 'none';
+        }
+    });
+
+    // Show date/time section when both barber and service are selected
+    function checkBarberService() {
+        if (barberSelect.value && serviceSelect.value) {
+            dateTimeSection.style.display = 'block';
+            setMinDate();
+        } else {
+            dateTimeSection.style.display = 'none';
+            customerSection.style.display = 'none';
+            submitBtn.style.display = 'none';
+        }
+    }
+
+    barberSelect.addEventListener('change', checkBarberService);
+    serviceSelect.addEventListener('change', checkBarberService);
+
+    // Show customer section when date is selected
+    dateInput.addEventListener('change', function() {
+        if (this.value && barberSelect.value && serviceSelect.value) {
+            customerSection.style.display = 'block';
+            checkAvailability();
+        } else {
+            customerSection.style.display = 'none';
+            submitBtn.style.display = 'none';
+        }
+    });
+
+    // Show submit button when all required fields are filled
+    function checkFormComplete() {
+        if (shopSelect.value && barberSelect.value && serviceSelect.value && 
+            dateInput.value && timeInput.value) {
+            submitBtn.style.display = 'inline-block';
+            updateSummary();
+        } else {
+            submitBtn.style.display = 'none';
+        }
+    }
+
+    timeInput.addEventListener('change', checkFormComplete);
+
+    // Load barbers and services for selected shop
+    function loadBarbersAndServices(shopId) {
+        fetch(`/api/barbers-and-services/?shop_id=${shopId}`)
+            .then(response => response.json())
+            .then(data => {
+                shopData = data;
+                
+                // Update barber options
+                barberSelect.innerHTML = '<option value="">Select a barber</option>';
+                data.barbers.forEach(barber => {
+                    barberSelect.innerHTML += `<option value="${barber.id}">${barber.name}</option>`;
+                });
+                
+                // Update service options
+                serviceSelect.innerHTML = '<option value="">Select a service</option>';
+                data.services.forEach(service => {
+                    serviceSelect.innerHTML += `<option value="${service.id}">${service.name} (${service.duration}min) - $${service.price}</option>`;
+                });
+                
+                // Update time input constraints
+                if (data.shop_hours) {
+                    timeInput.min = data.shop_hours.opening;
+                    timeInput.max = data.shop_hours.closing;
+                }
+            })
+            .catch(error => console.error('Error loading data:', error));
+    }
+
+    // Set minimum date to today
+    function setMinDate() {
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.min = today;
+    }
+
+    // Check availability when date changes
+    function checkAvailability() {
+        if (!barberSelect.value || !dateInput.value || !serviceSelect.value) return;
+        
+        loadingSlots.style.display = 'block';
+        
+        const params = new URLSearchParams({
+            barber_id: barberSelect.value,
+            date: dateInput.value,
+            service_id: serviceSelect.value
+        });
+        
+        fetch(`/api/check-availability/?${params}`)
+            .then(response => response.json())
+            .then(data => {
+                loadingSlots.style.display = 'none';
+                if (data.available_slots) {
+                    // You could display available slots here if needed
+                    console.log('Available slots:', data.available_slots);
+                }
+            })
+            .catch(error => {
+                loadingSlots.style.display = 'none';
+                console.error('Error checking availability:', error);
+            });
+    }
+
+    // Update booking summary
+    function updateSummary() {
+        const shopText = shopSelect.options[shopSelect.selectedIndex]?.text || '';
+        const barberText = barberSelect.options[barberSelect.selectedIndex]?.text || '';
+        const serviceText = serviceSelect.options[serviceSelect.selectedIndex]?.text || '';
+        
+        summaryContent.innerHTML = `
+            <p><strong>Shop:</strong> ${shopText}</p>
+            <p><strong>Barber:</strong> ${barberText}</p>
+            <p><strong>Service:</strong> ${serviceText}</p>
+            <p><strong>Date:</strong> ${dateInput.value}</p>
+            <p><strong>Time:</strong> ${timeInput.value}</p>
+        `;
+        summaryCard.style.display = 'block';
+    }
+
+    // Initialize
+    setMinDate();
+});
+</script>
+{% endblock %}
