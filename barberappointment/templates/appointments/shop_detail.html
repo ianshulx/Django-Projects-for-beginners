@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ shop.name }} - BarberBook{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="breadcrumb-item active">{{ shop.name }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h1 class="card-title">{{ shop.name }}</h1>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><i class="fas fa-map-marker-alt"></i> <strong>Address:</strong><br>{{ shop.address }}</p>
+                            <p><i class="fas fa-phone"></i> <strong>Phone:</strong> {{ shop.phone }}</p>
+                            {% if shop.email %}
+                                <p><i class="fas fa-envelope"></i> <strong>Email:</strong> {{ shop.email }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <p><i class="fas fa-clock"></i> <strong>Hours:</strong><br>
+                                {{ shop.opening_time }} - {{ shop.closing_time }}</p>
+                            <p><i class="fas fa-calendar"></i> <strong>Open:</strong> Monday - Saturday</p>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="{% url 'book_appointment' %}?shop={{ shop.id }}" class="btn btn-primary btn-lg">Book Appointment</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-cut"></i> Quick Book</h5>
+                </div>
+                <div class="card-body">
+                    <p>Ready to book your appointment?</p>
+                    <a href="{% url 'book_appointment' %}?shop={{ shop.id }}" class="btn btn-primary w-100">Book Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-user-tie"></i> Our Barbers</h3>
+                </div>
+                <div class="card-body">
+                    {% if barbers %}
+                        {% for barber in barbers %}
+                            <div class="mb-3 p-3 border rounded">
+                                <h5>{{ barber.name }}</h5>
+                                {% if barber.phone %}
+                                    <p class="mb-1"><i class="fas fa-phone"></i> {{ barber.phone }}</p>
+                                {% endif %}
+                                {% if barber.email %}
+                                    <p class="mb-1"><i class="fas fa-envelope"></i> {{ barber.email }}</p>
+                                {% endif %}
+                                <p class="mb-0"><strong>Specialties:</strong> {{ barber.specialties }}</p>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted">No barbers available at this shop.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-list"></i> Our Services</h3>
+                </div>
+                <div class="card-body">
+                    {% if services %}
+                        {% for service in services %}
+                            <div class="mb-3 p-3 border rounded">
+                                <h5>{{ service.name }}</h5>
+                                {% if service.description %}
+                                    <p class="mb-1">{{ service.description }}</p>
+                                {% endif %}
+                                <div class="d-flex justify-content-between">
+                                    <span><i class="fas fa-clock"></i> {{ service.duration_minutes }} min</span>
+                                    <span class="fw-bold">${{ service.price }}</span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted">No services available at this shop.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

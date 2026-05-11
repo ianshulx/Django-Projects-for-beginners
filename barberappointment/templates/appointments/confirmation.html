@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Appointment Confirmed - BarberBook{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-success">
+                <div class="card-header bg-success text-white">
+                    <h2 class="mb-0"><i class="fas fa-check-circle"></i> Appointment Confirmed!</h2>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-success">
+                        <h4 class="alert-heading">Thank you, {{ appointment.customer_name }}!</h4>
+                        <p>Your appointment has been successfully booked. We've sent a confirmation to your email.</p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-info-circle"></i> Appointment Details</h5>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><strong>Shop:</strong></td>
+                                    <td>{{ appointment.shop.name }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Barber:</strong></td>
+                                    <td>{{ appointment.barber.name }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Service:</strong></td>
+                                    <td>{{ appointment.service.name }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Date:</strong></td>
+                                    <td>{{ appointment.date|date:"l, F j, Y" }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Time:</strong></td>
+                                    <td>{{ appointment.time|time:"g:i A" }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Duration:</strong></td>
+                                    <td>{{ appointment.service.duration_minutes }} minutes</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Price:</strong></td>
+                                    <td>${{ appointment.service.price }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-map-marker-alt"></i> Shop Information</h5>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><strong>Address:</strong></td>
+                                    <td>{{ appointment.shop.address }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Phone:</strong></td>
+                                    <td>{{ appointment.shop.phone }}</td>
+                                </tr>
+                                {% if appointment.shop.email %}
+                                <tr>
+                                    <td><strong>Email:</strong></td>
+                                    <td>{{ appointment.shop.email }}</td>
+                                </tr>
+                                {% endif %}
+                                <tr>
+                                    <td><strong>Hours:</strong></td>
+                                    <td>{{ appointment.shop.opening_time }} - {{ appointment.shop.closing_time }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    {% if appointment.notes %}
+                    <div class="mt-4">
+                        <h5><i class="fas fa-sticky-note"></i> Special Notes</h5>
+                        <p class="text-muted">{{ appointment.notes }}</p>
+                    </div>
+                    {% endif %}
+
+                    <div class="alert alert-info mt-4">
+                        <h6><i class="fas fa-info-circle"></i> Important Information</h6>
+                        <ul class="mb-0">
+                            <li>Please arrive 5-10 minutes before your appointment time</li>
+                            <li>If you need to cancel or reschedule, please contact us at least 2 hours in advance</li>
+                            <li>Bring a valid ID for verification</li>
+                            <li>Payment can be made at the shop after the service</li>
+                        </ul>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <a href="{% url 'home' %}" class="btn btn-primary me-2">
+                            <i class="fas fa-home"></i> Back to Home
+                        </a>
+                        <a href="{% url 'my_appointments' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-calendar"></i> View My Appointments
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
