@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-zd=y_9m_lwh=ktc-c43v0*bje+rk!$s5vrm#0qwnlgp03)12pi
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['django-pokegame.onrender.com']
 
 
 # Application definition
