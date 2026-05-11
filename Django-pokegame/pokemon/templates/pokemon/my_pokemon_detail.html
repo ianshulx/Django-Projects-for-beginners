@@ -1,0 +1,106 @@
+{% extends 'pokemon/base.html' %}
+{% block title %}{{ mypoke.name }} — PokéDjango{% endblock %}
+
+{% block content %}
+<a href="{% url 'my_pokemon' %}" class="text-dim" style="font-size:.9rem; text-decoration:none;">← BACK TO TEAM</a>
+
+<div style="max-width:600px; margin:2rem auto;">
+
+  <div class="card pixel-box" style="padding:1.5rem;">
+    <!-- Header -->
+    <div class="flex justify-between items-center">
+      <h1 style="font-size:.9rem;">{{ mypoke.name }}</h1>
+      <span class="text-dim" style="font-size:1rem;">LV {{ mypoke.current_level }}</span>
+    </div>
+
+    <div style="font-size:1.1rem; margin-top:.4rem;">
+      <span class="text-dim">{{ mypoke.pokemon.name }}</span>
+      <span class="type-badge" style="color:var(--gb-blue); border-color:var(--gb-blue);">
+        {{ mypoke.pokemon.get_pokemon_type_display }}
+      </span>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Base stats -->
+    <h2>BASE STATS</h2>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:.6rem; font-size:1.05rem;">
+      <div>
+        <span class="text-dim">BASE HP:</span>
+        <span class="text-green">{{ mypoke.pokemon.hp }}</span>
+        {% if mypoke.hp_gain > 0 %}
+          <span class="text-dim"> + </span><span class="text-yellow">{{ mypoke.hp_gain }}</span>
+        {% endif %}
+        <span class="text-dim"> = </span><span class="text-green">{{ mypoke.total_hp }}</span>
+      </div>
+      <div>
+        <span class="text-dim">BASE SPD:</span>
+        <span class="text-blue">{{ mypoke.pokemon.speed }}</span>
+        {% if mypoke.speed_gain > 0 %}
+          <span class="text-dim"> + </span><span class="text-yellow">{{ mypoke.speed_gain }}</span>
+        {% endif %}
+        <span class="text-dim"> = </span><span class="text-blue">{{ mypoke.total_speed }}</span>
+      </div>
+    </div>
+
+    <!-- XP bar -->
+    <div style="margin-top:1rem;">
+      <div style="font-size:.9rem; color:var(--gb-dim); margin-bottom:.2rem;">
+        XP: {{ mypoke.current_xp }} / {{ mypoke.xp_to_next_level }}
+        <span class="text-yellow" style="margin-left:.5rem;">
+          ({{ mypoke.xp_progress_percent }}%)
+        </span>
+      </div>
+      <div class="xp-bar-wrap" style="height:10px;">
+        <div class="xp-bar" style="width:{{ mypoke.xp_progress_percent }}%;"></div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Moveset -->
+    <h2>MOVESET</h2>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:.6rem;">
+      {% for atk in mypoke.pokemon.attacks.all %}
+      <div class="card" style="padding:.6rem; margin:0;">
+        <div style="font-family:'Press Start 2P',monospace; font-size:.5rem; color:var(--gb-yellow);">
+          {{ atk.name }}
+        </div>
+        <div class="text-dim" style="font-size:.9rem; margin-top:.3rem;">
+          TYPE: {{ atk.get_attack_type_display }}
+        </div>
+        <div style="font-size:.95rem; color:var(--gb-red); margin-top:.2rem;">
+          PWR: {{ atk.damage }}
+        </div>
+      </div>
+      {% empty %}
+        <p class="text-dim">No attacks learned yet.</p>
+      {% endfor %}
+    </div>
+
+    <hr class="divider">
+
+    <!-- Evolution status -->
+    <h2>EVOLUTION</h2>
+    {% if evolution %}
+      <p style="color:var(--gb-purple); font-size:1rem;">
+        ✨ {{ mypoke.name }} can evolve into
+        <strong style="color:var(--gb-yellow);">{{ evolution.to_pokemon.name }}</strong>
+        (reached level {{ evolution.level_required }})!
+      </p>
+      <a href="{% url 'evolve' mypoke.id %}" class="btn btn-purple mt-2">EVOLVE NOW ✨</a>
+    {% else %}
+      <p class="text-dim" style="font-size:1rem;">No evolution available at current level.</p>
+    {% endif %}
+
+    <hr class="divider">
+
+    <!-- Actions -->
+    <div class="flex gap-2 wrap">
+      <a href="{% url 'pokedex' %}" class="btn btn-red">⚔ BATTLE</a>
+      <a href="{% url 'my_pokemon' %}" class="btn btn-blue">← TEAM</a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

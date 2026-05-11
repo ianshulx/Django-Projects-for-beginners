@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}PokéDjango{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap" rel="stylesheet">
+  <style>
+    /* ── Reset & base ───────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gb-black:   #0f0f0f;
+      --gb-dark:    #1a1a2e;
+      --gb-mid:     #16213e;
+      --gb-panel:   #0f3460;
+      --gb-green:   #4ade80;
+      --gb-yellow:  #facc15;
+      --gb-red:     #f87171;
+      --gb-blue:    #60a5fa;
+      --gb-purple:  #a78bfa;
+      --gb-text:    #e2e8f0;
+      --gb-dim:     #94a3b8;
+      --gb-border:  #334155;
+      --pixel:      2px;
+    }
+
+    html { font-size: 16px; }
+
+    body {
+      background: var(--gb-black);
+      color: var(--gb-text);
+      font-family: 'VT323', monospace;
+      font-size: 1.2rem;
+      min-height: 100vh;
+      background-image:
+        radial-gradient(ellipse at 20% 50%, rgba(79,70,229,.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(16,185,129,.06) 0%, transparent 60%);
+    }
+
+    /* ── Scanline overlay ────────────────────────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,.15) 2px,
+        rgba(0,0,0,.15) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ── Pixel border utility ────────────────────────────────────────────── */
+    .pixel-box {
+      border: var(--pixel) solid var(--gb-border);
+      box-shadow:
+        inset var(--pixel) var(--pixel) 0 rgba(255,255,255,.04),
+        0 4px 24px rgba(0,0,0,.5);
+    }
+
+    /* ── Nav ─────────────────────────────────────────────────────────────── */
+    nav {
+      background: var(--gb-dark);
+      border-bottom: var(--pixel) solid var(--gb-green);
+      padding: .6rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+
+    .nav-logo {
+      font-family: 'Press Start 2P', monospace;
+      font-size: .75rem;
+      color: var(--gb-green);
+      text-decoration: none;
+      letter-spacing: 2px;
+      text-shadow: 0 0 12px rgba(74,222,128,.6);
+    }
+
+    .nav-links { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+
+    .nav-links a {
+      color: var(--gb-dim);
+      text-decoration: none;
+      font-size: 1.1rem;
+      padding: .2rem .6rem;
+      border: var(--pixel) solid transparent;
+      transition: color .15s, border-color .15s;
+    }
+    .nav-links a:hover { color: var(--gb-green); border-color: var(--gb-green); }
+    .nav-links a.active { color: var(--gb-yellow); border-color: var(--gb-yellow); }
+
+    .nav-trainer {
+      font-size: .9rem;
+      color: var(--gb-purple);
+    }
+
+    /* ── Layout ──────────────────────────────────────────────────────────── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    /* ── Typography ─────────────────────────────────────────────────────── */
+    h1, h2, h3 {
+      font-family: 'Press Start 2P', monospace;
+      line-height: 1.6;
+    }
+    h1 { font-size: 1rem; color: var(--gb-green); margin-bottom: 1.5rem; }
+    h2 { font-size: .8rem; color: var(--gb-yellow); margin-bottom: 1rem; }
+    h3 { font-size: .65rem; color: var(--gb-blue); margin-bottom: .75rem; }
+
+    /* ── Cards ───────────────────────────────────────────────────────────── */
+    .card {
+      background: var(--gb-dark);
+      border: var(--pixel) solid var(--gb-border);
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .card:hover {
+      border-color: var(--gb-green);
+      box-shadow: 0 0 12px rgba(74,222,128,.15);
+    }
+
+    /* ── Buttons ─────────────────────────────────────────────────────────── */
+    .btn {
+      font-family: 'VT323', monospace;
+      font-size: 1.2rem;
+      padding: .4rem 1rem;
+      border: var(--pixel) solid;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all .1s;
+      letter-spacing: 1px;
+    }
+
+    .btn:active { transform: translate(1px,1px); }
+
+    .btn-green  { background: transparent; color: var(--gb-green);  border-color: var(--gb-green);  }
+    .btn-green:hover  { background: var(--gb-green);  color: var(--gb-black); }
+
+    .btn-yellow { background: transparent; color: var(--gb-yellow); border-color: var(--gb-yellow); }
+    .btn-yellow:hover { background: var(--gb-yellow); color: var(--gb-black); }
+
+    .btn-red    { background: transparent; color: var(--gb-red);    border-color: var(--gb-red);    }
+    .btn-red:hover    { background: var(--gb-red);    color: var(--gb-black); }
+
+    .btn-blue   { background: transparent; color: var(--gb-blue);   border-color: var(--gb-blue);   }
+    .btn-blue:hover   { background: var(--gb-blue);   color: var(--gb-black); }
+
+    .btn-purple { background: transparent; color: var(--gb-purple); border-color: var(--gb-purple); }
+    .btn-purple:hover { background: var(--gb-purple); color: var(--gb-black); }
+
+    .btn-sm { font-size: 1rem; padding: .2rem .6rem; }
+
+    /* ── Forms ───────────────────────────────────────────────────────────── */
+    .poke-input {
+      background: var(--gb-mid);
+      color: var(--gb-text);
+      border: var(--pixel) solid var(--gb-border);
+      padding: .4rem .75rem;
+      font-family: 'VT323', monospace;
+      font-size: 1.2rem;
+      width: 100%;
+      outline: none;
+    }
+    .poke-input:focus { border-color: var(--gb-green); box-shadow: 0 0 8px rgba(74,222,128,.3); }
+
+    .form-group { margin-bottom: 1rem; }
+    .form-group label {
+      display: block;
+      font-family: 'Press Start 2P', monospace;
+      font-size: .55rem;
+      color: var(--gb-dim);
+      margin-bottom: .3rem;
+      letter-spacing: 1px;
+    }
+    .help-text { font-size: .9rem; color: var(--gb-dim); margin-top: .2rem; }
+    .error-text { font-size: .9rem; color: var(--gb-red); margin-top: .2rem; }
+
+    /* ── HP Bar ──────────────────────────────────────────────────────────── */
+    .hp-bar-wrap {
+      background: #1e2a3a;
+      border: var(--pixel) solid var(--gb-border);
+      height: 10px;
+      margin-top: .3rem;
+    }
+    .hp-bar {
+      height: 100%;
+      transition: width .4s ease;
+    }
+    .hp-bar.high   { background: var(--gb-green); }
+    .hp-bar.medium { background: var(--gb-yellow); }
+    .hp-bar.low    { background: var(--gb-red); box-shadow: 0 0 6px rgba(248,113,113,.6); }
+
+    /* ── XP Bar ──────────────────────────────────────────────────────────── */
+    .xp-bar-wrap {
+      background: #1e2a3a;
+      border: var(--pixel) solid var(--gb-border);
+      height: 6px;
+      margin-top: .2rem;
+    }
+    .xp-bar { height: 100%; background: var(--gb-blue); transition: width .4s ease; }
+
+    /* ── Type badge ──────────────────────────────────────────────────────── */
+    .type-badge {
+      display: inline-block;
+      font-size: .85rem;
+      padding: .1rem .5rem;
+      border: var(--pixel) solid;
+      margin-left: .3rem;
+    }
+
+    /* ── Messages ────────────────────────────────────────────────────────── */
+    .messages { list-style: none; margin-bottom: 1rem; }
+    .messages li {
+      padding: .5rem .75rem;
+      border-left: 3px solid;
+      margin-bottom: .4rem;
+      font-size: 1rem;
+    }
+    .messages li.success { border-color: var(--gb-green);  background: rgba(74,222,128,.07);  }
+    .messages li.error   { border-color: var(--gb-red);    background: rgba(248,113,113,.07); }
+    .messages li.info    { border-color: var(--gb-blue);   background: rgba(96,165,250,.07);  }
+    .messages li.warning { border-color: var(--gb-yellow); background: rgba(250,204,21,.07);  }
+
+    /* ── Grids ───────────────────────────────────────────────────────────── */
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+
+    /* ── Blinking cursor ──────────────────────────────────────────────────── */
+    .blink { animation: blink 1s step-end infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ── Utility ─────────────────────────────────────────────────────────── */
+    .text-green  { color: var(--gb-green);  }
+    .text-yellow { color: var(--gb-yellow); }
+    .text-red    { color: var(--gb-red);    }
+    .text-blue   { color: var(--gb-blue);   }
+    .text-purple { color: var(--gb-purple); }
+    .text-dim    { color: var(--gb-dim);    }
+    .mt-1 { margin-top: .5rem; }
+    .mt-2 { margin-top: 1rem;  }
+    .mt-3 { margin-top: 1.5rem; }
+    .mb-1 { margin-bottom: .5rem; }
+    .flex { display: flex; }
+    .gap-1 { gap: .5rem; }
+    .gap-2 { gap: 1rem;  }
+    .wrap { flex-wrap: wrap; }
+    .items-center { align-items: center; }
+    .justify-between { justify-content: space-between; }
+    .divider {
+      border: none;
+      border-top: var(--pixel) solid var(--gb-border);
+      margin: 1.5rem 0;
+    }
+  </style>
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+{% if user.is_authenticated %}
+<nav>
+  <a href="{% url 'home' %}" class="nav-logo">▶ PokéDjango</a>
+  <div class="nav-links">
+    <a href="{% url 'home' %}"      {% if request.resolver_match.url_name == 'home'       %}class="active"{% endif %}>HOME</a>
+    <a href="{% url 'pokedex' %}"   {% if request.resolver_match.url_name == 'pokedex'    %}class="active"{% endif %}>POKÉDEX</a>
+    <a href="{% url 'my_pokemon' %}"{% if 'my_pokemon' in request.resolver_match.url_name %}class="active"{% endif %}>MY TEAM</a>
+    <a href="{% url 'logout' %}" class="text-red">LOGOUT</a>
+  </div>
+  <span class="nav-trainer">🎮 {{ user.username }}</span>
+</nav>
+{% endif %}
+
+<div class="container">
+  {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+    <li class="{{ message.tags }}">▶ {{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>
