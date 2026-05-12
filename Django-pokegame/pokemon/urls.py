@@ -7,6 +7,7 @@ urlpatterns = [
     path('register/', views.register_view,  name='register'),
     path('login/',    views.login_view,     name='login'),
     path('logout/',   views.logout_view,    name='logout'),
+    path('choose-starter/', views.choose_starter_view, name='choose_starter'),
 
     # ── Main ──────────────────────────────────────────────────────────────────
     path('',          views.home_view,      name='home'),

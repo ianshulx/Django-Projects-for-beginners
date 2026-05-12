@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from django.db import models
 
 from .constants import POKEMON_TYPES
-from .constants import TYPE_ICONS
 
 
 # ── Core species models ───────────────────────────────────────────────────────
@@ -19,7 +18,6 @@ class Attack(models.Model):
 
 
 class Pokemon(models.Model):
-    
     name         = models.CharField(max_length=100)
     hp           = models.IntegerField(help_text="Base HP for this species")
     level        = models.IntegerField(help_text="Base level of species (used as reference)")
@@ -27,10 +25,7 @@ class Pokemon(models.Model):
     pokemon_type = models.IntegerField(choices=POKEMON_TYPES, default=0)
     attacks      = models.ManyToManyField(Attack, blank=True)
     speed        = models.IntegerField(help_text="Base speed for this species")
-    
-    @property
-    def type_icon(self):
-        return TYPE_ICONS[self.pokemon_type]
+    is_starter   = models.BooleanField(default=False, help_text="Appears in starter selection")
 
     def __str__(self):
         return self.name

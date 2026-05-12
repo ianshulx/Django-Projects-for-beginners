@@ -18,8 +18,8 @@ def register_view(request):
     if request.method == 'POST' and form.is_valid():
         user = form.save()
         login(request, user)
-        messages.success(request, f"Welcome, Trainer {user.username}! Your journey begins.")
-        return redirect('home')
+        messages.success(request, f"Welcome, Trainer {user.username}! Choose your starter.")
+        return redirect('choose_starter')
     return render(request, 'pokemon/register.html', {'form': form})
 
 
@@ -72,8 +72,7 @@ def pokedex_view(request):
         wild_player.pokemons.select_related('pokemon').all()
         if wild_player else MyPoke.objects.none()
     )
-    # print(wild_player)
-    print(player)
+
     other_pokes = (
         MyPoke.objects
         .exclude(player=player)
@@ -184,12 +183,10 @@ def battle_session_view(request, session_id):
 
     # Only the challenger's owner may interact
     if challenger.player != player:
-        print("wow")
         messages.error(request, "This is not your battle!")
         return redirect('home')
 
     if not session.is_ongoing:
-        print("ok"  )
         return redirect('battle_result', session_id=session.id)
 
     if request.method == 'POST':
@@ -320,4 +317,34 @@ def evolve_view(request, mypoke_id):
         'evolved_to':  chain.to_pokemon,
         'type_icons':  TYPE_ICONS,
         'type_names':  TYPE_NAMES,
+    })
+
+
+# ── Starter selection ─────────────────────────────────────────────────────────
+
+@login_required
+def choose_starter_view(request):
+    player = request.user.player
+    if player.pokemons.exists():
+        return redirect('home')
+
+    starters = Pokemon.objects.filter(is_starter=True)
+
+    if request.method == 'POST':
+        pokemon_id = request.POST.get('pokemon_id')
+        nickname   = request.POST.get('nickname', '').strip() or pokemon.name
+        pokemon    = get_object_or_404(Pokemon, id=pokemon_id, is_starter=True)
+        MyPoke.objects.create(
+            name          = nickname,
+            pokemon       = pokemon,
+            player        = player,
+            current_level = 5,
+        )
+        messages.success(request, f"{nickname} chose you!")
+        return redirect('home')
+
+    return render(request, 'pokemon/choose_starter.html', {
+        'starters':   starters,
+        'type_icons': TYPE_ICONS,
+        'type_names': TYPE_NAMES,
     })
