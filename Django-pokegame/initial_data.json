@@ -1,5 +1,95 @@
 [
 {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$we3aY9aNnvYKxGP0TkU50q$REoXkLKn/GE/64MxrMUtZmyg3YcJ/B+sfWdNNLpEGlw=",
+        "last_login": "2026-05-12T18:05:36.297Z",
+        "is_superuser": false,
+        "username": "TestUser1",
+        "first_name": "",
+        "last_name": "",
+        "email": "dummy@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-05-09T22:50:19Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$j8750dq5Mkh0PuzCcVhQey$gz102WaN3ZiOUUYaOK8QfRfdT4GNvub1pydVNUTVbtA=",
+        "last_login": "2026-05-12T18:40:52.871Z",
+        "is_superuser": true,
+        "username": "spidey",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2026-05-09T22:51:57.001Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$J4ZKhMvuRIrEuDPZebFcVp$ZivVVcZZ2OG7k7xHp0q8XdDWdiW9BpwZG2fWiu6ScnM=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "wild",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-05-09T22:57:56Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 4,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$NLGM82JxJE090EBafIQOGj$fXGg1ZWuYUxLmolPSz7QLzuWUOHNfTLuUJabJLR+h4Q=",
+        "last_login": "2026-05-12T18:05:14.289Z",
+        "is_superuser": false,
+        "username": "TestUser2",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-05-12T17:59:57.619Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 5,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$NholI6NImeMGcuyHYCVxL6$L4g6RZnwCEJAj1jKLMKto98DF98R3fUjpM1fpLBlJEo=",
+        "last_login": "2026-05-12T18:06:12.116Z",
+        "is_superuser": false,
+        "username": "TestUser3",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-05-12T18:06:11.466Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
     "model": "pokemon.attack",
     "pk": 1,
     "fields": {
