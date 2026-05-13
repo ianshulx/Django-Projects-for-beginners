@@ -1,0 +1,87 @@
+{% extends 'pokemon/base.html' %}
+{% block title %}Choose Your Starter — PokéDjango{% endblock %}
+
+{% block content %}
+<div style="max-width:700px; margin:2rem auto; text-align:center;">
+  <h1>CHOOSE YOUR STARTER</h1>
+  <p class="text-dim" style="margin-bottom:2rem; font-size:1rem;">
+    This Pokémon will be your first partner. Choose wisely, Trainer<span class="blink">_</span>
+  </p>
+
+  {% if starters %}
+  <form method="post">
+    {% csrf_token %}
+    <div class="grid-3" style="text-align:left;">
+      {% for p in starters %}
+      <label style="cursor:pointer;">
+        <input type="radio" name="pokemon_id" value="{{ p.id }}"
+               id="s{{ p.id }}" style="display:none;">
+        <div class="card" id="card_{{ p.id }}"
+             style="transition:border-color .15s; padding:1.2rem;"
+             onclick="pick('{{ p.id }}')">
+          <div style="font-family:'Press Start 2P',monospace; font-size:.6rem; color:var(--gb-green);">
+            {{ p.name }}
+          </div>
+          <div class="text-dim" style="margin-top:.4rem; font-size:.95rem;">
+            {{ type_icons|default:'' }}
+            <span class="type-badge" style="color:var(--gb-blue); border-color:var(--gb-blue);">
+              {{ p.get_pokemon_type_display }}
+            </span>
+          </div>
+          <div style="margin-top:.6rem; font-size:.95rem; color:var(--gb-dim);">
+            HP: <span class="text-green">{{ p.hp }}</span>
+            &nbsp; SPD: <span class="text-blue">{{ p.speed }}</span>
+          </div>
+          <div style="margin-top:.5rem; font-size:.9rem; color:var(--gb-dim);">
+            {% for atk in p.attacks.all %}
+              <span class="type-badge" style="color:var(--gb-yellow); border-color:var(--gb-yellow);">
+                {{ atk.name }}
+              </span>
+            {% empty %}
+              No attacks
+            {% endfor %}
+          </div>
+        </div>
+      </label>
+      {% endfor %}
+    </div>
+
+    <div style="margin-top:1.5rem; max-width:280px; margin-left:auto; margin-right:auto; text-align:left;">
+      <label class="form-group" for="nickname">
+        <span style="font-family:'Press Start 2P',monospace; font-size:.5rem; color:var(--gb-dim);">
+          NICKNAME (optional)
+        </span>
+        <input type="text" name="nickname" id="nickname" maxlength="100"
+               class="poke-input" placeholder="Leave blank to use species name" style="margin-top:.4rem;">
+      </label>
+    </div>
+
+    <button type="submit" id="choose-btn" class="btn btn-green mt-3" disabled
+            style="font-size:1.2rem; padding:.5rem 2rem;">
+      I CHOOSE YOU! ▶
+    </button>
+  </form>
+
+  {% else %}
+    <div class="card">
+      <p class="text-dim">No starter Pokémon available yet.</p>
+      <p class="text-dim" style="margin-top:.4rem; font-size:.9rem;">
+        Ask your admin to mark some Pokémon as starters in <code>/admin/</code>.
+      </p>
+    </div>
+  {% endif %}
+</div>
+
+<script>
+  let picked = null;
+  function pick(id) {
+    if (picked) document.getElementById('card_' + picked).style.borderColor = 'var(--gb-border)';
+    picked = id;
+    document.getElementById('s' + id).checked = true;
+    const card = document.getElementById('card_' + id);
+    card.style.borderColor = 'var(--gb-green)';
+    card.style.boxShadow   = '0 0 14px rgba(74,222,128,.3)';
+    document.getElementById('choose-btn').removeAttribute('disabled');
+  }
+</script>
+{% endblock %}

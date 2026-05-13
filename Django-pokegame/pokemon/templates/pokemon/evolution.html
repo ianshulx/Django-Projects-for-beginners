@@ -1,0 +1,76 @@
+{% extends 'pokemon/base.html' %}
+{% block title %}Evolution — PokéDjango{% endblock %}
+
+{% block extra_head %}
+<style>
+  @keyframes evolveGlow {
+    0%   { box-shadow: 0 0 10px rgba(167,139,250,.3); border-color: var(--gb-purple); }
+    50%  { box-shadow: 0 0 50px rgba(167,139,250,.8), 0 0 100px rgba(167,139,250,.3); border-color: #e9d5ff; }
+    100% { box-shadow: 0 0 10px rgba(167,139,250,.3); border-color: var(--gb-purple); }
+  }
+
+  @keyframes floatUp {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+  }
+
+  .evolve-box {
+    animation: evolveGlow 2s ease-in-out infinite;
+    border: 2px solid var(--gb-purple);
+    padding: 2.5rem;
+    text-align: center;
+    max-width: 480px;
+    margin: 3rem auto;
+  }
+
+  .evolve-name {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 1rem;
+    animation: floatUp 2s ease-in-out infinite;
+    display: inline-block;
+  }
+
+  .arrow-anim {
+    color: var(--gb-purple);
+    font-size: 2.5rem;
+    margin: 1rem 0;
+    display: block;
+    animation: floatUp 2s ease-in-out infinite reverse;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="evolve-box card">
+
+  <h1 style="color:var(--gb-purple); margin-bottom:1rem;">✨ EVOLVING ✨</h1>
+
+  <p class="text-dim" style="margin-bottom:1.5rem; font-size:1rem;">
+    {{ mypoke.name }} has reached the evolution threshold!
+  </p>
+
+  <div>
+    <span class="evolve-name text-green">{{ mypoke.pokemon.name }}</span>
+    <span class="arrow-anim">▼</span>
+    <span class="evolve-name" style="color:var(--gb-yellow);">{{ evolved_to.name }}</span>
+  </div>
+
+  <div style="margin-top:1.5rem; font-size:1rem; color:var(--gb-dim);">
+    <div>Current: HP {{ mypoke.total_hp }}  |  SPD {{ mypoke.total_speed }}</div>
+    <div style="margin-top:.3rem; color:var(--gb-green);">
+      New type: {{ evolved_to.get_pokemon_type_display }}
+    </div>
+  </div>
+
+  <hr class="divider" style="margin:1.5rem 0;">
+
+  <form method="post">
+    {% csrf_token %}
+    <div class="flex gap-2" style="justify-content:center;">
+      <button type="submit" class="btn btn-purple">✨ EVOLVE!</button>
+      <a href="{% url 'my_pokemon_detail' mypoke.id %}" class="btn btn-blue">NOT NOW</a>
+    </div>
+  </form>
+
+</div>
+{% endblock %}

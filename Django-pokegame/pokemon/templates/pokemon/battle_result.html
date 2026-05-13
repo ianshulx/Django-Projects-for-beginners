@@ -1,0 +1,129 @@
+{% extends 'pokemon/base.html' %}
+{% block title %}Battle Result — PokéDjango{% endblock %}
+
+{% block extra_head %}
+<style>
+  @keyframes victoryPulse {
+    0%,100% { text-shadow: 0 0 10px rgba(74,222,128,.5); }
+    50%      { text-shadow: 0 0 30px rgba(74,222,128,1), 0 0 60px rgba(74,222,128,.5); }
+  }
+  @keyframes defeatShake {
+    0%,100% { transform: translateX(0); }
+    25%      { transform: translateX(-6px); }
+    75%      { transform: translateX(6px); }
+  }
+  .victory-text { animation: victoryPulse 1.5s ease-in-out infinite; color: var(--gb-green); }
+  .defeat-text  { animation: defeatShake .4s ease; color: var(--gb-red); }
+
+  .result-card {
+    max-width: 580px;
+    margin: 2rem auto;
+    padding: 2rem;
+  }
+
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: .4rem 0;
+    border-bottom: 1px solid var(--gb-border);
+    font-size: 1.05rem;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="result-card card pixel-box">
+
+  {% if session.challenger_won %}
+    <h1 class="victory-text" style="text-align:center; font-size:1.1rem; margin-bottom:1rem;">
+      ★ VICTORY! ★
+    </h1>
+  {% else %}
+    <h1 class="defeat-text" style="text-align:center; font-size:1.1rem; margin-bottom:1rem;">
+      ✗ DEFEATED
+    </h1>
+  {% endif %}
+
+  {% if evolution_name %}
+  <div style="text-align:center; padding:1rem;
+              background: rgba(167,139,250,.1);
+              border: 2px solid var(--gb-purple);
+              margin-bottom:1rem;">
+    <span class="text-purple" style="font-family:'Press Start 2P',monospace; font-size:.6rem;">
+      ✨ EVOLUTION! ✨
+    </span><br>
+    <span style="font-size:1.1rem; color:var(--gb-text); margin-top:.3rem; display:block;">
+      {{ session.challenger_poke.name }} evolved into
+      <strong style="color:var(--gb-yellow);">{{ evolution_name }}</strong>!
+    </span>
+  </div>
+  {% endif %}
+
+  <hr class="divider">
+
+  <!-- Battle summary -->
+  <h2>BATTLE SUMMARY</h2>
+
+  <div class="stat-row">
+    <span class="text-dim">Your Pokémon</span>
+    <span class="text-green">{{ session.challenger_poke.name }}</span>
+  </div>
+  <div class="stat-row">
+    <span class="text-dim">Opponent</span>
+    <span class="text-red">
+      {{ session.opponent_poke.name }}
+      {% if session.opponent_is_wild %}(wild){% endif %}
+    </span>
+  </div>
+  <div class="stat-row">
+    <span class="text-dim">Challenger remaining HP</span>
+    <span>{{ session.challenger_hp }} / {{ session.challenger_poke.total_hp }}</span>
+  </div>
+  <div class="stat-row">
+    <span class="text-dim">Opponent remaining HP</span>
+    <span>{{ session.opponent_hp }} / {{ session.opponent_poke.total_hp }}</span>
+  </div>
+  <div class="stat-row">
+    <span class="text-dim">Moves exchanged</span>
+    <span>{{ session.log|length }}</span>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Battle log replay -->
+  <h2>BATTLE LOG</h2>
+  <div style="background:var(--gb-mid); border:2px solid var(--gb-border);
+              padding:.75rem; max-height:200px; overflow-y:auto; font-size:1rem;">
+    {% for entry in session.log %}
+      {% if entry.system %}
+        <div style="color:var(--gb-yellow); padding:.15rem 0;">▶ {{ entry.message }}</div>
+      {% else %}
+        <div style="color: {% if entry.side == 'challenger' %}var(--gb-green){% else %}var(--gb-red){% endif %};
+                    padding:.15rem 0;">
+          ▶ {{ entry.actor }} → {{ entry.attack }}
+          {% if entry.label %}({{ entry.label }}){% endif %}
+          : {{ entry.damage }} dmg
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <hr class="divider">
+
+  <!-- Actions -->
+  <div class="flex gap-2 wrap">
+    <a href="{% url 'home' %}" class="btn btn-blue">HOME</a>
+    <a href="{% url 'pokedex' %}" class="btn btn-yellow">BATTLE AGAIN</a>
+
+    {% if can_capture %}
+    <form method="post" action="{% url 'capture' session.id %}" style="display:inline;">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-green">
+        ● CAPTURE {{ session.opponent_poke.name }}!
+      </button>
+    </form>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

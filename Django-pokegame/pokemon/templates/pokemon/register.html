@@ -1,0 +1,44 @@
+{% extends 'pokemon/base.html' %}
+{% block title %}Register — PokéDjango{% endblock %}
+
+{% block content %}
+<div style="max-width:440px; margin:3rem auto;">
+  <h1 style="text-align:center; margin-bottom:.5rem;">NEW TRAINER</h1>
+  <p class="text-dim" style="text-align:center; margin-bottom:2rem; font-size:1rem;">
+    Begin your Pokémon journey
+  </p>
+
+  <div class="card pixel-box">
+    <form method="post">
+      {% csrf_token %}
+      {% for field in form %}
+      <div class="form-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}
+          <p class="help-text">{{ field.help_text }}</p>
+        {% endif %}
+        {% for error in field.errors %}
+          <p class="error-text">▶ {{ error }}</p>
+        {% endfor %}
+      </div>
+      {% endfor %}
+
+      {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+          <p class="error-text">▶ {{ error }}</p>
+        {% endfor %}
+      {% endif %}
+
+      <button type="submit" class="btn btn-green" style="width:100%; margin-top:.5rem;">
+        START JOURNEY ▶
+      </button>
+    </form>
+  </div>
+
+  <p style="text-align:center; margin-top:1rem; font-size:1rem; color:var(--gb-dim);">
+    Already a trainer?
+    <a href="{% url 'login' %}" class="text-yellow">Log in →</a>
+  </p>
+</div>
+{% endblock %}

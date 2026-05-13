@@ -1,0 +1,90 @@
+{% extends 'pokemon/base.html' %}
+{% block title %}Choose Your Fighter — PokéDjango{% endblock %}
+
+{% block content %}
+<h1>CHOOSE YOUR FIGHTER</h1>
+
+<!-- Opponent info -->
+<div class="card pixel-box" style="max-width:400px; margin-bottom:2rem; border-color:var(--gb-red);">
+  <h2 style="color:var(--gb-red);">OPPONENT</h2>
+  <div style="font-size:1.1rem;">
+    <span class="text-yellow">{{ opponent.name }}</span>
+    <span class="text-dim"> — {{ opponent.pokemon.name }}</span>
+    <span class="type-badge" style="color:var(--gb-blue); border-color:var(--gb-blue);">
+      {{ opponent.pokemon.get_pokemon_type_display }}
+    </span>
+  </div>
+  <div class="text-dim" style="font-size:.95rem; margin-top:.4rem;">
+    LV {{ opponent.current_level }}
+    &nbsp;|&nbsp; HP: {{ opponent.total_hp }}
+    &nbsp;|&nbsp; SPD: {{ opponent.total_speed }}
+  </div>
+  <div style="margin-top:.5rem; font-size:.9rem; color:var(--gb-dim);">
+    {% for atk in opponent.pokemon.attacks.all %}
+      <span class="type-badge" style="color:var(--gb-yellow); border-color:var(--gb-yellow);">
+        {{ atk.name }}
+      </span>
+    {% empty %}
+      No attacks
+    {% endfor %}
+  </div>
+  <div style="margin-top:.5rem; font-size:.9rem; color:var(--gb-purple);">
+    Owner: {{ opponent.player.name }}
+  </div>
+</div>
+
+<!-- Pick your Pokémon -->
+<h2>YOUR POKÉMON</h2>
+<form method="post">
+  {% csrf_token %}
+  <div class="grid-3">
+    {% for mp in my_pokes %}
+    <label style="cursor:pointer;">
+      <input type="radio" name="challenger_id" value="{{ mp.id }}"
+             style="display:none;" id="mp{{ mp.id }}">
+      <div class="card" id="card_{{ mp.id }}"
+           style="border-color:var(--gb-border); transition:border-color .15s;"
+           onclick="selectPoke('{{ mp.id }}')">
+        <div style="font-family:'Press Start 2P',monospace; font-size:.6rem; color:var(--gb-green);">
+          {{ mp.name }}
+        </div>
+        <div class="text-dim" style="font-size:.9rem; margin-top:.3rem;">
+          {{ mp.pokemon.name }}
+          <span class="type-badge" style="color:var(--gb-blue); border-color:var(--gb-blue);">
+            {{ mp.pokemon.get_pokemon_type_display }}
+          </span>
+        </div>
+        <div style="margin-top:.5rem; font-size:.9rem; color:var(--gb-dim);">
+          LV {{ mp.current_level }}
+          &nbsp; HP: {{ mp.total_hp }}
+          &nbsp; SPD: {{ mp.total_speed }}
+        </div>
+        <div class="xp-bar-wrap mt-1">
+          <div class="xp-bar" style="width:{{ mp.xp_progress_percent }}%;"></div>
+        </div>
+      </div>
+    </label>
+    {% endfor %}
+  </div>
+
+  <div class="mt-3 flex gap-2">
+    <button type="submit" id="fight-btn" class="btn btn-red" disabled>⚔ FIGHT!</button>
+    <a href="{% url 'pokedex' %}" class="btn btn-blue">← BACK</a>
+  </div>
+</form>
+
+<script>
+  let selected = null;
+  function selectPoke(id) {
+    // Deselect previous
+    if (selected) {
+      document.getElementById('card_' + selected).style.borderColor = 'var(--gb-border)';
+    }
+    selected = id;
+    document.getElementById('mp' + id).checked = true;
+    document.getElementById('card_' + id).style.borderColor = 'var(--gb-green)';
+    document.getElementById('card_' + id).style.boxShadow = '0 0 12px rgba(74,222,128,.3)';
+    if (selected) document.getElementById('fight-btn').removeAttribute('disabled');
+  }
+</script>
+{% endblock %}

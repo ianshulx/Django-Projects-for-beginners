@@ -1,0 +1,199 @@
+{% extends 'pokemon/base.html' %}
+{% block title %}Battle — PokéDjango{% endblock %}
+
+{% block extra_head %}
+<style>
+  .battle-arena {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .fighter-box {
+    background: var(--gb-dark);
+    border: 2px solid var(--gb-border);
+    padding: 1rem;
+    position: relative;
+  }
+
+  .fighter-box.challenger { border-color: var(--gb-green); }
+  .fighter-box.opponent   { border-color: var(--gb-red);   }
+
+  .fighter-name {
+    font-family: 'Press Start 2P', monospace;
+    font-size: .65rem;
+    margin-bottom: .4rem;
+  }
+
+  .attack-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .5rem;
+    margin-top: 1rem;
+  }
+
+  .attack-btn {
+    font-family: 'VT323', monospace;
+    font-size: 1.15rem;
+    background: var(--gb-mid);
+    color: var(--gb-text);
+    border: 2px solid var(--gb-border);
+    padding: .5rem;
+    cursor: pointer;
+    text-align: left;
+    transition: all .1s;
+  }
+  .attack-btn:hover {
+    border-color: var(--gb-yellow);
+    color: var(--gb-yellow);
+    background: rgba(250,204,21,.06);
+  }
+  .attack-btn:active { transform: translate(1px,1px); }
+
+  .attack-btn .atk-name  { display: block; font-size: 1.1rem; }
+  .attack-btn .atk-meta  { display: block; font-size: .85rem; color: var(--gb-dim); margin-top: .15rem; }
+
+  .battle-log {
+    background: var(--gb-mid);
+    border: 2px solid var(--gb-border);
+    padding: .75rem 1rem;
+    height: 160px;
+    overflow-y: auto;
+    font-size: 1rem;
+  }
+
+  .log-entry        { padding: .2rem 0; border-bottom: 1px solid rgba(255,255,255,.04); }
+  .log-challenger   { color: var(--gb-green); }
+  .log-opponent     { color: var(--gb-red);   }
+  .log-system       { color: var(--gb-yellow); font-size: .9rem; }
+
+  /* Flicker animation for damage */
+  @keyframes flicker {
+    0%,100% { opacity:1; }
+    25%,75%  { opacity:.3; }
+    50%      { opacity:.7; }
+  }
+  .flash { animation: flicker .4s ease; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="max-width:800px; margin:0 auto;">
+
+  <h1 style="margin-bottom:1.5rem;">
+    ⚔ BATTLE
+    <span class="text-dim" style="font-size:.55rem; margin-left:1rem;">
+      #{{ session.id }}
+    </span>
+  </h1>
+
+  <!-- ── Arena ─────────────────────────────────────────────────────────── -->
+  {% if session.is_ongoing %}
+  <div class="battle-arena">
+
+    <!-- Challenger -->
+    <div class="fighter-box challenger">
+      <div class="fighter-name text-green">{{ session.challenger_poke.name }}</div>
+      <div class="text-dim" style="font-size:.9rem;">
+        {{ session.challenger_poke.pokemon.name }}
+        (LV {{ session.challenger_poke.current_level }})
+      </div>
+      <div style="margin-top:.6rem; font-size:.95rem;">
+        HP: <span class="text-green">{{ session.challenger_hp }}</span>
+        / {{ session.challenger_poke.total_hp }}
+      </div>
+      <div class="hp-bar-wrap mt-1">
+        {% with pct=session.challenger_hp_percent %}
+        <div class="hp-bar {% if pct > 50 %}high{% elif pct > 20 %}medium{% else %}low{% endif %}"
+             id="chp-bar" style="width:{{ pct }}%;"></div>
+        {% endwith %}
+      </div>
+    </div>
+
+    <!-- Opponent -->
+    <div class="fighter-box opponent">
+      <div class="fighter-name text-red">
+        {{ session.opponent_poke.name }}
+        {% if session.opponent_is_wild %}
+          <span class="text-dim" style="font-size:.5rem;">(WILD)</span>
+        {% endif %}
+      </div>
+      <div class="text-dim" style="font-size:.9rem;">
+        {{ session.opponent_poke.pokemon.name }}
+        (LV {{ session.opponent_poke.current_level }})
+      </div>
+      <div style="margin-top:.6rem; font-size:.95rem;">
+        HP: <span class="text-red">{{ session.opponent_hp }}</span>
+        / {{ session.opponent_poke.total_hp }}
+      </div>
+      <div class="hp-bar-wrap mt-1">
+        {% with pct=session.opponent_hp_percent %}
+        <div class="hp-bar {% if pct > 50 %}high{% elif pct > 20 %}medium{% else %}low{% endif %}"
+             id="ohp-bar" style="width:{{ pct }}%;"></div>
+        {% endwith %}
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Battle Log ─────────────────────────────────────────────────────── -->
+  <div class="battle-log" id="battle-log">
+    {% for entry in log %}
+      {% if entry.system %}
+        <div class="log-entry log-system">▶ {{ entry.message }}</div>
+      {% else %}
+        <div class="log-entry {% if entry.side == 'challenger' %}log-challenger{% else %}log-opponent{% endif %}">
+          ▶ {{ entry.actor }} used <strong>{{ entry.attack }}</strong>!
+          {% if entry.label %}
+            <em> {{ entry.label }}</em>
+          {% endif %}
+          ({{ entry.damage }} dmg) — {{ entry.target }} HP: {{ entry.remaining_hp }}
+        </div>
+      {% endif %}
+    {% empty %}
+      <div class="log-entry log-system">▶ Battle started! Choose an attack.</div>
+    {% endfor %}
+  </div>
+
+  <!-- ── Attack Selector ────────────────────────────────────────────────── -->
+  <div style="margin-top:1.5rem;">
+    <h2>WHAT WILL {{ session.challenger_poke.name|upper }} DO?</h2>
+
+    {% if attacks %}
+    <div class="attack-grid">
+      {% for attack in attacks %}
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="attack_id" value="{{ attack.id }}">
+        <button type="submit" class="attack-btn">
+          <span class="atk-name">{{ attack.name }}</span>
+          <span class="atk-meta">
+            TYPE: {{ attack.get_attack_type_display }}
+            &nbsp;|&nbsp; PWR: {{ attack.damage }}
+          </span>
+        </button>
+      </form>
+      {% endfor %}
+    </div>
+    {% else %}
+      <p class="text-dim">No attacks available! Add attacks to this Pokémon via Admin.</p>
+    {% endif %}
+  </div>
+
+  {% else %}
+    <!-- Battle is over — redirect -->
+    <div class="card" style="text-align:center; padding:2rem;">
+      <p class="text-yellow" style="font-size:1.2rem;">BATTLE OVER</p>
+      <a href="{% url 'battle_result' session.id %}" class="btn btn-green mt-2">VIEW RESULTS →</a>
+    </div>
+  {% endif %}
+
+</div>
+
+<script>
+  // Auto-scroll the log to bottom
+  const log = document.getElementById('battle-log');
+  if (log) log.scrollTop = log.scrollHeight;
+</script>
+{% endblock %}  

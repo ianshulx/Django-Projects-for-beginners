@@ -1,0 +1,125 @@
+{% extends 'pokemon/base.html' %}
+{% block title %}Home — PokéDjango{% endblock %}
+
+{% block content %}
+
+<div class="flex items-center justify-between mb-1">
+  <h1>TRAINER {{ user.username|upper }}</h1>
+</div>
+<p class="text-dim" style="margin-bottom:2rem; font-size:1rem;">
+  Your current team and recent battles
+</p>
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:start;">
+
+  <!-- ── My Team ──────────────────────────────────────────────────────── -->
+  <section>
+    <h2>MY TEAM</h2>
+
+    {% if my_pokes %}
+      {% for mp in my_pokes %}
+      {% with pct=mp.xp_progress_percent %}
+      <div class="card">
+        <div class="flex justify-between items-center">
+          <a href="{% url 'my_pokemon_detail' mp.id %}" class="text-green" style="text-decoration:none; font-family:'Press Start 2P',monospace; font-size:.6rem;">
+            {{ mp.name }}
+          </a>
+          <span class="text-dim" style="font-size:.9rem;">lv {{ mp.current_level }}</span>
+        </div>
+        
+        <div class="text-dim" style="font-size:.9rem; margin-top:.3rem;">
+          {% comment %} {{ type_icons[mp.pokemon.pokemon_type]|default:'' }} {% endcomment %}
+          {{ mp.pokemon.name }}
+          <span class="type-badge" style="color:var(--gb-blue); border-color:var(--gb-blue);">
+            {{ mp.pokemon.get_pokemon_type_display }}
+            {% with num=mp.pokemon.pokemon_type %}   
+            {{ mp.pokemon.type_icon|default:'' }}
+            {% endwith %}
+          </span>
+        </div>
+
+        <!-- HP bar -->
+        {% with hp_pct=100 %}
+        <div style="margin-top:.6rem; font-size:.9rem;" class="text-dim">
+          HP: {{ mp.total_hp }}
+        </div>
+        <div class="hp-bar-wrap">
+          <div class="hp-bar high" style="width:100%;"></div>
+        </div>
+        {% endwith %}
+
+        <!-- XP bar -->
+        <div style="margin-top:.4rem; font-size:.85rem;" class="text-dim">
+          XP: {{ mp.current_xp }} / {{ mp.xp_to_next_level }}
+        </div>
+        <div class="xp-bar-wrap">
+          <div class="xp-bar" style="width:{{ pct }}%;"></div>
+        </div>
+
+        <!-- Attacks -->
+        <div style="margin-top:.6rem; font-size:.9rem; color:var(--gb-dim);">
+          {% for atk in mp.pokemon.attacks.all %}
+            <span class="type-badge" style="color:var(--gb-yellow); border-color:var(--gb-yellow);">{{ atk.name }}</span>
+          {% empty %}
+            <span class="text-dim">No attacks</span>
+          {% endfor %}
+        </div>
+
+        <div class="flex gap-1 wrap mt-2">
+          <a href="{% url 'my_pokemon_detail' mp.id %}" class="btn btn-blue btn-sm">DETAILS</a>
+          {% if mp.pending_evolution %}
+          <a href="{% url 'evolve' mp.id %}" class="btn btn-purple btn-sm">✨ EVOLVE</a>
+          {% endif %}
+          <a href="{% url 'pokedex' %}" class="btn btn-yellow btn-sm">BATTLE</a>
+        </div>
+      </div>
+      {% endwith %}
+      {% endfor %}
+    {% else %}
+      <div class="card">
+        <p class="text-dim">No Pokémon yet!</p>
+        <a href="{% url 'pokedex' %}" class="btn btn-green mt-2">FIND WILD POKÉMON →</a>
+      </div>
+    {% endif %}
+
+    <a href="{% url 'my_pokemon' %}" class="btn btn-blue" style="margin-top:.5rem;">VIEW FULL TEAM</a>
+  </section>
+
+  <!-- ── Recent Battles ───────────────────────────────────────────────── -->
+  <section>
+    <h2>RECENT BATTLES</h2>
+
+    {% if recent_battles %}
+      {% for b in recent_battles %}
+      <div class="card" style="font-size:1rem;">
+        <div class="flex justify-between">
+          <span class="text-green">{{ b.challenger_poke.name }}</span>
+          <span class="text-dim">vs</span>
+          <span class="text-yellow">{{ b.opponent_poke.name }}</span>
+        </div>
+        <div class="text-dim" style="margin-top:.3rem; font-size:.9rem;">
+          {{ b.created_at|date:"M d H:i" }}
+        </div>
+        <div style="margin-top:.3rem;">
+          {% if b.status == 'ongoing' %}
+            <span class="text-yellow">⚔ ONGOING</span>
+            <a href="{% url 'battle_session' b.id %}" class="btn btn-yellow btn-sm" style="margin-left:.5rem;">RESUME</a>
+          {% elif b.status == 'challenger_won' %}
+            <span class="text-green">★ VICTORY</span>
+          {% else %}
+            <span class="text-red">✗ DEFEAT</span>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="card">
+        <p class="text-dim">No battles yet. Challenge a wild Pokémon!</p>
+        <a href="{% url 'pokedex' %}" class="btn btn-red mt-2">BATTLE NOW →</a>
+      </div>
+    {% endif %}
+  </section>
+
+</div>
+
+{% endblock %}

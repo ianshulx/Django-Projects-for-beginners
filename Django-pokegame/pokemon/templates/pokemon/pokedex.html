@@ -1,0 +1,99 @@
+{% extends 'pokemon/base.html' %}
+{% block title %}Pokédex — PokéDjango{% endblock %}
+
+{% block content %}
+<h1>POKÉDEX</h1>
+<p class="text-dim" style="margin-bottom:2rem; font-size:1rem;">
+  Choose a target — then select your fighter to begin a battle.
+</p>
+
+<!-- ── Wild Pokémon ──────────────────────────────────────────────────────── -->
+<section>
+  <h2>🌿 WILD POKÉMON</h2>
+  {% if wild_pokes %}
+  <div class="grid-3">
+    {% for mp in wild_pokes %}
+    <div class="card">
+      <div style="font-family:'Press Start 2P',monospace; font-size:.6rem; color:var(--gb-green);">
+        {{ mp.name }}
+      </div>
+      <div class="text-dim" style="font-size:.9rem; margin-top:.3rem;">
+        {{ mp.pokemon.name }}
+        <span class="type-badge" style="color:var(--gb-blue); border-color:var(--gb-blue);">
+          {{ mp.pokemon.get_pokemon_type_display }}
+        </span>
+      </div>
+      <div style="margin-top:.6rem; font-size:.9rem; color:var(--gb-dim);">
+        HP: {{ mp.total_hp }} &nbsp; SPD: {{ mp.total_speed }} &nbsp; LV: {{ mp.current_level }}
+      </div>
+      <div style="margin-top:.5rem; font-size:.9rem; color:var(--gb-dim);">
+        {% for atk in mp.pokemon.attacks.all %}
+          <span class="type-badge" style="color:var(--gb-yellow); border-color:var(--gb-yellow);">
+            {{ atk.name }}
+          </span>
+        {% empty %}
+          <span>No attacks</span>
+        {% endfor %}
+      </div>
+      <div class="mt-2">
+        <a href="{% url 'battle_select' mp.id %}" class="btn btn-red btn-sm">⚔ BATTLE</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+    <div class="card">
+      <p class="text-dim">No wild Pokémon found. Ask your admin to seed some via the Django admin panel.</p>
+    </div>
+  {% endif %}
+</section>
+
+<hr class="divider">
+
+<!-- ── Other Trainers' Pokémon ────────────────────────────────────────────── -->
+<section>
+  <h2>🧢 OTHER TRAINERS' POKÉMON</h2>
+  {% if other_pokes %}
+  <div class="grid-3">
+    {% for mp in other_pokes %}
+    <div class="card">
+      <div class="flex justify-between items-center">
+        <span style="font-family:'Press Start 2P',monospace; font-size:.6rem; color:var(--gb-purple);">
+          {{ mp.name }}
+        </span>
+        <span class="text-dim" style="font-size:.85rem;">
+          🎮 {{ mp.player.name }}
+        </span>
+      </div>
+      <div class="text-dim" style="font-size:.9rem; margin-top:.3rem;">
+        {{ mp.pokemon.name }}
+        <span class="type-badge" style="color:var(--gb-blue); border-color:var(--gb-blue);">
+          {{ mp.pokemon.get_pokemon_type_display }}
+        </span>
+      </div>
+      <div style="margin-top:.5rem; font-size:.9rem; color:var(--gb-dim);">
+        HP: {{ mp.total_hp }} &nbsp; SPD: {{ mp.total_speed }} &nbsp; LV: {{ mp.current_level }}
+      </div>
+      <div style="margin-top:.5rem; font-size:.9rem; color:var(--gb-dim);">
+        {% for atk in mp.pokemon.attacks.all %}
+          <span class="type-badge" style="color:var(--gb-yellow); border-color:var(--gb-yellow);">
+            {{ atk.name }}
+          </span>
+        {% empty %}
+          <span>No attacks</span>
+        {% endfor %}
+      </div>
+      <div class="mt-2">
+        <a href="{% url 'battle_select' mp.id %}" class="btn btn-red btn-sm">⚔ BATTLE</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+    <div class="card">
+      <p class="text-dim">No other trainers with Pokémon yet. Invite some friends!</p>
+    </div>
+  {% endif %}
+</section>
+
+{% endblock %}
