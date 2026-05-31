@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پورتفولیو</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <!-- دکمه تغییر زبان -->
+        <div class="language-switch" style="display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 2rem;">
+            <a href="{% url 'home:english' %}" style="padding: 8px 20px; background: #667eea; color: white; border-radius: 25px; text-decoration: none;">English</a>
+            <span style="color: #999;">|</span>
+            <a href="{% url 'home:home' %}" style="padding: 8px 20px; background: #e0e0e0; color: #333; border-radius: 25px; text-decoration: none;">فارسی</a>
+        </div>
+        <!-- بخش درباره من -->
+        <section class="about">
+            <h2>درباره‌ی من</h2>
+            <p>من کاربر *
+                ، توسعه‌دهنده full-stack با تسلط بر جنگو، DRF، Celery، RabbitMQ، Redis، PostgreSQL، MongoDB، Docker،
+                Git، تست‌نویسی، امنیت وب، وب اسکرپینگ، دیزاین پترن‌ها
+                ، و لینوکس. بیش از ۲۴ دوره تخصصی رو کامل پشت سر گذاشتم و آماده ساخت پروژه‌های مقیاس‌پذیر و باکیفیت هستم.
+            </p>
+        </section>
+
+        <!-- بخش مهارت‌ها -->
+        <section class="skills">
+            <h2>مهارت‌ها</h2>
+            <ul>
+                <li>Git & GitHub</li>
+                <li>PostgreSQL / SQLite / Redis / MongoDB</li>
+                <li>Python / Algorithms</li>
+                <li>HTML & CSS (Flexbox, Grid)</li>
+            </ul>
+        </section>
+
+        <!-- بخش ارتباط با من -->
+        <section class="contact">
+            <h2>ارتباط با من</h2>
+            <p>ایمیل: <a href="mailto:you@example.com">you@example.com</a></p>
+            <p>گیت‌هاب: <a href="#" target="_blank">github.com/yourusername</a></p>
+            <p>لینکدین: <a href="#" target="_blank">linkedin.com/in/yourusername</a></p>
+        </section>
+    </div>
+</body>
+</html>

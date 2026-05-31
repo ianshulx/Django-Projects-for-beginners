@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <!-- Language Switch Button -->
+        <div class="language-switch" style="display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 2rem;">
+            <a href="{% url 'home:english' %}" style="padding: 8px 20px; background: #667eea; color: white; border-radius: 25px; text-decoration: none;">English</a>
+            <span style="color: #999;">|</span>
+            <a href="{% url 'home:home' %}" style="padding: 8px 20px; background: #e0e0e0; color: #333; border-radius: 25px; text-decoration: none;">فارسی</a>
+        </div>
+
+        <!-- About Me Section -->
+        <section class="about">
+            <h2>About Me</h2>
+            <p>
+                I'm user *, a full-stack developer proficient in Django, DRF, Celery, RabbitMQ, Redis,
+                PostgreSQL, MongoDB, Docker, Git, testing, web security, web scraping, design patterns, and Linux.
+                I've completed over 24 specialized courses and I'm ready to build scalable, high-quality projects.
+            </p>
+        </section>
+
+        <!-- Skills Section -->
+        <section class="skills">
+            <h2>Skills</h2>
+            <ul>
+                <li>Git & GitHub</li>
+                <li>PostgreSQL / SQLite / Redis / MongoDB</li>
+                <li>Python / Algorithms</li>
+                <li>HTML & CSS (Flexbox, Grid)</li>
+            </ul>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="contact">
+            <h2>Contact Me</h2>
+            <p>Email: <a href="mailto:you@example.com">you@example.com</a></p>
+            <p>GitHub: <a href="#" target="_blank">github.com/yourusername</a></p>
+            <p>LinkedIn: <a href="#" target="_blank">linkedin.com/in/yourusername</a></p>
+        </section>
+    </div>
+</body>
+</html>

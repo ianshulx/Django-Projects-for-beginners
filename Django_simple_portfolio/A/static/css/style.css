@@ -1,0 +1,132 @@
+/* تنظیمات پایه و ریست */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Vazir', 'Tahoma', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    color: #333;
+    line-height: 1.6;
+    padding: 2rem;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* بخش درباره من */
+.about {
+    background: white;
+    padding: 1.8rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    border-right: 5px solid #4CAF50;
+    transition: transform 0.3s ease;
+}
+
+.about:hover {
+    transform: translateX(-5px);
+}
+
+.about h2 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+}
+
+.about p {
+    font-size: 1.1rem;
+    color: #555;
+}
+
+/* بخش مهارت‌ها */
+.skills {
+    background: white;
+    padding: 1.8rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    border-right: 5px solid #2196F3;
+}
+
+.skills h2 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+}
+
+.skills ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    list-style: none;
+}
+
+.skills li {
+    background: #2196F3;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 0.95rem;
+    transition: background 0.3s;
+}
+
+.skills li:hover {
+    background: #0b5e9e;
+    transform: scale(1.05);
+}
+
+/* بخش ارتباط با من */
+.contact {
+    background: white;
+    padding: 1.8rem;
+    border-radius: 15px;
+    border-right: 5px solid #FF9800;
+}
+
+.contact h2 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+}
+
+.contact p {
+    margin: 0.6rem 0;
+}
+
+.contact a {
+    color: #FF9800;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.contact a:hover {
+    color: #e68900;
+    text-decoration: underline;
+}
+
+/* ریسپانسیو برای موبایل */
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+    }
+    .container {
+        padding: 1rem;
+    }
+    .skills ul {
+        flex-direction: column;
+        gap: 0.7rem;
+    }
+    .skills li {
+        text-align: center;
+    }
+}
