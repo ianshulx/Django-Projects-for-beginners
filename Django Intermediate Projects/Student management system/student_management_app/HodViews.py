@@ -104,6 +104,14 @@ def add_staff_save(request):
         password = request.POST.get('password')
         address = request.POST.get('address')
 
+        if CustomUser.objects.filter(username=username).exists():
+            messages.error(request, "Username already exists!")
+            return redirect('add_staff')
+
+        if CustomUser.objects.filter(email=email).exists():
+            messages.error(request, "Email already exists!")
+            return redirect('add_staff')
+
         try:
             user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=2)
             user.staffs.address = address
