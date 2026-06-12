@@ -366,7 +366,14 @@ def add_student_save(request):
                 profile_pic_url = fs.url(filename)
             else:
                 profile_pic_url = None
+            
+            if CustomUser.objects.filter(username=username).exists():
+                messages.error(request, "Username already exists!")
+                return redirect('add_staff')
 
+            if CustomUser.objects.filter(email=email).exists():
+                messages.error(request, "Email already exists!")
+                return redirect('add_staff')
 
             try:
                 user = CustomUser.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name, user_type=3)
