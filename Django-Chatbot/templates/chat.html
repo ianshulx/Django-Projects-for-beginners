@@ -118,8 +118,10 @@
     }
 
     .message.ai .message-avatar {
-      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg,#06b6d4,#3b82f6);
     }
+
+   
 
     .message-content {
       max-width: 70%;
@@ -154,7 +156,7 @@
       border-top: 1px solid #e0e0e0;
       display: flex;
       gap: 12px;
-      align-items: center;
+      align-items: flex-end;
     }
 
     #msg {
@@ -282,8 +284,8 @@
 <body>
   <div class="chat-container">
     <div class="chat-header">
-      <h1>🤖 AI Chatbot</h1>
-      <p>Powered by Mistral AI</p>
+      <h1>✨ Nova Django Assistant</h1>
+      <p>Built with Django and Powered by OpenRouter</p>      
     </div>
 
     <div id="chatbox">
@@ -305,9 +307,9 @@
           </select>
           <input type="text" id="roleInput" placeholder="Or enter a custom role/character..." style="flex:1;padding:8px;border-radius:8px;border:1px solid #e0e0e0">
         </div>
-        <input type="text" id="msg" placeholder="Type your message here..." autocomplete="off">
+        <input type="text" id="msg" placeholder="Ask Nova Django Assistant anything..." autocomplete="off">
       </div>
-      <button id="sendBtn">Send</button>
+      <button id="sendBtn">➤</button>
     </div>
   </div>
 
@@ -338,7 +340,8 @@
       
       const avatar = document.createElement('div');
       avatar.className = 'message-avatar';
-      avatar.textContent = sender === 'user' ? 'You' : 'AI';
+      avatar.innerHTML = sender === "user"
+      ? "😊" : "🧠";
       
       const contentDiv = document.createElement('div');
       contentDiv.className = 'message-content';
