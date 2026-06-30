@@ -1,163 +1,151 @@
 import json
 import logging
+
+import requests
 from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import render
-import requests
 from django.views.decorators.csrf import csrf_exempt
-# Create your views here.
-
 
 logger = logging.getLogger(__name__)
 
+
 @csrf_exempt
 def chatbot(request):
-    
-
     if request.method == "GET":
         return render(request, "chat.html")
-    
 
     try:
-        body= json.loads(request.body.decode('utf-8')) if request.body else {}
+        body = json.loads(request.body or "{}")
     except json.JSONDecodeError:
-        return JsonResponse({'error': 'Invalid JSON'}, status=400)
-    
-    user_message = body.get("message","").strip()
+        return JsonResponse({"error": "Invalid JSON."}, status=400)
+
+    user_message = body.get("message", "").strip()
 
     if not user_message:
-        return JsonResponse({'error': 'Message cannot be empty'}, status=400)
-    
-    # Optional role (system prompt) from the client
-    role_message = body.get("role", "").strip()
-    
-    api_key = getattr(settings, 'OPENROUTER_API_KEY', None)
+        return JsonResponse({"error": "Message cannot be empty."}, status=400)
+
+    role_message = (
+        body.get("role", "").strip()
+        or getattr(settings, "DEFAULT_BOT_ROLE", "You are a nasty lover.")
+    )
+
+    api_key = getattr(settings, "OPENROUTER_API_KEY", None)
 
     if not api_key:
-        logger.error("OpenRouter API key is not configured.")
-        return JsonResponse({'error': 'Server configuration error'}, status=500)
-    
-    # Use provided role or fall back to default from settings
-    if not role_message:
-        role_message = getattr(settings, 'DEFAULT_BOT_ROLE', '')
+        logger.error("OPENROUTER_API_KEY is missing.")
+        return JsonResponse(
+            {"error": "OpenRouter API key is not configured."},
+            status=500,
+        )
+
+    model = getattr(
+        settings,
+        "OPENROUTER_MODEL",
+        "openai/gpt-4.1-mini",
+    )
+
+    payload = {
+        "model": model,
+        "messages": [
+            {
+                "role": "system",
+                "content": role_message,
+            },
+            {
+                "role": "user",
+                "content": user_message,
+            },
+        ],
+        "temperature": 0.7,
+        "max_tokens": 300,
+    }
+
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+
+        # Recommended by OpenRouter
+        "HTTP-Referer": "http://127.0.0.1:8000",
+        "X-Title": "Django Chatbot",
+    }
 
     try:
-        # Build request payload so we can inspect it if debugging
-        payload = {
-            "model": "mistralai/mistral-7b-instruct",
-            # include a system message (role) first so the model adopts the character
-            "messages": [
-                {"role": "system", "content": role_message},
-                {"role": "user", "content": user_message}
-            ],
-        }
-
-        resp = requests.post(
-            'https://openrouter.ai/api/v1/chat/completions',
-            headers={
-                'Authorization': f'Bearer {api_key}',
-                'Content-Type': 'application/json',
-            },
+        response = requests.post(
+            "https://openrouter.ai/api/v1/chat/completions",
+            headers=headers,
             json=payload,
-            timeout=15,
+            timeout=30,
+        )
+
+    except requests.exceptions.ConnectionError:
+        logger.exception("Unable to connect to OpenRouter.")
+        return JsonResponse(
+            {
+                "error": "Cannot connect to OpenRouter. Check your internet connection."
+            },
+            status=502,
+        )
+
+    except requests.exceptions.Timeout:
+        logger.exception("OpenRouter request timed out.")
+        return JsonResponse(
+            {"error": "The AI service took too long to respond."},
+            status=504,
         )
 
     except requests.RequestException as exc:
-        logger.exception("Error communicating with OpenAI API: %s", exc)
-        return JsonResponse({'error': 'Error communicating with AI service'}, status=502)
+        logger.exception(exc)
+        return JsonResponse(
+            {"error": "An unexpected network error occurred."},
+            status=502,
+        )
 
-    if resp.status_code != 200:
-        logger.error("OpenAI API error %s: %s", resp.status_code, resp.text)
-        return JsonResponse({'error': 'AI service error'}, status=502)
-    
-    try:
-        data = resp.json()
-        # Safely access content from the model response
-        ai_reply = ''
+    print("=" * 80)
+    print("STATUS:", response.status_code)
+    print("BODY:")
+    print(response.text)
+    print("=" * 80)
+
+    if response.status_code != 200:
         try:
-            ai_reply = data.get('choices', [])[0].get('message', {}).get('content', '')
+            error = response.json()
         except Exception:
-            # fallback if structure is different
-            ai_reply = data.get('choices', [])[0].get('text', '') if data.get('choices') else ''
+            error = response.text
 
-        # If the model returned an empty reply, provide a helpful fallback so UI isn't blank
-        attempts = []
+        logger.error(error)
 
-        if not (ai_reply and ai_reply.strip()):
-            # Record first (empty) attempt
-            attempts.append({
-                'type': 'initial',
-                'response': data,
-            })
+        return JsonResponse(
+            {
+                "error": "OpenRouter API Error",
+                "details": error,
+            },
+            status=response.status_code,
+        )
 
-            # Attempt 1: retry with more generous generation params
-            try:
-                retry_payload = payload.copy()
-                retry_payload.update({
-                    'max_tokens': 200,
-                    'temperature': 0.7,
-                })
-                r2 = requests.post(
-                    'https://openrouter.ai/api/v1/chat/completions',
-                    headers={
-                        'Authorization': f'Bearer {api_key}',
-                        'Content-Type': 'application/json',
-                    },
-                    json=retry_payload,
-                    timeout=15,
-                )
-                data2 = r2.json() if r2.status_code == 200 else {'error_status': r2.status_code, 'text': r2.text}
-                attempts.append({'type': 'retry_more_tokens', 'request': retry_payload, 'response': data2})
-                # Try to extract reply
-                try:
-                    ai_reply = data2.get('choices', [])[0].get('message', {}).get('content', '')
-                except Exception:
-                    ai_reply = data2.get('choices', [])[0].get('text', '') if data2.get('choices') else ''
-            except Exception as exc:
-                logger.exception('Retry attempt 1 failed: %s', exc)
+    try:
+        data = response.json()
 
-            # Attempt 2: retry without system role (in case role silences the model)
-            if not (ai_reply and ai_reply.strip()):
-                try:
-                    payload_no_role = {
-                        'model': payload.get('model'),
-                        'messages': [
-                            {'role': 'user', 'content': user_message}
-                        ],
-                        'max_tokens': 200,
-                        'temperature': 0.7,
-                    }
-                    r3 = requests.post(
-                        'https://openrouter.ai/api/v1/chat/completions',
-                        headers={
-                            'Authorization': f'Bearer {api_key}',
-                            'Content-Type': 'application/json',
-                        },
-                        json=payload_no_role,
-                        timeout=15,
-                    )
-                    data3 = r3.json() if r3.status_code == 200 else {'error_status': r3.status_code, 'text': r3.text}
-                    attempts.append({'type': 'retry_no_role', 'request': payload_no_role, 'response': data3})
-                    try:
-                        ai_reply = data3.get('choices', [])[0].get('message', {}).get('content', '')
-                    except Exception:
-                        ai_reply = data3.get('choices', [])[0].get('text', '') if data3.get('choices') else ''
-                except Exception as exc:
-                    logger.exception('Retry attempt 2 failed: %s', exc)
+        ai_reply = (
+            data["choices"][0]["message"]["content"].strip()
+        )
 
-            # Still empty after retries -> fallback
-            if not (ai_reply and ai_reply.strip()):
-                ai_reply = 'No response from the AI. Please try rephrasing your question.'
-                try:
-                    logger.debug('Model response JSON (attempts): %s', attempts)
-                except Exception:
-                    logger.exception('Failed to log model response attempts')
+        if not ai_reply:
+            ai_reply = "The AI returned an empty response."
 
-                if getattr(settings, 'DEBUG', False):
-                    return JsonResponse({'reply': ai_reply, 'debug_attempts': attempts, 'sent_role': role_message, 'request_payload': payload})
-    
+        return JsonResponse(
+            {
+                "reply": ai_reply,
+            }
+        )
+
     except Exception as exc:
-        logger.exception("Error processing OpenAI API response: %s", exc)
-        return JsonResponse({'error': 'Error processing AI response'}, status=500)
+        logger.exception(exc)
 
-    return JsonResponse({'reply': ai_reply})
+        return JsonResponse(
+            {
+                "error": "Failed to parse OpenRouter response.",
+                "raw_response": response.text,
+            },
+            status=500,
+        )
