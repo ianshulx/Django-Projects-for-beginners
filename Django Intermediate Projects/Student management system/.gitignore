@@ -1,0 +1,58 @@
+# ==========================================
+# Django and Python Core
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+local_settings.py
+
+# ==========================================
+# Databases and State Files
+# ==========================================
+*.sqlite3
+*.sqlite3-journal
+
+# ==========================================
+# Environments and Secrets
+# ==========================================
+.env
+.venv
+venv/
+env/
+ENV/
+*.env
+
+# ==========================================
+# Django Media and Static Assets
+# ==========================================
+media/
+staticfiles/
+
+# ==========================================
+# IDEs, Text Editors, and OS Files
+# ==========================================
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+.DS_Store
+Thumbs.db
+
+# ==========================================
+# Testing, Logs, and Coverage
+# ==========================================
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.deprecated
+*.log
+.pytest_cache/

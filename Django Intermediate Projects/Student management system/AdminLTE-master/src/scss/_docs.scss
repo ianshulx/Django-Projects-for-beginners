@@ -1,0 +1,820 @@
+//
+// Component: Docs
+//
+// Visual treatment for documentation pages. Body class `.docs-page` opts in.
+// Demo pages are not affected.
+//
+
+// Inline code blocks rendered by MDX (Astro highlight default class)
+.astro-code {
+  padding: .75rem;
+  @include border-radius($border-radius);
+}
+
+.docs-page {
+  // Constrain the docs card to a comfortable reading width.
+  // Tables and code blocks inside can still scroll horizontally if needed.
+  .app-content > .container-fluid {
+    max-width: 60rem; // ~960px
+
+    @include media-breakpoint-up(xxl) {
+      max-width: 64rem;
+    }
+  }
+
+  //
+  // Card body — breathing room + prose typography.
+  // Only applied inside docs content cards so demo-page card content
+  // stays unchanged.
+  //
+  .card > .card-body {
+    padding: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--#{$prefix}body-color);
+
+    @include media-breakpoint-up(md) {
+      padding: 2.5rem;
+    }
+
+    //
+    // Heading hierarchy. The MDX content in src/html/components/docs/ uses
+    // ##### (h5) as the dominant section heading and ###### (h6) as a
+    // sub-heading (most visible in FAQ.mdx, where h5 is a topic and h6 is
+    // a question). Style h5 as a major section and h6 as a sub-section so
+    // the visual hierarchy matches the semantic one.
+    //
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .h1,
+    .h2,
+    .h3,
+    .h4,
+    .h5,
+    .h6 {
+      margin-top: 2em;
+      margin-bottom: .5em;
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--#{$prefix}emphasis-color);
+      scroll-margin-top: 4rem; // anchor-link friendly
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+
+    h2,
+    .h2 {
+      padding-bottom: .35em;
+      font-size: 1.75rem;
+      border-bottom: 1px solid var(--#{$prefix}border-color);
+    }
+
+    h3,
+    .h3 {
+      font-size: 1.4rem;
+    }
+
+    h4,
+    .h4 {
+      font-size: 1.2rem;
+    }
+
+    // h5 is the dominant section heading across docs MDX files. Give it
+    // a visible separator above so sections are easy to scan.
+    h5,
+    .h5 {
+      padding-top: 1.5em;
+      margin-top: 2.5em;
+      font-size: 1.3rem;
+      border-top: 1px solid var(--#{$prefix}border-color);
+
+      &:first-child {
+        padding-top: 0;
+        border-top: 0;
+      }
+    }
+
+    // h6 is the sub-section / FAQ question style. Smaller than h5 but
+    // still distinctly heading-like, with a touch of accent colour to
+    // separate from body text.
+    h6,
+    .h6 {
+      margin-top: 1.75em;
+      font-size: 1.08rem;
+      color: var(--#{$prefix}emphasis-color);
+    }
+
+    //
+    // Paragraphs and lists.
+    //
+    p,
+    ul,
+    ol,
+    dl,
+    blockquote,
+    table {
+      margin-bottom: 1.1rem;
+    }
+
+    ul,
+    ol {
+      padding-left: 1.5rem;
+
+      li {
+        margin-bottom: .35rem;
+      }
+
+      // Tighter nested lists
+      ul,
+      ol {
+        margin-top: .35rem;
+        margin-bottom: 0;
+      }
+    }
+
+    // Lead-style first paragraph (just after a heading)
+    h2 + p,
+    h3 + p,
+    h5 + p {
+      margin-top: 0;
+    }
+
+    //
+    // Inline code — pill style that complements MDX's syntax-highlighted blocks.
+    //
+    p code,
+    li code,
+    td code,
+    th code,
+    h2 code,
+    h3 code,
+    h4 code,
+    h5 code,
+    h6 code {
+      padding: .15em .4em;
+      font-size: .875em;
+      color: var(--#{$prefix}emphasis-color);
+      background: var(--#{$prefix}tertiary-bg);
+      border: 1px solid var(--#{$prefix}border-color);
+      @include border-radius($border-radius-sm);
+    }
+
+    //
+    // Code blocks.
+    //
+    pre.astro-code,
+    pre {
+      padding: 1rem 1.25rem;
+      margin-top: 1.25rem;
+      margin-bottom: 1.5rem;
+      overflow-x: auto;
+      font-size: .875rem;
+      line-height: 1.6;
+      @include border-radius($border-radius);
+
+      code {
+        padding: 0;
+        background: transparent;
+        border: 0;
+      }
+    }
+
+    //
+    // Tables — reference-doc styling with hairline borders.
+    //
+    table {
+      width: 100%;
+      margin-top: 1.25rem;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+      font-size: .95rem;
+      border-collapse: collapse;
+      border: 1px solid var(--#{$prefix}border-color);
+      @include border-radius($border-radius-sm);
+
+      th,
+      td {
+        padding: .65rem .9rem;
+        text-align: left;
+        vertical-align: top;
+        border-bottom: 1px solid var(--#{$prefix}border-color);
+      }
+
+      th {
+        font-weight: 600;
+        color: var(--#{$prefix}emphasis-color);
+        background: var(--#{$prefix}tertiary-bg);
+      }
+
+      tr:last-child td {
+        border-bottom: 0;
+      }
+
+      code {
+        white-space: nowrap;
+      }
+    }
+
+    //
+    // Blockquotes used as info callouts.
+    //
+    blockquote {
+      padding: .85rem 1.1rem;
+      margin-top: 1.25rem;
+      color: var(--#{$prefix}emphasis-color);
+      background: var(--#{$prefix}info-bg-subtle);
+      border-left: 4px solid var(--#{$prefix}info-border-subtle);
+      @include border-radius($border-radius-sm);
+
+      p:last-child {
+        margin-bottom: 0;
+      }
+
+      code {
+        background: rgba(0, 0, 0, .05);
+      }
+    }
+
+    //
+    // Prose links — stand out more than Bootstrap defaults.
+    //
+    a:not(.btn):not(.nav-link) {
+      color: var(--#{$prefix}primary);
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+
+      &:hover {
+        text-decoration-thickness: 2px;
+      }
+    }
+
+    //
+    // Horizontal rule — used as additional section separator.
+    //
+    hr {
+      margin: 2.5rem 0;
+      border: 0;
+      border-top: 1px solid var(--#{$prefix}border-color);
+      opacity: 1;
+    }
+
+    //
+    // Lead paragraph — the first paragraph in any doc is a summary.
+    // Visually heavier so it functions as a deck.
+    //
+    > p:first-child,
+    > p:first-of-type {
+      margin-bottom: 2rem;
+      font-size: 1.125rem;
+      line-height: 1.6;
+      color: var(--#{$prefix}body-color);
+    }
+
+    //
+    // FAQ / disclosure accordion — uses native <details>/<summary>.
+    // Add `.faq-item` to <details> to opt in.
+    //
+    details.faq-item {
+      margin-bottom: .5rem;
+      overflow: hidden;
+      background: var(--#{$prefix}body-bg);
+      border: 1px solid var(--#{$prefix}border-color);
+      @include border-radius($border-radius);
+      @include transition(border-color .15s ease, box-shadow .15s ease);
+
+      &:hover {
+        border-color: var(--#{$prefix}primary-border-subtle);
+      }
+
+      &[open] {
+        background: var(--#{$prefix}body-bg);
+        border-color: var(--#{$prefix}primary-border-subtle);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, .04);
+      }
+
+      summary {
+        position: relative;
+        padding: .9rem 3rem .9rem 1.1rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--#{$prefix}emphasis-color);
+        list-style: none;
+        cursor: pointer;
+        user-select: none;
+        @include transition(color .15s ease);
+
+        // Hide the default disclosure triangle in Webkit/Blink
+        &::-webkit-details-marker {
+          display: none;
+        }
+
+        // Hide the marker in modern Firefox too
+        &::marker {
+          content: "";
+        }
+
+        &:hover {
+          color: var(--#{$prefix}primary);
+        }
+
+        // Right-side chevron, rotates on open
+        &::after {
+          position: absolute;
+          top: 50%;
+          right: 1.1rem;
+          display: inline-block;
+          width: .55rem;
+          height: .55rem;
+          margin-top: -.4rem;
+          content: "";
+          border-right: 2px solid currentcolor;
+          border-bottom: 2px solid currentcolor;
+          opacity: .55;
+          transform: rotate(45deg);
+          @include transition(transform .2s ease);
+        }
+      }
+
+      &[open] > summary {
+        color: var(--#{$prefix}primary);
+        border-bottom: 1px solid var(--#{$prefix}border-color);
+
+        &::after {
+          margin-top: -.15rem;
+          opacity: 1;
+          transform: rotate(-135deg);
+        }
+      }
+
+      // Content (everything after <summary>) gets the inner padding
+      > *:not(summary) {
+        padding-right: 1.1rem;
+        padding-left: 1.1rem;
+      }
+
+      > *:not(summary):first-of-type {
+        padding-top: 1rem;
+      }
+
+      > *:not(summary):last-child {
+        padding-bottom: 1rem;
+      }
+
+      // Tighten paragraphs/lists inside an FAQ answer
+      p,
+      ul,
+      ol {
+        margin-bottom: .65rem;
+      }
+
+      > *:last-child p:last-child,
+      > p:last-child,
+      > ul:last-child,
+      > ol:last-child {
+        margin-bottom: 0;
+      }
+
+      // Code blocks inside an FAQ answer get a less-distracting bg
+      pre.astro-code,
+      pre {
+        margin-right: 0;
+        margin-left: 0;
+      }
+    }
+  }
+
+  // Dark-mode tweak: blockquote info bg needs more contrast on dark
+  &[data-bs-theme="dark"],
+  [data-bs-theme="dark"] & {
+    .card > .card-body blockquote code {
+      background: rgba(255, 255, 255, .08);
+    }
+  }
+}
+
+//
+// FAQ page — custom layout that breaks out of the standard docs card
+// to give the FAQ a more distinctive visual identity. Opt in via
+// body.faq-page (set in pages/docs/faq.astro).
+//
+
+.faq-page {
+  // The FAQ doesn't use the standard card wrapper used by other docs,
+  // so the container can stretch wider for the chip strip and section
+  // grid.
+  .app-content > .container-fluid {
+    max-width: 64rem;
+
+    @include media-breakpoint-up(xxl) {
+      max-width: 72rem;
+    }
+  }
+
+  // --- Hero -------------------------------------------------------------
+  .faq-hero {
+    position: relative;
+    padding: 3rem 1.5rem 2.5rem;
+    margin-top: 1rem;
+    overflow: hidden;
+    background: radial-gradient(ellipse at top left, rgba(var(--#{$prefix}primary-rgb), .12), transparent 60%), radial-gradient(ellipse at bottom right, rgba(var(--#{$prefix}info-rgb), .1), transparent 65%), var(--#{$prefix}body-bg);
+    border: 1px solid var(--#{$prefix}border-color);
+    @include border-radius($border-radius-xl);
+  }
+
+  .faq-hero-eyebrow {
+    display: inline-flex;
+    gap: .4rem;
+    align-items: center;
+    padding: .35rem .85rem;
+    margin-bottom: 1rem;
+    font-size: .75rem;
+    font-weight: 600;
+    color: var(--#{$prefix}primary);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    background: var(--#{$prefix}primary-bg-subtle);
+    border: 1px solid var(--#{$prefix}primary-border-subtle);
+    @include border-radius(50rem);
+
+    .bi {
+      font-size: .9rem;
+    }
+  }
+
+  .faq-hero-title {
+    margin: 0 0 .5rem;
+    font-size: 2.25rem;
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--#{$prefix}emphasis-color);
+
+    @include media-breakpoint-up(md) {
+      font-size: 2.75rem;
+    }
+  }
+
+  .faq-hero-lead {
+    max-width: 36rem;
+    margin: 0 auto 1.75rem;
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: var(--#{$prefix}secondary-color);
+  }
+
+  .faq-search {
+    position: relative;
+    max-width: 32rem;
+    margin: 0 auto;
+
+    .form-control {
+      height: 3rem;
+      padding-right: 3rem;
+      padding-left: 3rem;
+      font-size: 1rem;
+      background: var(--#{$prefix}body-bg);
+      @include border-radius(50rem);
+      @include transition(box-shadow .15s ease, border-color .15s ease);
+
+      &:focus {
+        box-shadow: 0 0 0 .25rem rgba(var(--#{$prefix}primary-rgb), .15);
+      }
+    }
+  }
+
+  .faq-search-icon {
+    position: absolute;
+    top: 50%;
+    left: 1.2rem;
+    color: var(--#{$prefix}secondary-color);
+    pointer-events: none;
+    transform: translateY(-50%);
+  }
+
+  .faq-search-clear {
+    position: absolute;
+    top: 50%;
+    right: .65rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    color: var(--#{$prefix}secondary-color);
+    background: var(--#{$prefix}tertiary-bg);
+    border: 0;
+    transform: translateY(-50%);
+    @include border-radius(50%);
+    @include transition(background .15s ease, color .15s ease);
+
+    &:hover {
+      color: var(--#{$prefix}body-color);
+      background: var(--#{$prefix}secondary-bg);
+    }
+  }
+
+  .faq-empty-state {
+    max-width: 32rem;
+    padding: 1rem;
+    margin: 1.5rem auto 0;
+    font-size: .95rem;
+    color: var(--#{$prefix}secondary-color);
+    background: var(--#{$prefix}tertiary-bg);
+    @include border-radius($border-radius);
+
+    .bi {
+      margin-right: .35rem;
+    }
+  }
+
+  // --- Section nav chips ------------------------------------------------
+  .faq-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    justify-content: center;
+  }
+
+  .faq-chip {
+    display: inline-flex;
+    gap: .45rem;
+    align-items: center;
+    padding: .45rem .85rem;
+    font-size: .875rem;
+    font-weight: 500;
+    color: var(--#{$prefix}body-color);
+    text-decoration: none;
+    background: var(--#{$prefix}body-bg);
+    border: 1px solid var(--#{$prefix}border-color);
+    @include border-radius(50rem);
+    @include transition(transform .15s ease, border-color .15s ease, background-color .15s ease, color .15s ease);
+
+    &:hover {
+      color: var(--#{$prefix}emphasis-color);
+      background: var(--#{$prefix}tertiary-bg);
+      transform: translateY(-1px);
+    }
+
+    .bi {
+      font-size: 1rem;
+    }
+  }
+
+  .faq-chip-count {
+    padding: 0 .45rem;
+    font-size: .7rem;
+    font-weight: 600;
+    color: var(--#{$prefix}secondary-color);
+    background: var(--#{$prefix}tertiary-bg);
+    @include border-radius(50rem);
+  }
+
+  // Per-section chip accent on hover/active
+  @each $tone in (primary, info, warning, success, danger, secondary) {
+    .faq-chip-#{$tone}:hover {
+      color: var(--#{$prefix}#{$tone}-text-emphasis);
+      background: var(--#{$prefix}#{$tone}-bg-subtle);
+      border-color: var(--#{$prefix}#{$tone}-border-subtle);
+
+      .faq-chip-count {
+        color: var(--#{$prefix}#{$tone}-text-emphasis);
+        background: rgba(0, 0, 0, .06);
+      }
+    }
+  }
+
+  // --- Sections ---------------------------------------------------------
+  .faq-section {
+    margin-bottom: 2.5rem;
+    scroll-margin-top: 5rem;
+  }
+
+  .faq-section-header {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    background: var(--#{$prefix}body-bg);
+    border: 1px solid var(--#{$prefix}border-color);
+    border-left: 4px solid var(--#{$prefix}primary);
+    @include border-radius($border-radius);
+  }
+
+  .faq-section-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    font-size: 1.35rem;
+    color: var(--#{$prefix}primary);
+    background: var(--#{$prefix}primary-bg-subtle);
+    @include border-radius($border-radius);
+  }
+
+  .faq-section-title {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--#{$prefix}emphasis-color);
+  }
+
+  .faq-section-count {
+    margin: .1rem 0 0;
+    font-size: .8rem;
+    color: var(--#{$prefix}secondary-color);
+  }
+
+  // Per-section tone accents
+  @each $tone in (primary, info, warning, success, danger, secondary) {
+    .faq-section-#{$tone} {
+      border-left-color: var(--#{$prefix}#{$tone});
+
+      .faq-section-icon {
+        color: var(--#{$prefix}#{$tone}-text-emphasis);
+        background: var(--#{$prefix}#{$tone}-bg-subtle);
+      }
+    }
+  }
+
+  // --- FAQ items (override the generic .docs-page details styling) ------
+  .faq-section-items .faq-item {
+    margin-bottom: .5rem;
+    overflow: hidden;
+    background: var(--#{$prefix}body-bg);
+    border: 1px solid var(--#{$prefix}border-color);
+    @include border-radius($border-radius);
+    @include transition(border-color .15s ease, box-shadow .15s ease, transform .15s ease);
+
+    &:hover {
+      border-color: var(--#{$prefix}primary-border-subtle);
+      transform: translateX(2px);
+    }
+
+    &[open] {
+      border-color: var(--#{$prefix}primary-border-subtle);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .04);
+      transform: none;
+    }
+
+    summary {
+      display: flex;
+      gap: .85rem;
+      align-items: center;
+      padding: 1rem 1.25rem;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--#{$prefix}emphasis-color);
+      list-style: none;
+      cursor: pointer;
+      user-select: none;
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+
+      &::marker {
+        content: "";
+      }
+
+      &::after {
+        content: none; // disable the generic chevron, we use our own
+      }
+    }
+
+    .faq-q-icon {
+      display: inline-flex;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      width: 1.75rem;
+      height: 1.75rem;
+      font-size: .85rem;
+      color: var(--#{$prefix}primary);
+      background: var(--#{$prefix}primary-bg-subtle);
+      @include border-radius(50%);
+    }
+
+    .faq-q-text {
+      flex-grow: 1;
+    }
+
+    .faq-q-chevron {
+      flex-shrink: 0;
+      color: var(--#{$prefix}secondary-color);
+      @include transition(transform .2s ease, color .2s ease);
+    }
+
+    &[open] .faq-q-chevron {
+      color: var(--#{$prefix}primary);
+      transform: rotate(180deg);
+    }
+
+    &[open] summary {
+      color: var(--#{$prefix}primary);
+      border-bottom: 1px solid var(--#{$prefix}border-color);
+    }
+
+    .faq-answer {
+      padding: 1.1rem 1.25rem 1.1rem 3.85rem; // align with the question text (icon + gap)
+      font-size: .95rem;
+      line-height: 1.65;
+      color: var(--#{$prefix}body-color);
+
+      p:last-child,
+      ul:last-child,
+      ol:last-child,
+      pre:last-child {
+        margin-bottom: 0;
+      }
+
+      a {
+        color: var(--#{$prefix}primary);
+        text-decoration: underline;
+        text-underline-offset: 2px;
+
+        &:hover {
+          text-decoration-thickness: 2px;
+        }
+      }
+
+      code {
+        padding: .12em .35em;
+        font-size: .875em;
+        color: var(--#{$prefix}emphasis-color);
+        background: var(--#{$prefix}tertiary-bg);
+        border: 1px solid var(--#{$prefix}border-color);
+        @include border-radius($border-radius-sm);
+      }
+
+      pre.astro-code,
+      pre {
+        padding: .85rem 1rem;
+        margin-top: .75rem;
+        margin-bottom: .75rem;
+        overflow-x: auto;
+        font-size: .85rem;
+        line-height: 1.55;
+        @include border-radius($border-radius-sm);
+
+        code {
+          padding: 0;
+          background: transparent;
+          border: 0;
+        }
+      }
+    }
+  }
+
+  // --- CTA footer -------------------------------------------------------
+  .faq-cta {
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    background: radial-gradient(ellipse at top, rgba(var(--#{$prefix}primary-rgb), .08), transparent 60%), var(--#{$prefix}body-bg);
+    border: 1px solid var(--#{$prefix}border-color);
+    @include border-radius($border-radius-xl);
+  }
+
+  .faq-cta-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.6rem;
+    color: var(--#{$prefix}primary);
+    background: var(--#{$prefix}primary-bg-subtle);
+    @include border-radius(50%);
+  }
+
+  .faq-cta h2 {
+    margin: 0 0 .5rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--#{$prefix}emphasis-color);
+  }
+
+  .faq-cta p {
+    max-width: 32rem;
+    margin: 0 auto 1.5rem;
+    color: var(--#{$prefix}secondary-color);
+  }
+
+  .faq-cta-actions {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    justify-content: center;
+  }
+}

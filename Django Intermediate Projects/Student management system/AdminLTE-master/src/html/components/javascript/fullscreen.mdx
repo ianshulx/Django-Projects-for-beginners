@@ -1,0 +1,53 @@
+The FullScreen plugin toggles the browser's native fullscreen mode.
+
+##### Usage
+
+This plugin is activated via data attributes.
+
+**Data API**
+
+Add `data-lte-toggle="fullscreen"` to a button element. Use `data-lte-icon="maximize"` and `data-lte-icon="minimize"` on child icon elements to toggle their visibility.
+
+```html
+<button type="button" class="btn" data-lte-toggle="fullscreen">
+  <i data-lte-icon="maximize" class="bi bi-arrows-fullscreen"></i>
+  <i data-lte-icon="minimize" class="bi bi-fullscreen-exit d-none"></i>
+</button>
+```
+
+##### Events
+
+| Event | Description |
+|-------|-------------|
+| `maximized.lte.fullscreen` | Fired when entering fullscreen mode. |
+| `minimized.lte.fullscreen` | Fired when exiting fullscreen mode. |
+
+##### Programmatic API
+
+```js
+import { FullScreen } from "admin-lte"
+
+const btn = document.querySelector('[data-lte-toggle="fullscreen"]')
+const fs = new FullScreen(btn)
+
+fs.toggleFullScreen()  // enter or exit based on current state
+fs.inFullScreen()      // request fullscreen
+fs.outFullscreen()     // exit fullscreen
+```
+
+###### Methods
+
+| Method | Returns | Description |
+|---|---|---|
+| `toggleFullScreen()` | `void` | Calls `inFullScreen()` if not in fullscreen, otherwise `outFullscreen()`. Checks `document.fullscreenEnabled` first. |
+| `inFullScreen()` | `void` | Calls `document.documentElement.requestFullscreen()`. The icon `.d-none` toggle and `maximized.lte.fullscreen` event are driven by the resulting `fullscreenchange` event, so a denied request leaves the UI untouched. |
+| `outFullscreen()` | `void` | Calls `document.exitFullscreen()`. The icon `.d-none` toggle and `minimized.lte.fullscreen` event are driven by the resulting `fullscreenchange` event. |
+
+The constructor takes no config — pass only the trigger element.
+
+##### Notes
+
+- Requires browser support for the [Fullscreen API](https://developer.mozilla.org/docs/Web/API/Fullscreen_API). Check `document.fullscreenEnabled` before invoking.
+- Icon state and events are synced from the native `fullscreenchange` event, so they stay correct when the user exits fullscreen with <kbd>ESC</kbd> or <kbd>F11</kbd>, and a request denied by the browser leaves the icons unchanged.
+- The maximize icon is hidden via the `d-none` Bootstrap utility class (not inline `display`) so it doesn't override the icon library's natural display value — this works correctly with FontAwesome, Lucide, Tabler Icons, etc.
+- Fullscreen on `document.documentElement` (i.e. `<html>`) means the entire page goes fullscreen. To fullscreen just a card, use the [CardWidget `maximize()` method](card-widget.html#programmatic-api) instead.

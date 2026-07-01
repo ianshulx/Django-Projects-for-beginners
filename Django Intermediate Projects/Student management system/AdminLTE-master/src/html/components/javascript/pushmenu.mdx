@@ -1,0 +1,98 @@
+The PushMenu plugin toggles the sidebar between expanded and collapsed states. It handles responsive behavior, optional localStorage persistence, and overlay management on mobile.
+
+##### Usage
+
+This plugin is activated via data attributes on the sidebar element and toggle buttons.
+
+**Data API**
+
+Add `data-lte-toggle="sidebar"` to any button or link to toggle the sidebar.
+
+```html
+<a href="#" data-lte-toggle="sidebar">Toggle Sidebar</a>
+```
+
+##### Configuration
+
+Configure the sidebar via data attributes on the `.app-sidebar` element:
+
+| Attribute | Default | Description |
+|-----------|---------|-------------|
+| `data-sidebar-breakpoint` | `992` | Screen width (px) below which the sidebar is considered mobile. |
+| `data-enable-persistence` | `false` | Save sidebar state to localStorage across page loads. |
+
+```html
+<aside class="app-sidebar" data-enable-persistence="true" data-sidebar-breakpoint="768">
+  <!-- sidebar content -->
+</aside>
+```
+
+##### Responsive Behavior
+
+- **Desktop** (above breakpoint): Sidebar is expanded by default. Collapse is remembered if persistence is enabled.
+- **Mobile** (at or below breakpoint): Sidebar is collapsed by default. An overlay appears when the sidebar is open, clicking it collapses the sidebar.
+
+##### CSS Classes
+
+| Class | Applied to | Description |
+|-------|-----------|-------------|
+| `sidebar-collapse` | `<body>` | Sidebar is collapsed. |
+| `sidebar-open` | `<body>` | Sidebar is explicitly open on mobile. |
+| `sidebar-mini` | `<body>` | Enables mini sidebar mode (icons only when collapsed). |
+| `sidebar-without-hover` | `<body>` | Prevents collapsed sidebar from expanding on hover. |
+| `sidebar-expand-{breakpoint}` | `<body>` | Sets the responsive breakpoint (`sm`, `md`, `lg`, `xl`, `xxl`). |
+
+##### Events
+
+| Event | Description |
+|-------|-------------|
+| `open.lte.push-menu` | Fired when the sidebar is expanded. |
+| `collapse.lte.push-menu` | Fired when the sidebar is collapsed. |
+
+Both events bubble. Listen on `document` for a global hook:
+
+```js
+document.addEventListener("open.lte.push-menu", () => {
+  console.log("Sidebar opened")
+})
+```
+
+##### Programmatic API
+
+Import the class and instantiate it on any element (typically the sidebar toggle button or `document.body`):
+
+```js
+import { PushMenu } from "admin-lte"
+
+const sidebar = new PushMenu(document.querySelector('[data-lte-toggle="sidebar"]'), {
+  sidebarBreakpoint: 992,
+  enablePersistence: false
+})
+```
+
+###### Methods
+
+| Method | Returns | Description |
+|---|---|---|
+| `toggle()` | `void` | Expands or collapses the sidebar based on current state. Persists state if `enablePersistence` is `true`. |
+| `expand()` | `void` | Expands the sidebar. Fires `open.lte.push-menu`. |
+| `collapse()` | `void` | Collapses the sidebar. Fires `collapse.lte.push-menu`. |
+| `isCollapsed()` | `boolean` | `true` if `<body>` has `sidebar-collapse` class. |
+| `isExplicitlyOpen()` | `boolean` | `true` if `<body>` has `sidebar-open` (mobile, user opened it). |
+| `isMiniMode()` | `boolean` | `true` if `<body>` has `sidebar-mini`. |
+| `isMobileSize()` | `boolean` | `true` if `window.innerWidth ≤ sidebarBreakpoint`. |
+| `saveSidebarState(state)` | `void` | Manually save state to localStorage (`"sidebar-open"` or `"sidebar-collapse"`). |
+| `loadSidebarState()` | `void` | Read state from localStorage and apply it. |
+| `clearSidebarState()` | `void` | Remove saved state from localStorage. |
+| `updateStateByResponsiveLogic()` | `void` | Recompute correct state based on viewport size (collapse on mobile, expand on desktop unless mini). Called automatically on resize. |
+
+###### Storage key
+
+When `enablePersistence` is enabled, the plugin reads/writes `localStorage.getItem("lte.sidebar.state")`. The stored value is one of:
+
+- `"sidebar-open"` — user wants the sidebar expanded
+- `"sidebar-collapse"` — user wants it collapsed
+
+##### Example
+
+<a href="#" data-lte-toggle="sidebar">Toggle Sidebar</a>

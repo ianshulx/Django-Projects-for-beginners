@@ -1,0 +1,61 @@
+//
+// Core: Main Header
+//
+
+.app-header {
+  z-index: $lte-zindex-app-header;
+  grid-area: #{$lte-prefix}app-header;
+  max-width: 100vw;
+  border-bottom: $lte-app-header-bottom-border;
+  @include transition($lte-transition-speed $lte-transition-fn);
+
+  .nav-link {
+    position: relative;
+    height: $nav-link-height;
+  }
+}
+
+// Navbar badge
+.navbar-badge {
+  position: absolute;
+  top: 9px;
+  right: 5px;
+  padding: 2px 4px;
+  font-size: .6rem;
+  font-weight: 400;
+}
+
+.fixed-header {
+  .app-header {
+    position: sticky;
+    top: 0;
+    z-index: $lte-zindex-fixed-header;
+  }
+
+  // Fixes #6020: when only `fixed-header` is used (without `layout-fixed`),
+  // the sidebar — including its branding — used to scroll with the page
+  // because nothing made it sticky. Pin the sidebar so the brand and menu
+  // stay visible while the page content scrolls beneath the fixed header.
+  // Only applied on `sidebar-expand-*` breakpoints, since the mobile sidebar
+  // is an off-canvas overlay that handles its own positioning.
+  @each $breakpoint in map-keys($grid-breakpoints) {
+    $next: breakpoint-next($breakpoint, $grid-breakpoints);
+    $infix: breakpoint-infix($next, $grid-breakpoints);
+
+    &.sidebar-expand#{$infix} {
+      @include media-breakpoint-up($next) {
+        .app-sidebar {
+          position: sticky;
+          top: 0;
+          max-height: 100vh;
+
+          .sidebar-wrapper {
+            height: subtract(100vh, add($lte-app-header-height, 1px));
+            overflow-x: hidden;
+            overflow-y: auto;
+          }
+        }
+      }
+    }
+  }
+}

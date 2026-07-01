@@ -1,0 +1,56 @@
+The Layout plugin manages CSS transitions during layout changes and signals when the app has finished loading.
+
+##### Behavior
+
+The Layout plugin performs two key tasks automatically:
+
+1. **Hold Transitions** - During window resize, CSS transitions on the sidebar, navbar, and content area are temporarily disabled to prevent visual glitches. The `hold-transition` class is added to `<body>` for the duration.
+
+2. **App Loaded Signal** - After a 400ms delay on DOMContentLoaded, the `app-loaded` class is added to `<body>`. Use this class in CSS to defer animations until the app is ready, preventing flicker on initial page load.
+
+##### CSS Classes
+
+| Class | Description |
+|-------|-------------|
+| `hold-transition` | Temporarily disables CSS transitions on layout elements. Applied during window resize. |
+| `app-loaded` | Added to `<body>` after the initial layout is ready. Use for entrance animations. |
+
+##### Usage in CSS
+
+```css
+/* Hide sidebar transitions until the app is loaded */
+body:not(.app-loaded) .app-sidebar {
+  transition: none !important;
+}
+
+/* Only animate after app is loaded */
+body.app-loaded .app-sidebar {
+  transition: width 0.3s ease;
+}
+```
+
+##### Programmatic API
+
+The Layout plugin self-initializes on `DOMContentLoaded` — there's nothing to wire up manually. The only public method is exposed for advanced cases where you want to suppress transitions around your own DOM mutations:
+
+```js
+import { Layout } from "admin-lte"
+
+const layout = new Layout(document.body)
+layout.holdTransition(200)   // disable transitions for 200ms
+
+// ... do something that would otherwise animate awkwardly
+document.body.classList.toggle("sidebar-mini")
+```
+
+###### Methods
+
+| Method | Returns | Description |
+|---|---|---|
+| `holdTransition(time?)` | `void` | Adds `hold-transition` to `<body>`, removes it after `time` milliseconds (default `100`). Use to suppress CSS transitions during programmatic layout changes. |
+
+##### Notes
+
+- The `hold-transition` class is automatically removed after the timeout. You don't need to clean up.
+- No data attributes — the plugin reads no config and initialises with the body element on page load.
+- If you need to detect when the initial page-load animations are done, watch for the `app-loaded` class on `<body>` or listen for the standard `load` event.
