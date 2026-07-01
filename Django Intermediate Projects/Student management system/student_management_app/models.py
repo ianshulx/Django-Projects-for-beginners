@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models.signals import post_save
@@ -16,7 +18,7 @@ class SessionYearModel(models.Model):
 # Overriding the Default Django Auth User and adding One More Field (user_type)
 class CustomUser(AbstractUser):
     user_type_data = ((1, "HOD"), (2, "Staff"), (3, "Student"))
-    user_type = models.CharField(default=1, choices=user_type_data, max_length=10)
+    user_type = models.CharField(default='1', choices=user_type_data, max_length=10)
 
 
 
@@ -178,21 +180,41 @@ def create_user_profile(sender, instance, created, **kwargs):
     # if Created is true (Means Data Inserted)
     if created:
         # Check the user_type and insert the data in respective tables
-        if instance.user_type == 1:
-            AdminHOD.objects.create(admin=instance)
-        if instance.user_type == 2:
-            Staffs.objects.create(admin=instance)
-        if instance.user_type == 3:
-            Students.objects.create(admin=instance, course_id=Courses.objects.get(id=1), session_year_id=SessionYearModel.objects.get(id=1), address="", profile_pic="", gender="")
-    
+        if instance.user_type in ['1', 1]:
+            AdminHOD.objects.get_or_create(admin=instance)
+        if instance.user_type in ['2', 2]:
+            Staffs.objects.get_or_create(admin=instance)
+        if instance.user_type in ['3', 3]:
+            course = Courses.objects.order_by('id').first()
+            if course is None:
+                course = Courses.objects.create(course_name='Default Course')
+
+            session = SessionYearModel.objects.order_by('id').first()
+            if session is None:
+                session = SessionYearModel.objects.create(
+                    session_start_year=date(2000, 1, 1),
+                    session_end_year=date(2000, 12, 31),
+                )
+
+            Students.objects.get_or_create(
+                admin=instance,
+                defaults={
+                    'course_id': course,
+                    'session_year_id': session,
+                    'address': '',
+                    'profile_pic': '',
+                    'gender': '',
+                },
+            )
+
 
 @receiver(post_save, sender=CustomUser)
 def save_user_profile(sender, instance, **kwargs):
-    if instance.user_type == 1:
+    if instance.user_type in ['1', 1] and hasattr(instance, 'adminhod'):
         instance.adminhod.save()
-    if instance.user_type == 2:
+    if instance.user_type in ['2', 2] and hasattr(instance, 'staffs'):
         instance.staffs.save()
-    if instance.user_type == 3:
+    if instance.user_type in ['3', 3] and hasattr(instance, 'students'):
         instance.students.save()
     
 

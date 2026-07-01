@@ -58,6 +58,16 @@
             </li>
 
             <li class="nav-item">
+              {% url 'bulk_upload_staff' as bulk_upload_staff %}
+              <a href="{{ bulk_upload_staff }}" class="nav-link {% if request.path == bulk_upload_staff %} active {% endif %}">
+                <i class="nav-icon fas fa-file-upload"></i>
+                <p>
+                  Bulk Upload Staff
+                </p>
+              </a>
+            </li>
+
+            <li class="nav-item">
               {% url 'manage_student' as manage_student %}
               {% url 'edit_student' student_id=id as edit_student %}
               <a href="{{ manage_student }}" class="nav-link {% if request.path == manage_student %} active {% endif %} {% if request.path == edit_student %} active {% endif %}">
@@ -74,6 +84,16 @@
                 <i class="nav-icon fas fa-th"></i>
                 <p>
                   Add Student
+                </p>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              {% url 'bulk_upload_students' as bulk_upload_students %}
+              <a href="{{ bulk_upload_students }}" class="nav-link {% if request.path == bulk_upload_students %} active {% endif %}">
+                <i class="nav-icon fas fa-file-upload"></i>
+                <p>
+                  Bulk Upload Students
                 </p>
               </a>
             </li>

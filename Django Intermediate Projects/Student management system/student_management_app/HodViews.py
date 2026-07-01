@@ -5,10 +5,323 @@ from django.core.files.storage import FileSystemStorage #To upload Profile Pictu
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
+from django.db import transaction
 import json
+import logging
+import os
+import pandas as pd
+import openpyxl
+from io import BytesIO
 
 from student_management_app.models import CustomUser, Staffs, Courses, Subjects, Students, SessionYearModel, FeedBackStudent, FeedBackStaffs, LeaveReportStudent, LeaveReportStaff, Attendance, AttendanceReport
 from .forms import AddStudentForm, EditStudentForm
+
+DEFAULT_AVATAR_PATH = "https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/img/user2-160x160.jpg"
+MAX_UPLOAD_SIZE = 5 * 1024 * 1024
+logger = logging.getLogger(__name__)
+
+
+def _get_uploaded_file_extension(uploaded_file):
+    name = uploaded_file.name.lower()
+    if name.endswith('.csv'):
+        return 'csv'
+    if name.endswith(('.xls', '.xlsx')):
+        return 'excel'
+    return None
+
+
+def _read_upload_file(uploaded_file):
+    ext = _get_uploaded_file_extension(uploaded_file)
+    if ext is None:
+        raise ValueError("Unsupported file format. Please upload a CSV or Excel file.")
+
+    if ext == 'csv':
+        try:
+            df = pd.read_csv(uploaded_file)
+        except Exception as exc:
+            raise ValueError(f"Unable to read CSV file: {exc}") from exc
+        return df
+
+    try:
+        df = pd.read_excel(uploaded_file)
+    except Exception as exc:
+        raise ValueError(f"Unable to read Excel file: {exc}") from exc
+    return df
+
+
+def _normalize_row_value(value):
+    if pd.isna(value):
+        return ""
+    if isinstance(value, str):
+        return value.strip()
+    return str(value).strip()
+
+
+def _validate_required_fields(row, required_fields):
+    errors = []
+    for field in required_fields:
+        if _normalize_row_value(row.get(field, "")) == "":
+            errors.append(f"{field} is required")
+    return errors
+
+
+def _build_student_sample_workbook():
+    sample_data = [{
+        'first_name': 'John',
+        'last_name': 'Doe',
+        'username': 'STD001',
+        'email': 'john@example.com',
+        'password': 'Password@123',
+        'gender': 'Male',
+        'address': 'Nairobi',
+        'course': 'Computer Science',
+        'session': '2025-2026',
+    }]
+    df = pd.DataFrame(sample_data)
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name='Students')
+    output.seek(0)
+    return output
+
+
+def _build_staff_sample_workbook():
+    sample_data = [{
+        'first_name': 'Jane',
+        'last_name': 'Smith',
+        'username': 'STF001',
+        'email': 'jane@example.com',
+        'password': 'Password@123',
+        'address': 'Nakuru',
+    }]
+    df = pd.DataFrame(sample_data)
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name='Staff')
+    output.seek(0)
+    return output
+
+
+def bulk_upload_students(request):
+    return render(request, 'hod_template/bulk_upload_students.html')
+
+
+def bulk_upload_students_save(request):
+    if request.method != 'POST':
+        messages.error(request, 'Invalid Method')
+        return redirect('bulk_upload_students')
+
+    uploaded_file = request.FILES.get('file')
+    if uploaded_file is None:
+        messages.error(request, 'Please select a file to upload.')
+        return redirect('bulk_upload_students')
+
+    if uploaded_file.size > MAX_UPLOAD_SIZE:
+        messages.error(request, 'The uploaded file is too large. Please upload a file smaller than 5MB.')
+        return redirect('bulk_upload_students')
+
+    if uploaded_file.name.lower().endswith(('.exe', '.bat', '.cmd', '.scr', '.php', '.js')):
+        messages.error(request, 'Executable files are not allowed.')
+        return redirect('bulk_upload_students')
+
+    try:
+        df = _read_upload_file(uploaded_file)
+    except ValueError as exc:
+        messages.error(request, str(exc))
+        return redirect('bulk_upload_students')
+
+    required_columns = ['first_name', 'last_name', 'username', 'email', 'password', 'gender', 'address', 'course', 'session']
+    if not set(required_columns).issubset(df.columns):
+        messages.error(request, 'The uploaded file is missing one or more required columns.')
+        return redirect('bulk_upload_students')
+
+    imported_count = 0
+    skipped_count = 0
+    errors = []
+    existing_usernames = set(CustomUser.objects.values_list('username', flat=True))
+    existing_emails = set(CustomUser.objects.values_list('email', flat=True))
+
+    for index, row in df.iterrows():
+        row_number = index + 2
+        data = {column: _normalize_row_value(row.get(column, '')) for column in required_columns}
+        row_errors = _validate_required_fields(data, ['first_name', 'last_name', 'username', 'email', 'password', 'gender', 'address', 'course', 'session'])
+
+        if row_errors:
+            skipped_count += 1
+            errors.append({'row': row_number, 'reason': '; '.join(row_errors)})
+            continue
+
+        username = data['username']
+        email = data['email']
+        course_name = data['course']
+        session_name = data['session']
+
+        if username in existing_usernames:
+            skipped_count += 1
+            errors.append({'row': row_number, 'reason': 'Username already exists.'})
+            continue
+
+        if email in existing_emails:
+            skipped_count += 1
+            errors.append({'row': row_number, 'reason': 'Email already exists.'})
+            continue
+
+        course_obj = Courses.objects.filter(course_name__iexact=course_name).first()
+        if course_obj is None:
+            skipped_count += 1
+            errors.append({'row': row_number, 'reason': f'Course "{course_name}" does not exist.'})
+            continue
+
+        try:
+            start_year, end_year = [int(part.strip()) for part in session_name.split('-')]
+        except (ValueError, AttributeError):
+            skipped_count += 1
+            errors.append({'row': row_number, 'reason': f'Session "{session_name}" is invalid. Use the format 2025-2026.'})
+            continue
+
+        session_obj = SessionYearModel.objects.filter(session_start_year__year=start_year, session_end_year__year=end_year).first()
+        if session_obj is None:
+            skipped_count += 1
+            errors.append({'row': row_number, 'reason': f'Session "{session_name}" does not exist.'})
+            continue
+
+        try:
+            with transaction.atomic():
+                user = CustomUser.objects.create_user(
+                    username=username,
+                    email=email,
+                    password=data['password'],
+                    first_name=data['first_name'],
+                    last_name=data['last_name'],
+                    user_type=3,
+                )
+                user.students.address = data['address']
+                user.students.gender = data['gender']
+                user.students.course_id = course_obj
+                user.students.session_year_id = session_obj
+                if not user.students.profile_pic:
+                    user.students.profile_pic = DEFAULT_AVATAR_PATH
+                user.students.save()
+                user.save()
+            imported_count += 1
+            existing_usernames.add(username)
+            existing_emails.add(email)
+        except Exception as exc:
+            logger.exception('Failed to import student row %s', row_number)
+            skipped_count += 1
+            errors.append({'row': row_number, 'reason': f'Unexpected error: {exc}'})
+
+    context = {
+        'imported_count': imported_count,
+        'skipped_count': skipped_count,
+        'errors': errors,
+    }
+    return render(request, 'hod_template/bulk_upload_students.html', context)
+
+
+def bulk_upload_students_sample(request):
+    output = _build_student_sample_workbook()
+    response = HttpResponse(output.getvalue(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="students_sample.xlsx"'
+    return response
+
+
+def bulk_upload_staff(request):
+    return render(request, 'hod_template/bulk_upload_staff.html')
+
+
+def bulk_upload_staff_save(request):
+    if request.method != 'POST':
+        messages.error(request, 'Invalid Method')
+        return redirect('bulk_upload_staff')
+
+    uploaded_file = request.FILES.get('file')
+    if uploaded_file is None:
+        messages.error(request, 'Please select a file to upload.')
+        return redirect('bulk_upload_staff')
+
+    if uploaded_file.size > MAX_UPLOAD_SIZE:
+        messages.error(request, 'The uploaded file is too large. Please upload a file smaller than 5MB.')
+        return redirect('bulk_upload_staff')
+
+    if uploaded_file.name.lower().endswith(('.exe', '.bat', '.cmd', '.scr', '.php', '.js')):
+        messages.error(request, 'Executable files are not allowed.')
+        return redirect('bulk_upload_staff')
+
+    try:
+        df = _read_upload_file(uploaded_file)
+    except ValueError as exc:
+        messages.error(request, str(exc))
+        return redirect('bulk_upload_staff')
+
+    required_columns = ['first_name', 'last_name', 'username', 'email', 'password', 'address']
+    if not set(required_columns).issubset(df.columns):
+        messages.error(request, 'The uploaded file is missing one or more required columns.')
+        return redirect('bulk_upload_staff')
+
+    imported_count = 0
+    skipped_count = 0
+    errors = []
+    existing_usernames = set(CustomUser.objects.values_list('username', flat=True))
+    existing_emails = set(CustomUser.objects.values_list('email', flat=True))
+
+    for index, row in df.iterrows():
+        row_number = index + 2
+        data = {column: _normalize_row_value(row.get(column, '')) for column in required_columns}
+        row_errors = _validate_required_fields(data, ['first_name', 'last_name', 'username', 'email', 'password', 'address'])
+
+        if row_errors:
+            skipped_count += 1
+            errors.append({'row': row_number, 'reason': '; '.join(row_errors)})
+            continue
+
+        username = data['username']
+        email = data['email']
+
+        if username in existing_usernames:
+            skipped_count += 1
+            errors.append({'row': row_number, 'reason': 'Username already exists.'})
+            continue
+
+        if email in existing_emails:
+            skipped_count += 1
+            errors.append({'row': row_number, 'reason': 'Email already exists.'})
+            continue
+
+        try:
+            with transaction.atomic():
+                user = CustomUser.objects.create_user(
+                    username=username,
+                    email=email,
+                    password=data['password'],
+                    first_name=data['first_name'],
+                    last_name=data['last_name'],
+                    user_type=2,
+                )
+                user.staffs.address = data['address']
+                user.staffs.save()
+                user.save()
+            imported_count += 1
+            existing_usernames.add(username)
+            existing_emails.add(email)
+        except Exception as exc:
+            logger.exception('Failed to import staff row %s', row_number)
+            skipped_count += 1
+            errors.append({'row': row_number, 'reason': f'Unexpected error: {exc}'})
+
+    context = {
+        'imported_count': imported_count,
+        'skipped_count': skipped_count,
+        'errors': errors,
+    }
+    return render(request, 'hod_template/bulk_upload_staff.html', context)
+
+
+def bulk_upload_staff_sample(request):
+    output = _build_staff_sample_workbook()
+    response = HttpResponse(output.getvalue(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="staff_sample.xlsx"'
+    return response
 
 
 def admin_home(request):
