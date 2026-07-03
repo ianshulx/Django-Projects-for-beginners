@@ -1,0 +1,28 @@
+{
+  "files": [
+    {
+      "path": "./dist/css/adminlte.css",
+      "maxSize": "50 kB"
+    },
+    {
+      "path": "./dist/css/adminlte.min.css",
+      "maxSize": "46 kB"
+    },
+    {
+      "path": "./dist/css/adminlte.rtl.css",
+      "maxSize": "50 kB"
+    },
+    {
+      "path": "./dist/css/adminlte.rtl.min.css",
+      "maxSize": "46 kB"
+    },
+    {
+      "path": "./dist/js/adminlte.js",
+      "maxSize": "9 kB"
+    },
+    {
+      "path": "./dist/js/adminlte.min.js",
+      "maxSize": "5.8 kB"
+    }
+  ]
+}

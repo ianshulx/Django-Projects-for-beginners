@@ -1,0 +1,17 @@
+---
+import SidenavDemo from "./_sidenav-demo.astro"
+import SidenavDocs from "./_sidenav-docs.astro"
+
+const { path, mainPage, page } = Astro.props
+
+// The sidebar shows different navigation depending on whether the visitor is
+// browsing the dashboard demo or reading documentation. Pages declare their
+// mainPage; "docs", "components", and "javascript" are all documentation
+// sections.
+const docsMains = new Set(["docs", "components", "javascript"])
+const isDocsMode = docsMains.has(mainPage)
+---
+
+{isDocsMode ?
+  <SidenavDocs path={path} mainPage={mainPage} page={page} /> :
+  <SidenavDemo path={path} mainPage={mainPage} page={page} />}

@@ -1,0 +1,76 @@
+{% extends 'hod_template/base_template.html' %}
+
+{% block page_title %}
+    Bulk Upload Staff
+{% endblock page_title %}
+
+{% block main_content %}
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Bulk Upload Staff</h3>
+                    </div>
+                    <div class="card-body">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="alert alert-info">
+                            Upload a CSV or Excel file. The file must contain the columns: first_name, last_name, username, email, password, address.
+                        </div>
+
+                        <form method="post" action="{% url 'bulk_upload_staff_save' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="file">Choose CSV or Excel File</label>
+                                <input type="file" name="file" class="form-control" id="file" accept=".csv,.xlsx,.xls" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                            <a href="{% url 'bulk_upload_staff_sample' %}" class="btn btn-outline-secondary">Download Sample Excel</a>
+                        </form>
+
+                        {% if imported_count is not None or skipped_count is not None %}
+                            <hr>
+                            <h5>Import Summary</h5>
+                            <ul>
+                                <li>Staff Imported: {{ imported_count|default:0 }}</li>
+                                <li>Skipped: {{ skipped_count|default:0 }}</li>
+                                <li>Errors: {{ errors|length|default:0 }}</li>
+                            </ul>
+                        {% endif %}
+
+                        {% if errors %}
+                            <h5 class="mt-4">Error Summary</h5>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Row</th>
+                                            <th>Reason</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for error in errors %}
+                                            <tr>
+                                                <th>{{ error.row }}</th>
+                                                <td>{{ error.reason }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock main_content %}

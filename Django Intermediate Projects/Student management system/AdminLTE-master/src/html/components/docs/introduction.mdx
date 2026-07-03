@@ -1,0 +1,111 @@
+## What is AdminLTE?
+
+AdminLTE is a free, MIT-licensed admin dashboard template built on **Bootstrap 5.3.8** with vanilla TypeScript (no jQuery). It ships responsive layouts, a sidebar navigation system, light/dark/auto color mode, RTL support, and a growing catalog of demo pages — calendar, kanban, chat, file manager, invoice, profile, settings, and more.
+
+It's a *template*, not a component library. You drop the markup into your own project (or framework templates) and customize the parts you need. Bootstrap 5 handles the components; AdminLTE provides the application shell.
+
+If you've never used AdminLTE before, start with [Getting Started](getting-started.html) — it walks through a working dashboard in ten minutes.
+
+## Installation paths
+
+Pick the path that matches how you'll actually use AdminLTE:
+
+| Path | Best for | Setup time |
+|---|---|---|
+| **CDN** | Prototyping, demos, simple sites | 1 minute |
+| **npm + bundler** | Production apps, framework projects (Laravel, Symfony, Rails) | 5 minutes |
+| **Build from source** | You need to customize SCSS variables, sidebar width, breakpoints | 10 minutes |
+| **Composer** | PHP projects that prefer Packagist over npm | 2 minutes |
+
+### CDN — fastest path
+
+Drop these four CSS tags into `<head>` and four script tags before `</body>`. No install, no build step:
+
+```html
+<!-- In <head> -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0/dist/css/adminlte.min.css" />
+
+<!-- Before </body> -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0/dist/js/adminlte.min.js"></script>
+```
+
+Then copy any [demo page](https://github.com/ColorlibHQ/AdminLTE/tree/master/dist) HTML into your own file. See [Getting Started](getting-started.html) for the minimum-viable layout.
+
+### npm + bundler
+
+Requires Node.js 18+ and a bundler (Vite, Webpack, Rollup, esbuild, etc.).
+
+```bash
+npm install admin-lte@4.0.0
+```
+
+Then import the CSS and JS in your app entry point:
+
+```js
+// CSS
+import "admin-lte/dist/css/adminlte.min.css"
+// Plus Bootstrap and dependency CSS
+import "bootstrap-icons/font/bootstrap-icons.css"
+import "overlayscrollbars/styles/overlayscrollbars.css"
+
+// JS
+import "bootstrap"
+import "admin-lte"
+```
+
+Yarn and pnpm work the same way — substitute `yarn add` or `pnpm add` for the install.
+
+### Build from source
+
+If you want to customize SCSS variables (sidebar width, breakpoints, brand colours), clone the repo and build locally:
+
+```bash
+git clone https://github.com/ColorlibHQ/AdminLTE.git
+cd AdminLTE
+npm install
+npm run dev          # dev server with hot-reload at localhost:3000
+npm run production   # one-off production build (clean + lint + compile)
+```
+
+The compiled output lands in `dist/`. Edit `src/scss/_variables.scss` or `src/scss/_bootstrap-variables.scss`, then rerun the build. See [Customization &amp; Theming](customization.html) for which variables matter.
+
+### Composer
+
+For PHP projects:
+
+```bash
+composer require "almasaeed2010/adminlte=4.0.0"
+```
+
+The package is published from the same source tree — you get the `dist/` folder ready to serve.
+
+## Prerequisites
+
+| | Minimum | Recommended |
+|---|---|---|
+| Bootstrap | 5.3.0 | 5.3.8 (pinned in `package.json`) |
+| Node.js | 18 LTS | 22 LTS (used by CI) |
+| Browser | Modern evergreen | Latest stable Chrome/Firefox/Safari/Edge |
+
+AdminLTE 4 does **not** support Internet Explorer. If you need IE11, stay on [AdminLTE 3](https://github.com/ColorlibHQ/AdminLTE/releases/tag/v3.2.0) or earlier.
+
+## Where to next
+
+- **[Getting Started](getting-started.html)** — a working dashboard in 10 minutes
+- **[Layout](layout.html)** — the app-wrapper structure and responsive options
+- **[Customization](customization.html)** — change colours, sidebar width, spacing
+- **[Migration from v3](migration.html)** — upgrading an existing AdminLTE 3 project
+
+## Releases and changelog
+
+Always grab the latest from the [GitHub releases page](https://github.com/ColorlibHQ/AdminLTE/releases) — that's where the changelog lives.
+
+Legacy releases:
+[AdminLTE 3.2](https://github.com/ColorlibHQ/AdminLTE/releases/tag/v3.2.0) ·
+[AdminLTE 2](https://github.com/ColorlibHQ/AdminLTE/releases/tag/v2.4.18) ·
+[AdminLTE 1](https://github.com/ColorlibHQ/AdminLTE/releases/tag/1.3.1)

@@ -1,0 +1,32 @@
+{
+  "root": true,
+  "compilerOptions": {
+    "removeComments": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noImplicitAny": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "alwaysStrict": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "paths": {
+      "@components/*": ["./src/html/components/*"],
+    },
+    /* Language and Environment */
+    "target": "es2022",
+    "lib": ["es2022", "DOM"],
+  },
+  "include": [
+    "src/ts/**/*"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules",
+  ]
+}

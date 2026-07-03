@@ -1,0 +1,35 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: monthly
+      time: "03:00"
+    groups:
+      eslint:
+        patterns:
+          - "eslint"
+          - "eslint-*"
+          - "@typescript-eslint/*"
+      stylelint:
+        patterns:
+          - "stylelint"
+          - "stylelint-*"
+      prettier:
+        patterns:
+          - "prettier"
+          - "prettier-*"
+      rollup:
+        patterns:
+          - "rollup"
+          - "@rollup/*"
+      postcss:
+        patterns:
+          - "postcss"
+          - "postcss-*"
+      astro:
+        patterns:
+          - "astro"
+          - "@astrojs/*"
+    open-pull-requests-limit: 10
+    versioning-strategy: increase

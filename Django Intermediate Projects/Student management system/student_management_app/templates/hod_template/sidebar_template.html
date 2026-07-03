@@ -3,7 +3,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
       <a href="{% url 'admin_home' %}" class="brand-link">
-        <img src="{% static 'dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+        <img src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
             style="opacity: .8">
         <span class="brand-text font-weight-light">Open University</span>
       </a>
@@ -13,7 +13,7 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <div class="image">
-            <img src="{% static 'dist/img/user2-160x160.jpg' %}" class="img-circle elevation-2" alt="User Image">
+            <img src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
           </div>
           <div class="info">
             <a href="{% url 'admin_profile' %}" class="d-block">{{ user.first_name }} {{ user.last_name }}</a>
@@ -58,6 +58,16 @@
             </li>
 
             <li class="nav-item">
+              {% url 'bulk_upload_staff' as bulk_upload_staff %}
+              <a href="{{ bulk_upload_staff }}" class="nav-link {% if request.path == bulk_upload_staff %} active {% endif %}">
+                <i class="nav-icon fas fa-file-upload"></i>
+                <p>
+                  Bulk Upload Staff
+                </p>
+              </a>
+            </li>
+
+            <li class="nav-item">
               {% url 'manage_student' as manage_student %}
               {% url 'edit_student' student_id=id as edit_student %}
               <a href="{{ manage_student }}" class="nav-link {% if request.path == manage_student %} active {% endif %} {% if request.path == edit_student %} active {% endif %}">
@@ -74,6 +84,16 @@
                 <i class="nav-icon fas fa-th"></i>
                 <p>
                   Add Student
+                </p>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              {% url 'bulk_upload_students' as bulk_upload_students %}
+              <a href="{{ bulk_upload_students }}" class="nav-link {% if request.path == bulk_upload_students %} active {% endif %}">
+                <i class="nav-icon fas fa-file-upload"></i>
+                <p>
+                  Bulk Upload Students
                 </p>
               </a>
             </li>

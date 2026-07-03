@@ -1,0 +1,32 @@
+//
+// Core: Main Footer
+//
+
+.app-footer {
+  grid-area: #{$lte-prefix}app-footer;
+  width: inherit;
+  max-width: 100vw;
+  min-height: 3rem;
+  padding: $lte-app-footer-padding;
+  color: $lte-app-footer-color;
+  background-color: $lte-app-footer-bg;
+  border-top: $lte-app-footer-border-top;
+  @include transition($lte-transition-speed $lte-transition-fn);
+}
+
+.fixed-footer {
+  .app-footer {
+    position: sticky;
+    bottom: 0;
+    z-index: $lte-zindex-fixed-footer;
+  }
+
+  // When layout-fixed is used, app-main has overflow: auto which prevents
+  // position: sticky from working on the footer. Ensure the grid keeps the
+  // footer pinned at the bottom while app-main scrolls independently.
+  &.layout-fixed {
+    .app-main {
+      min-height: 0;
+    }
+  }
+}

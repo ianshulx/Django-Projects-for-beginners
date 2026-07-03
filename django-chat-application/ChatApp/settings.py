@@ -39,6 +39,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'ChatApp.urls'
@@ -144,7 +145,7 @@ ACCOUNT_EMAIL_REQUIRED = True
 
 
 # Celery Configuration
-CELERY_TIMEZONE = "Asia/Tehran"
+CELERY_TIMEZONE = "Africa/Kenya"
 CELERY_ENABLE_UTC = True
 CELERY_BROKER_URL = 'pyamqp://guest@localhost:5672'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'

@@ -20,8 +20,8 @@ cryptography==41.0.3
 daphne==4.0.0
 defusedxml==0.7.1
 Django==4.2.4
-django-allauth==0.55.0
-django-cleanup==8.0.0
+django-allauth==0.54.0
+django-cleanup==7.0.0
 djangorestframework==3.14.0
 hyperlink==21.0.0
 idna==3.4
@@ -29,7 +29,7 @@ incremental==22.10.0
 kombu==5.3.2
 msgpack==1.0.5
 oauthlib==3.2.2
-Pillow==10.0.0
+Pillow==10.0.1
 prompt-toolkit==3.0.39
 pyasn1==0.5.0
 pyasn1-modules==0.3.0
